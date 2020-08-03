@@ -98,21 +98,6 @@ describe('SvgFilenameEditor', function() {
     }
   };
 
-  var mockWindowDimenesionService = {
-    getResizeEvent: function() {
-      return {
-        subscribe: function(callback) {
-          callback();
-          return {
-            unsubscribe: function() {
-              return 'Unsubscribe Successful';
-            }
-          };
-        }
-      };
-    }
-  };
-
   class mockImageObject {
     source = null;
     onload = null;
@@ -137,7 +122,6 @@ describe('SvgFilenameEditor', function() {
     $provide.value('ImageLocalStorageService', {});
     $provide.value('ImagePreloaderService', mockImagePreloaderService);
     $provide.value('ImageUploadHelperService', mockImageUploadHelperService);
-    $provide.value('WindowDimensionsService', mockWindowDimenesionService);
   }));
   beforeEach(angular.mock.inject(function($injector, $componentController, $q) {
     contextService = $injector.get('ContextService');
@@ -156,8 +140,11 @@ describe('SvgFilenameEditor', function() {
       deferred.resolve('sample-csrf-token');
       return deferred.promise;
     });
-    // @ts-ignore inorder to ignore other Image object properties that
-    // should be declared.
+    // This throws "Argument of type 'mockImageObject' is not assignable to
+    // parameter of type 'HTMLImageElement'.". This is because
+    // 'HTMLImageElement' has around 250 more properties. We have only defined
+    // the properties we need in 'mockImageObject'.
+    // @ts-expect-error
     spyOn(window, 'Image').and.returnValue(new mockImageObject());
 
     svgFilenameCtrl = $componentController('svgFilenameEditor');
@@ -173,10 +160,6 @@ describe('SvgFilenameEditor', function() {
     svgFilenameCtrl.fillPicker = mockPicker;
     svgFilenameCtrl.strokePicker = mockPicker;
   }));
-
-  afterAll(function() {
-    svgFilenameCtrl.$onDestroy();
-  });
 
   it('should update diagram size', function() {
     var WIDTH = 100;
@@ -241,13 +224,30 @@ describe('SvgFilenameEditor', function() {
     svgFilenameCtrl.createClosedPolygon();
   });
 
+  it('should change the order of shapes', function() {
+    svgFilenameCtrl.createCircle();
+    svgFilenameCtrl.createRect();
+    expect(svgFilenameCtrl.canvas.getObjects()[0].get('type')).toBe('circle');
+    expect(svgFilenameCtrl.canvas.getObjects()[1].get('type')).toBe('rect');
+    svgFilenameCtrl.canvas.setActiveObject(
+      svgFilenameCtrl.canvas.getObjects()[0]);
+    svgFilenameCtrl.bringObjectForward();
+    expect(svgFilenameCtrl.canvas.getObjects()[0].get('type')).toBe('rect');
+    expect(svgFilenameCtrl.canvas.getObjects()[1].get('type')).toBe('circle');
+    svgFilenameCtrl.sendObjectBackward();
+    expect(svgFilenameCtrl.canvas.getObjects()[0].get('type')).toBe('circle');
+    expect(svgFilenameCtrl.canvas.getObjects()[1].get('type')).toBe('rect');
+  });
+
   it('should undo and redo the creation of shapes', function() {
     for (var i = 0; i < 6; i++) {
       svgFilenameCtrl.createRect();
     }
     expect(svgFilenameCtrl.canvas.getObjects().length).toBe(6);
+    expect(svgFilenameCtrl.isUndoEnabled()).toBe(true);
     svgFilenameCtrl.onUndo();
     expect(svgFilenameCtrl.canvas.getObjects().length).toBe(5);
+    expect(svgFilenameCtrl.isRedoEnabled()).toBe(true);
     svgFilenameCtrl.onRedo();
     expect(svgFilenameCtrl.canvas.getObjects().length).toBe(6);
     svgFilenameCtrl.canvas.setActiveObject(
@@ -258,6 +258,7 @@ describe('SvgFilenameEditor', function() {
     expect(svgFilenameCtrl.canvas.getObjects().length).toBe(6);
     svgFilenameCtrl.onRedo();
     expect(svgFilenameCtrl.canvas.getObjects().length).toBe(5);
+    expect(svgFilenameCtrl.isClearEnabled()).toBe(true);
     svgFilenameCtrl.onClear();
     expect(svgFilenameCtrl.objectUndoStack.length).toBe(0);
   });
@@ -281,13 +282,13 @@ describe('SvgFilenameEditor', function() {
     expect(svgFilenameCtrl.canvas.backgroundColor).toBe(color);
     expect(rectShape.get('strokeWidth')).toBe(10);
     svgFilenameCtrl.createText();
+    svgFilenameCtrl.canvas.discardActiveObject();
+    svgFilenameCtrl.canvas.setActiveObject(
+      svgFilenameCtrl.canvas.getObjects()[1]);
     svgFilenameCtrl.fabricjsOptions.bold = true;
     svgFilenameCtrl.fabricjsOptions.italic = true;
     svgFilenameCtrl.fabricjsOptions.fontFamily = 'comic sans ms';
     svgFilenameCtrl.fabricjsOptions.size = '12px';
-    svgFilenameCtrl.canvas.discardActiveObject();
-    svgFilenameCtrl.canvas.setActiveObject(
-      svgFilenameCtrl.canvas.getObjects()[1]);
     svgFilenameCtrl.onItalicToggle();
     svgFilenameCtrl.onBoldToggle();
     svgFilenameCtrl.onFontChange();
@@ -333,6 +334,42 @@ describe('SvgFilenameEditor', function() {
     expect(svgFilenameCtrl.canvas.getObjects()[1].get('type')).toBe('polyline');
   });
 
+  it('should create a bezier curve', function() {
+    svgFilenameCtrl.createRect();
+    svgFilenameCtrl.createQuadraticBezier();
+    expect(svgFilenameCtrl.isDrawModeBezier()).toBe(true);
+    svgFilenameCtrl.canvas.trigger('object:moving', {
+      target: {
+        name: 'p0',
+        left: 100,
+        top: 100
+      }
+    });
+    svgFilenameCtrl.canvas.trigger('object:moving', {
+      target: {
+        name: 'p1',
+        left: 200,
+        top: 200
+      }
+    });
+    svgFilenameCtrl.canvas.trigger('object:moving', {
+      target: {
+        name: 'p2',
+        left: 300,
+        top: 300
+      }
+    });
+    svgFilenameCtrl.onStrokeChange();
+    svgFilenameCtrl.onFillChange();
+    svgFilenameCtrl.onSizeChange();
+    svgFilenameCtrl.createQuadraticBezier();
+    expect(svgFilenameCtrl.isDrawModeBezier()).toBe(false);
+    expect(svgFilenameCtrl.canvas.getObjects()[1].get('path')).toEqual(
+      [['M', 100, 100], ['Q', 200, 200, 300, 300]]
+    );
+    expect(svgFilenameCtrl.canvas.getObjects()[1].get('type')).toBe('path');
+  });
+
   it('should trigger object selection and scaling events', function() {
     svgFilenameCtrl.createRect();
     svgFilenameCtrl.createText();
@@ -340,6 +377,7 @@ describe('SvgFilenameEditor', function() {
       svgFilenameCtrl.canvas.getObjects()[0]);
     svgFilenameCtrl.canvas.setActiveObject(
       svgFilenameCtrl.canvas.getObjects()[1]);
+    expect(svgFilenameCtrl.isSizeVisible()).toBe(true);
     expect(svgFilenameCtrl.displayFontStyles).toBe(true);
     svgFilenameCtrl.canvas.trigger('object:scaling');
     expect(svgFilenameCtrl.canvas.getObjects()[1].get('scaleX')).toBe(1);
@@ -357,8 +395,11 @@ describe('SvgFilenameEditor', function() {
     var responseText = ")]}'\n{ \"filename\": \"imageFile1.svg\" }";
     /* eslint-enable quotes */
 
-    // @ts-ignore in order to ignore JQuery properties that should
-    // be declared.
+    // This throws "Argument of type '() => Promise<any, any, any>' is not
+    // assignable to parameter of type '{ (url: string, ...):
+    // jqXHR<any>; ...}'.". We need to suppress this error because we need
+    // to mock $.ajax to this function purposes.
+    // @ts-expect-error
     spyOn($, 'ajax').and.callFake(function() {
       var d = $.Deferred();
       d.resolve(responseText);
@@ -382,8 +423,11 @@ describe('SvgFilenameEditor', function() {
   it('should handle rejection when saving an svg file fails', function() {
     svgFilenameCtrl.createRect();
     var errorMessage = 'Error on saving svg file';
-    // @ts-ignore in order to ignore JQuery properties that should
-    // be declared.
+    // This throws "Argument of type '() => Promise<any, any, any>' is not
+    // assignable to parameter of type '{ (url: string, ...):
+    // jqXHR<any>; ...}'.". We need to suppress this error because we need
+    // to mock $.ajax to this function purposes.
+    // @ts-expect-error
     spyOn($, 'ajax').and.callFake(function() {
       var d = $.Deferred();
       d.reject({
@@ -454,10 +498,6 @@ describe('SvgFilenameEditor initialized with value attribute',
       });
       initializeMockDocument(svgFilenameCtrl);
     }));
-
-    afterEach(function() {
-      svgFilenameCtrl.$onDestroy();
-    });
 
     it('should load the svg file', function() {
       svgFilenameCtrl.$onInit();
@@ -554,11 +594,17 @@ describe('SvgFilenameEditor with image save destination as ' +
     spyOn(contextService, 'getImageSaveDestination').and.returnValue(
       AppConstants.IMAGE_SAVE_DESTINATION_LOCAL_STORAGE);
 
-    // @ts-ignore inorder to ignore other Image object properties that
-    // should be declared.
+    // This throws "Argument of type 'mockImageObject' is not assignable to
+    // parameter of type 'HTMLImageElement'.". This is because
+    // 'HTMLImageElement' has around 250 more properties. We have only defined
+    // the properties we need in 'mockImageObject'.
+    // @ts-expect-error
     spyOn(window, 'Image').and.returnValue(new mockImageObject());
-    // @ts-ignore inorder to ignore other FileReader object properties that
-    // should be declared.
+    // This throws "Argument of type 'mockReaderObject' is not assignable
+    // to parameter of type 'FileReader'.". This is because
+    // 'FileReader' has around 15 more properties. We have only defined
+    // the properties we need in 'mockReaderObject'.
+    // @ts-expect-error
     spyOn(window, 'FileReader').and.returnValue(new mockReaderObject());
 
     svgFilenameCtrl = $componentController('svgFilenameEditor');
@@ -567,10 +613,6 @@ describe('SvgFilenameEditor with image save destination as ' +
     svgFilenameCtrl.canvas = new fabric.Canvas(svgFilenameCtrl.canvasID);
     svgFilenameCtrl.initializeMouseEvents();
   }));
-
-  afterEach(function() {
-    svgFilenameCtrl.$onDestroy();
-  });
 
   it('should save svg file to local storage created by the svg editor',
     function() {
@@ -612,10 +654,6 @@ describe('should fail svg tag validation', function() {
     svgFilenameCtrl = $componentController('svgFilenameEditor');
   }));
 
-  afterEach(function() {
-    svgFilenameCtrl.$onDestroy();
-  });
-
   it('should fail svg validation', function() {
     var invalidSvgTag = (
       '<svg width="100" height="100"><rect id="rectangle-de569866-9c11-b553-' +
@@ -646,10 +684,6 @@ describe('should fail svg attribute validation', function() {
   beforeEach(angular.mock.inject(function($componentController) {
     svgFilenameCtrl = $componentController('svgFilenameEditor');
   }));
-
-  afterEach(function() {
-    svgFilenameCtrl.$onDestroy();
-  });
 
   it('should fail svg validation', function() {
     var invalidWidthAttribute = (
