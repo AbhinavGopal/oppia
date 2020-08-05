@@ -17,7 +17,7 @@
  */
 
 import { ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
-import { EventEmitter, NO_ERRORS_SCHEMA, Pipe }
+import { EventEmitter, NO_ERRORS_SCHEMA, Pipe, PipeTransform }
   from '@angular/core';
 
 import { AboutPageComponent } from './about-page.component';

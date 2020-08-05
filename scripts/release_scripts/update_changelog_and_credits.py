@@ -33,11 +33,12 @@ from scripts import common
 from scripts.release_scripts import generate_release_info
 
 _PARENT_DIR = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
-_PY_GITHUB_PATH = os.path.join(
-    _PARENT_DIR, 'oppia_tools', 'PyGithub-%s' % common.PYGITHUB_VERSION)
+_PY_GITHUB_PATH = os.path.join(_PARENT_DIR, 'oppia_tools', 'PyGithub-1.43.7')
 sys.path.insert(0, _PY_GITHUB_PATH)
 
-import github  # isort:skip pylint: disable=wrong-import-position
+# pylint: disable=wrong-import-position
+import github # isort:skip
+# pylint: enable=wrong-import-position
 
 ABOUT_PAGE_CONSTANTS_FILEPATH = os.path.join(
     'core', 'templates', 'pages', 'about-page',
@@ -149,8 +150,8 @@ def get_previous_release_version(branch_type, current_release_version_number):
         str. The previous version.
 
     Raises:
-        Exception. Branch type is invalid.
-        Exception. Previous release version is same as current release version.
+        Exception: Branch type is invalid.
+        Exception: Previous release version is same as current release version.
     """
     all_tags = subprocess.check_output(['git', 'tag'])[:-1].split('\n')
     # Tags are of format vX.Y.Z. So, the substring starting from index 1 is the
@@ -161,8 +162,7 @@ def get_previous_release_version(branch_type, current_release_version_number):
         previous_release_version = all_tags[-2][1:]
     else:
         raise Exception('Invalid branch type: %s.' % branch_type)
-    assert previous_release_version != current_release_version_number, (
-        'Previous release version is same as current release version.')
+    assert previous_release_version != current_release_version_number
     return previous_release_version
 
 

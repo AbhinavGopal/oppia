@@ -41,48 +41,44 @@ angular.module('oppia').controller(
         $uibModalInstance: $uibModalInstance
       });
 
-      $scope.countOfSkillsToPrioritize =
+      var init = function() {
+        $scope.countOfSkillsToPrioritize =
           countOfSkillsToPrioritize;
-      $scope.instructionMessage = (
-        'Select the skill(s) to link the question to:');
-      $scope.currentMode = currentMode;
-      $scope.linkedSkillsWithDifficulty =
-        linkedSkillsWithDifficulty;
-      $scope.skillSummaries = allSkillSummaries;
-      $scope.skillSummariesInitial = [];
-      $scope.skillSummariesFinal = [];
-      let selectedSkills = [];
+        $scope.instructionMessage = (
+          'Select the skill(s) to link the question to:');
+        $scope.currentMode = currentMode;
+        $scope.linkedSkillsWithDifficulty =
+          linkedSkillsWithDifficulty;
+        $scope.skillSummaries = allSkillSummaries;
+        $scope.skillSummariesInitial = [];
+        $scope.skillSummariesFinal = [];
 
-      for (var idx in allSkillSummaries) {
-        if (idx < countOfSkillsToPrioritize) {
-          $scope.skillSummariesInitial.push(
-            allSkillSummaries[idx]);
-        } else {
-          $scope.skillSummariesFinal.push(
-            allSkillSummaries[idx]);
+        for (var idx in allSkillSummaries) {
+          if (idx < countOfSkillsToPrioritize) {
+            $scope.skillSummariesInitial.push(
+              allSkillSummaries[idx]);
+          } else {
+            $scope.skillSummariesFinal.push(
+              allSkillSummaries[idx]);
+          }
         }
-      }
-      $scope.skillIdToRubricsObject = skillIdToRubricsObject;
-
-      $scope.isSkillSelected = function(skillId) {
-        return selectedSkills.includes(skillId);
+        $scope.skillIdToRubricsObject = skillIdToRubricsObject;
       };
 
       $scope.selectOrDeselectSkill = function(summary) {
-        if (!$scope.isSkillSelected(summary.id)) {
+        if (!summary.isSelected) {
           $scope.linkedSkillsWithDifficulty.push(
             SkillDifficultyObjectFactory.create(
               summary.id, summary.description,
               DEFAULT_SKILL_DIFFICULTY));
-          selectedSkills.push(summary.id);
+          summary.isSelected = true;
         } else {
           var idIndex = $scope.linkedSkillsWithDifficulty.map(
             function(linkedSkillWithDifficulty) {
               return linkedSkillWithDifficulty.getId();
             }).indexOf(summary.id);
           $scope.linkedSkillsWithDifficulty.splice(idIndex, 1);
-          var index = selectedSkills.indexOf(summary.id);
-          selectedSkills.splice(index, 1);
+          summary.isSelected = false;
         }
       };
 
@@ -97,5 +93,7 @@ angular.module('oppia').controller(
       $scope.startQuestionCreation = function() {
         $uibModalInstance.close($scope.linkedSkillsWithDifficulty);
       };
+
+      init();
     }
   ]);

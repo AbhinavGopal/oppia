@@ -24,7 +24,7 @@ import { StateClassifierMappingService } from
 describe('State classifier mapping service', () => {
   describe('Test correct retrieval of classifier details', () => {
     let mappingService: StateClassifierMappingService;
-    let classifierData: ClassifierData = {
+    let classifierData: IClassifierData = {
       KNN: {
         occurrence: 0,
         K: 0,

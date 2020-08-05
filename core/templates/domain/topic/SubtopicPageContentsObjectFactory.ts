@@ -23,20 +23,20 @@ import { Injectable } from '@angular/core';
 import { downgradeInjectable } from '@angular/upgrade/static';
 
 import {
-  RecordedVoiceOverBackendDict,
+  IRecordedVoiceOverBackendDict,
   RecordedVoiceovers,
   RecordedVoiceoversObjectFactory
 } from 'domain/exploration/RecordedVoiceoversObjectFactory';
 
 import {
-  SubtitledHtmlBackendDict,
+  ISubtitledHtmlBackendDict,
   SubtitledHtml,
   SubtitledHtmlObjectFactory
 } from 'domain/exploration/SubtitledHtmlObjectFactory';
 
-export interface SubtopicPageContentsBackendDict {
-  'subtitled_html': SubtitledHtmlBackendDict;
-  'recorded_voiceovers': RecordedVoiceOverBackendDict;
+export interface ISubtopicPageContentsBackendDict {
+  'subtitled_html': ISubtitledHtmlBackendDict;
+  'recorded_voiceovers': IRecordedVoiceOverBackendDict;
 }
 
 export class SubtopicPageContents {
@@ -72,7 +72,7 @@ export class SubtopicPageContents {
     this._recordedVoiceovers = cloneDeep(newRecordedVoiceovers);
   }
 
-  toBackendDict(): SubtopicPageContentsBackendDict {
+  toBackendDict(): ISubtopicPageContentsBackendDict {
     return {
       subtitled_html: this._subtitledHtml.toBackendDict(),
       recorded_voiceovers: this._recordedVoiceovers.toBackendDict()
@@ -97,7 +97,7 @@ export class SubtopicPageContentsObjectFactory {
   }
 
   createFromBackendDict(
-      backendDict: SubtopicPageContentsBackendDict): SubtopicPageContents {
+      backendDict: ISubtopicPageContentsBackendDict): SubtopicPageContents {
     return new SubtopicPageContents(
       this.subtitledHtmlObjectFactory.createFromBackendDict(
         backendDict.subtitled_html),

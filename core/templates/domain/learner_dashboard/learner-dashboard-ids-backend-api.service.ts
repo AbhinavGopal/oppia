@@ -21,38 +21,19 @@ import { downgradeInjectable } from '@angular/upgrade/static';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import {
-  LearnerDashboardActivityIds,
-  LearnerDashboardActivityIdsDict,
-  LearnerDashboardActivityIdsObjectFactory
-} from 'domain/learner_dashboard/LearnerDashboardActivityIdsObjectFactory';
-
-interface LearnerDashboardIdsBackendResponse {
-  'learner_dashboard_activity_ids': LearnerDashboardActivityIdsDict;
-}
-
 @Injectable({
   providedIn: 'root'
 })
 export class LearnerDashboardIdsBackendApiService {
-  constructor(
-    private http: HttpClient,
-    private learnerDashboardActivityIdsObjectFactory:
-    LearnerDashboardActivityIdsObjectFactory) {}
+  constructor(private http: HttpClient) {}
 
-  _fetchLearnerDashboardIds(): Promise<LearnerDashboardActivityIds> {
-    return new Promise((resolve, reject) => {
-      this.http.get<LearnerDashboardIdsBackendResponse>(
-        '/learnerdashboardidshandler/data').toPromise().then(response => {
-        resolve(this.learnerDashboardActivityIdsObjectFactory
-          .createFromBackendDict(response.learner_dashboard_activity_ids));
-      }, errorResponse => {
-        reject(errorResponse.error.error);
-      });
-    });
+  _fetchLearnerDashboardIds(): Promise<Object> {
+    // HttpClient returns an Observable, the toPromise converts it into a
+    // Promise.
+    return this.http.get('/learnerdashboardidshandler/data').toPromise();
   }
 
-  fetchLearnerDashboardIds(): Promise<LearnerDashboardActivityIds> {
+  fetchLearnerDashboardIds(): Promise<Object> {
     return this._fetchLearnerDashboardIds();
   }
 }

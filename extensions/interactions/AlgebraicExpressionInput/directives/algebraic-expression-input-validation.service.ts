@@ -21,9 +21,9 @@ import { downgradeInjectable } from '@angular/upgrade/static';
 
 import { AnswerGroup } from
   'domain/exploration/AnswerGroupObjectFactory';
-import { Warning, baseInteractionValidationService } from
+import { IWarning, baseInteractionValidationService } from
   'interactions/base-interaction-validation.service';
-import { AlgebraicExpressionInputCustomizationArgs } from
+import { IAlgebraicExpressionInputCustomizationArgs } from
   'extensions/interactions/customization-args-defs';
 import { AlgebraicExpressionInputRulesService } from
   './algebraic-expression-input-rules.service';
@@ -41,10 +41,10 @@ export class AlgebraicExpressionInputValidationService {
 
   getAllWarnings(
       stateName: string,
-      customizationArgs: AlgebraicExpressionInputCustomizationArgs,
-      answerGroups: AnswerGroup[], defaultOutcome: Outcome): Warning[] {
+      customizationArgs: IAlgebraicExpressionInputCustomizationArgs,
+      answerGroups: AnswerGroup[], defaultOutcome: Outcome): IWarning[] {
     let warningsList = [];
-    let algebraicRulesService = (
+    let aeirs = (
       new AlgebraicExpressionInputRulesService());
 
     warningsList = warningsList.concat(
@@ -71,8 +71,7 @@ export class AlgebraicExpressionInputValidationService {
           let seenRuleType = <string> seenRule.type;
 
           if (seenRuleType === 'IsEquivalentTo' && (
-            algebraicRulesService.IsEquivalentTo(
-              seenInput, {x: currentInput}))) {
+            aeirs.IsEquivalentTo(seenInput, {x: currentInput}))) {
             // This rule will make all of the following matching
             // inputs obsolete.
             warningsList.push({
@@ -83,8 +82,7 @@ export class AlgebraicExpressionInputValidationService {
                 'by an \'IsEquivalentTo\' rule with a matching input.')
             });
           } else if (currentRuleType === 'MatchesExactlyWith' && (
-            algebraicRulesService.MatchesExactlyWith(
-              seenInput, {x: currentInput}))) {
+            aeirs.MatchesExactlyWith(seenInput, {x: currentInput}))) {
             // This rule will make the following inputs with MatchesExactlyWith
             // rule obsolete.
             warningsList.push({

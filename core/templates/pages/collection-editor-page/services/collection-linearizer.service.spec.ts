@@ -24,8 +24,6 @@ import { CollectionNodeObjectFactory } from
   'domain/collection/collection-node-object.factory';
 import { CollectionObjectFactory } from
   'domain/collection/CollectionObjectFactory';
-import { CollectionPlaythroughObjectFactory } from
-  'domain/collection/CollectionPlaythroughObjectFactory';
 import { UpgradedServices } from 'services/UpgradedServices';
 // ^^^ This block is to be removed.
 
@@ -49,8 +47,7 @@ describe('Collection linearizer service', function() {
       'CollectionNodeObjectFactory', new CollectionNodeObjectFactory());
     $provide.value(
       'CollectionObjectFactory', new CollectionObjectFactory(
-        new CollectionNodeObjectFactory(),
-        new CollectionPlaythroughObjectFactory()));
+        new CollectionNodeObjectFactory()));
   }));
   beforeEach(angular.mock.module('oppia', function($provide) {
     var ugs = new UpgradedServices();

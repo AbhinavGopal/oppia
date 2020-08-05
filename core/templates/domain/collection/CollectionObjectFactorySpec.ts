@@ -44,12 +44,7 @@ describe('Collection object factory', () => {
       version: 1,
       nodes: [],
       language_code: null,
-      tags: null,
-      schema_version: null,
-      playthrough_dict: {
-        next_exploration_id: 'expId',
-        completed_exploration_ids: ['expId2']
-      }
+      tags: null
     };
     _sampleCollection = collectionObjectFactory.create(
       sampleCollectionBackendObject);
@@ -77,10 +72,6 @@ describe('Collection object factory', () => {
     expect(collection.getLanguageCode()).toBeNull();
     expect(collection.getTags()).toBeNull();
     expect(collection.getVersion()).toBeNull();
-    expect(collection.getSchemaVersion()).toBeNull();
-    expect(collection.getPlaythrough().getNextExplorationId()).toBeNull();
-    expect(
-      collection.getPlaythrough().getCompletedExplorationIds()).toEqual([]);
     expect(collection.getCollectionNodes()).toEqual([]);
   });
 
@@ -97,11 +88,6 @@ describe('Collection object factory', () => {
         objective: null,
         language_code: null,
         tags: null,
-        schema_version: null,
-        playthrough_dict: {
-          next_exploration_id: 'expId',
-          completed_exploration_ids: ['expId2']
-        },
         category: null,
         version: null
       });
@@ -285,39 +271,11 @@ describe('Collection object factory', () => {
       language_code: 'en',
       version: 15,
       nodes: [],
-      tags: null,
-      schema_version: null,
-      playthrough_dict: {
-        next_exploration_id: 'expId',
-        completed_exploration_ids: ['expId2']
-      }
+      tags: null
     });
     secondCollection.addCollectionNode(collectionNodeObjectFactory.create({
       exploration_id: 'exp_id5',
-      exploration_summary: {
-        last_updated_msec: 1591296737470.528,
-        community_owned: false,
-        objective: 'Test Objective',
-        id: '44LKoKLlIbGe',
-        num_views: 0,
-        thumbnail_icon_url: '/subjects/Algebra.svg',
-        human_readable_contributors_summary: {},
-        language_code: 'en',
-        thumbnail_bg_color: '#cd672b',
-        created_on_msec: 1591296635736.666,
-        ratings: {
-          1: 0,
-          2: 0,
-          3: 0,
-          4: 0,
-          5: 0
-        },
-        status: 'public',
-        tags: [],
-        activity_type: 'exploration',
-        category: 'Algebra',
-        title: 'Test Title'
-      }
+      exploration_summary: {}
     }));
 
     _addCollectionNode('exp_id0');

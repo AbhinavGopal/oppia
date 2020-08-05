@@ -23,15 +23,15 @@ import { HttpClient } from '@angular/common/http';
 
 import cloneDeep from 'lodash/cloneDeep';
 
-import { ConceptCard, ConceptCardBackendDict, ConceptCardObjectFactory} from
+import { ConceptCard, IConceptCardBackendDict, ConceptCardObjectFactory} from
   'domain/skill/ConceptCardObjectFactory';
 import { SkillDomainConstants } from
   'domain/skill/skill-domain.constants';
 import { UrlInterpolationService } from
   'domain/utilities/url-interpolation.service';
 
-interface ConceptCardBackendDicts {
-  'concept_card_dicts': ConceptCardBackendDict[];
+interface IConceptCardBackendDicts {
+  'concept_card_dicts': IConceptCardBackendDict[];
 }
 
 @Injectable({
@@ -57,7 +57,7 @@ export class ConceptCardBackendApiService {
 
     var conceptCardObjects = [];
 
-    this.http.get<ConceptCardBackendDicts>(conceptCardDataUrl).toPromise()
+    this.http.get<IConceptCardBackendDicts>(conceptCardDataUrl).toPromise()
       .then(response => {
         if (successCallback) {
           var conceptCardDicts = response.concept_card_dicts;
@@ -70,7 +70,7 @@ export class ConceptCardBackendApiService {
         }
       }, errorResponse => {
         if (errorCallback) {
-          errorCallback(errorResponse.error.error);
+          errorCallback(errorResponse.error);
         }
       });
   }

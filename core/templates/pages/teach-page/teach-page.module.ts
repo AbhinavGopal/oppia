@@ -26,17 +26,15 @@ angular.module('oppia', [
   'toastr', 'ui.bootstrap', 'ui.sortable', 'ui.tree', 'ui.validate'
 ]);
 
-import { NgModule, StaticProvider } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { Component, NgModule, StaticProvider } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { downgradeComponent } from '@angular/upgrade/static';
-
-import { TeachPageComponent } from './teach-page.component';
+import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { RequestInterceptor } from 'services/request-interceptor.service';
+import { SharedComponentsModule } from 'components/shared-component.module';
 import { OppiaAngularRootComponent } from
   'components/oppia-angular-root.component';
-import { SharedComponentsModule } from 'components/shared-component.module';
-import { RequestInterceptor } from 'services/request-interceptor.service';
 
 import { AppConstants } from 'app.constants';
 import { InteractionsExtensionsConstants } from
@@ -51,11 +49,9 @@ import { ObjectsDomainConstants } from
     SharedComponentsModule
   ],
   declarations: [
-    TeachPageComponent,
     OppiaAngularRootComponent
   ],
   entryComponents: [
-    TeachPageComponent,
     OppiaAngularRootComponent
   ],
   providers: [

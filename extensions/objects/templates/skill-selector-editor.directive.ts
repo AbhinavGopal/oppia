@@ -15,7 +15,6 @@
 /**
  * @fileoverview Directive for the skill selector editor.
  */
-
 require(
   'components/skill-selector/skill-selector.directive.ts');
 require('domain/skill/skill-domain.constants.ajs.ts');
@@ -42,9 +41,6 @@ angular.module('oppia').directive('skillSelectorEditor', [
             ContextService.setCustomEntityContext(ENTITY_TYPE.SKILL, skillId);
             ctrl.value = skillId;
           };
-          ctrl.validators = [{
-            id: 'is_nonempty'
-          }];
           ctrl.$onInit = function() {
             $scope.$on('$destroy', function() {
               ContextService.removeCustomEntityContext();

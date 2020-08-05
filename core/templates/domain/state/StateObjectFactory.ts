@@ -19,38 +19,38 @@
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 
-import { InteractionBackendDict, Interaction, InteractionObjectFactory } from
+import { IInteractionBackendDict, Interaction, InteractionObjectFactory } from
   'domain/exploration/InteractionObjectFactory';
-import { ParamChangeBackendDict, ParamChange } from
+import { IParamChangeBackendDict, ParamChange } from
   'domain/exploration/ParamChangeObjectFactory';
 import { ParamChangesObjectFactory } from
   'domain/exploration/ParamChangesObjectFactory';
 import {
-  RecordedVoiceOverBackendDict,
+  IRecordedVoiceOverBackendDict,
   RecordedVoiceovers,
   RecordedVoiceoversObjectFactory
 } from 'domain/exploration/RecordedVoiceoversObjectFactory';
 import {
-  SubtitledHtmlBackendDict,
+  ISubtitledHtmlBackendDict,
   SubtitledHtml,
   SubtitledHtmlObjectFactory
 } from 'domain/exploration/SubtitledHtmlObjectFactory';
 import {
-  WrittenTranslationsBackendDict,
+  IWrittenTranslationsBackendDict,
   WrittenTranslations,
   WrittenTranslationsObjectFactory
 } from 'domain/exploration/WrittenTranslationsObjectFactory';
 
 const constants = require('constants.ts');
 
-export interface StateBackendDict {
+export interface IStateBackendDict {
   'classifier_model_id': string;
-  'content': SubtitledHtmlBackendDict;
-  'interaction': InteractionBackendDict;
-  'param_changes': ParamChangeBackendDict[];
-  'recorded_voiceovers': RecordedVoiceOverBackendDict;
+  'content': ISubtitledHtmlBackendDict;
+  'interaction': IInteractionBackendDict;
+  'param_changes': IParamChangeBackendDict[];
+  'recorded_voiceovers': IRecordedVoiceOverBackendDict;
   'solicit_answer_details': boolean;
-  'written_translations': WrittenTranslationsBackendDict;
+  'written_translations': IWrittenTranslationsBackendDict;
 }
 
 export class State {
@@ -80,7 +80,7 @@ export class State {
     this.name = newName;
   }
 
-  toBackendDict(): StateBackendDict {
+  toBackendDict(): IStateBackendDict {
     return {
       content: this.content.toBackendDict(),
       classifier_model_id: this.classifierModelId,
@@ -133,7 +133,7 @@ export class StateObjectFactory {
   }
 
   createFromBackendDict(
-      stateName: string, stateDict: StateBackendDict): State {
+      stateName: string, stateDict: IStateBackendDict): State {
     return new State(
       stateName,
       stateDict.classifier_model_id,

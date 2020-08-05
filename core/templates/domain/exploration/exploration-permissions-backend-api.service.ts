@@ -24,7 +24,7 @@ import { ContextService } from 'services/context.service';
 import { UrlInterpolationService } from
   'domain/utilities/url-interpolation.service';
 import {
-  ExplorationPermissionsBackendDict,
+  IExplorationPermissionsBackendDict,
   ExplorationPermissions,
   ExplorationPermissionsObjectFactory
 } from 'domain/exploration/exploration-permissions-object.factory';
@@ -46,16 +46,12 @@ export class ExplorationPermissionsBackendApiService {
         exploration_id: this.contextService.getExplorationId()
       });
 
-    return new Promise((resolve, reject) => {
-      this.http.get<ExplorationPermissionsBackendDict>(
-        explorationPermissionsUrl).toPromise().then(response => {
-        let permissionsObject = (
-          this.explorationPermissionsObjectFactory.createFromBackendDict(
-            response));
-        resolve(permissionsObject);
-      }, errorResponse => {
-        reject(errorResponse.error.error);
-      });
+    return this.http.get<IExplorationPermissionsBackendDict>(
+      explorationPermissionsUrl).toPromise().then(response => {
+      let permissionsObject = (
+        this.explorationPermissionsObjectFactory.createFromBackendDict(
+          response));
+      return permissionsObject;
     });
   }
 }

@@ -39,22 +39,7 @@ import {
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
 
-// NOTE - These types are defined by taking
-// https://webpack.js.org/guides/dependency-management/#context-module-api
-// as a reference.
-interface RequireContext {
-  context(
-      directory: string, useSubdirectories: boolean, regExp: RegExp): Context;
-}
-
-interface Context {
-  (request: Object): void;
-  resolve: () => string;
-  keys: () => Object[];
-  id: string;
-}
-
-declare const require: RequireContext;
+declare const require: any;
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(

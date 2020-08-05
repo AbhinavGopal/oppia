@@ -20,7 +20,7 @@
 import { Injectable } from '@angular/core';
 import { downgradeInjectable } from '@angular/upgrade/static';
 
-export interface LearnerDashboardActivityIdsDict {
+export interface ILearnerDashboardActivityIdsDict {
   'incomplete_exploration_ids': string[];
   'incomplete_collection_ids': string[];
   'completed_exploration_ids': string[];
@@ -138,7 +138,7 @@ export class LearnerDashboardActivityIds {
 })
 export class LearnerDashboardActivityIdsObjectFactory {
   createFromBackendDict(
-      learnerDashboardActivityIdsDict: LearnerDashboardActivityIdsDict):
+      learnerDashboardActivityIdsDict: ILearnerDashboardActivityIdsDict):
       LearnerDashboardActivityIds {
     return new LearnerDashboardActivityIds(
       learnerDashboardActivityIdsDict.incomplete_exploration_ids,

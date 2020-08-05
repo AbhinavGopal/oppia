@@ -17,212 +17,207 @@
  */
 
 import {
-  FractionAnswer,
-  NumberWithUnitsAnswer,
-  MusicNotesAnswer,
-  GraphAnswer } from
+  IFractionAnswer,
+  INumberWithUnitsAnswer,
+  IMusicNotesAnswer,
+  IGraphAnswer } from
   'interactions/answer-defs';
 
-export interface AlgebraicExpressionRuleInputs {
+export interface IAlgebraicExpressionRuleInputs {
   x: string;
 }
 
-export interface CodeReplRuleInputs {
+export interface ICodeReplRuleInputs {
   x: string;
 }
 
-export interface ContinueRuleInputs {}
+export interface IContinueRuleInputs {}
 
 // DragAndDrop interaction has multiple types of inputs based on
 // rule type.
-export interface DragAndDropCheckEqualityRuleInputs {
+export interface IDragAndDropCheckEqualityRuleInputs {
   x: string[][];
 }
 
-export interface DragAndDropHasElementXAtPositionYRuleInputs {
+export interface IDragAndDropHasElementXAtPositionYRuleInputs {
   x: string;
   y: number;
 }
 
-export interface DragAndDropHasElementXBeforeElementYRuleInputs {
+export interface IDragAndDropHasElementXBeforeElementYRuleInputs {
   x: string;
   y: string;
 }
 
-export type DragAndDropRuleInputs = (
-  DragAndDropCheckEqualityRuleInputs |
-  DragAndDropHasElementXAtPositionYRuleInputs |
-  DragAndDropHasElementXBeforeElementYRuleInputs);
+export type IDragAndDropRuleInputs = (
+  IDragAndDropCheckEqualityRuleInputs |
+  IDragAndDropHasElementXAtPositionYRuleInputs |
+  IDragAndDropHasElementXBeforeElementYRuleInputs);
 
-export interface EndExplorationRuleInputs {}
+export interface IEndExplorationRuleInputs {}
 
 // FractionInput interaction has multiple types of inputs based on
 // rule type.
-export interface FractionEquivalentRuleInputs {
-  f: FractionAnswer;
+export interface IFractionEquivalentRuleInputs {
+  f: IFractionAnswer;
 }
 
-export interface FractionIntegerPartRuleInputs {
+export interface IFractionIntegerPartRuleInputs {
   x: number;
 }
 
-export type FractionRuleInputs = (
-  FractionEquivalentRuleInputs |
-  FractionIntegerPartRuleInputs);
+export type IFractionRuleInputs = (
+  IFractionEquivalentRuleInputs |
+  IFractionIntegerPartRuleInputs);
 
 // GraphInput interaction has multiple types of inputs based on
 // rule type.
-export interface GraphPropertyRuleInputs {
+export interface IGraphPropertyRuleInputs {
   p: string;
 }
 
-export interface GraphIsomorphicRuleInputs {
-  g: GraphAnswer;
+export interface IGraphIsomorphicRuleInputs {
+  g: IGraphAnswer;
 }
 
-export type GraphRuleInputs = (
-  GraphPropertyRuleInputs |
-  GraphIsomorphicRuleInputs);
+export type IGraphRuleInputs = (
+  IGraphPropertyRuleInputs |
+  IGraphIsomorphicRuleInputs);
 
-export interface ImageClickRuleInputs {
+export interface IImageClickRuleInputs {
   x: string;
 }
 
-export interface InteractiveMapRuleInputs {
+export interface IInteractiveMapRuleInputs {
   d: number;
   p: number[];
 }
 
-export interface ItemSelectionRuleInputs {
+export interface IItemSelectionRuleInputs {
   x: string[];
 }
 
-export interface LogicProofRuleInputs {
+export interface ILogicProofRuleInputs {
   c: string;
 }
 
 // MathEquation interaction has multiple types of inputs based on
 // rule type.
-export interface MathEquationMatchesExactlyWithRuleInputs {
+export interface IMathEquationMatchesExactlyWithRuleInputs {
   x: string;
   y: string;
 }
 
-export interface MathEquationIsEquivalentToRuleInputs {
+export interface IMathEquationIsEquivalentToRuleInputs {
   x: string;
 }
 
-export type MathEquationRuleInputs = (
-  MathEquationMatchesExactlyWithRuleInputs |
-  MathEquationIsEquivalentToRuleInputs);
+export type IMathEquationRuleInputs = (
+  IMathEquationMatchesExactlyWithRuleInputs |
+  IMathEquationIsEquivalentToRuleInputs);
 
-export interface MathExpressionRuleInputs {
+export interface IMathExpressionRuleInputs {
   x: string;
 }
 
-export interface MultipleChoiceRuleInputs {
+export interface IMultipleChoiceRuleInputs {
   x: number;
 }
 
 // MusicNotes interaction has multiple types of inputs based on
 // rule type.
-export interface MusicNotesEqualsRuleInputs {
-  x: MusicNotesAnswer[];
+export interface IMusicNotesEqualsRuleInputs {
+  x: IMusicNotesAnswer[];
 }
 
-export interface MusicNotesIsLongerThanRuleInputs {
+export interface IMusicNotesIsLongerThanRuleInputs {
   k: number;
 }
 
-export interface MusicNotesHasLengthInclusivelyBetweenRuleInputs {
+export interface IMusicNotesHasLengthInclusivelyBetweenRuleInputs {
   a: number;
   b: number;
 }
 
-export interface MusicNotesIsEqualToExceptForRuleInputs {
-  x: MusicNotesAnswer[];
+export interface IMusicNotesIsEqualToExceptForRuleInputs {
+  x: IMusicNotesAnswer[];
   k: number;
 }
 
-export interface MusicNotesIsTranspositionOfRuleInputs {
-  x: MusicNotesAnswer[];
+export interface IMusicNotesIsTranspositionOfRuleInputs {
+  x: IMusicNotesAnswer[];
   y: number;
 }
 
-export interface MusicNotesIsTranspositionOfExceptForRuleInputs {
-  x: MusicNotesAnswer[];
+export interface IMusicNotesIsTranspositionOfExceptForRuleInputs {
+  x: IMusicNotesAnswer[];
   y: number;
   k: number;
 }
 
-export type MusicNotesRuleInputs = (
-  MusicNotesEqualsRuleInputs |
-  MusicNotesIsLongerThanRuleInputs |
-  MusicNotesHasLengthInclusivelyBetweenRuleInputs |
-  MusicNotesIsEqualToExceptForRuleInputs |
-  MusicNotesIsTranspositionOfRuleInputs |
-  MusicNotesIsTranspositionOfExceptForRuleInputs);
+export type IMusicNotesRuleInputs = (
+  IMusicNotesEqualsRuleInputs |
+  IMusicNotesIsLongerThanRuleInputs |
+  IMusicNotesHasLengthInclusivelyBetweenRuleInputs |
+  IMusicNotesIsEqualToExceptForRuleInputs |
+  IMusicNotesIsTranspositionOfRuleInputs |
+  IMusicNotesIsTranspositionOfExceptForRuleInputs);
 
-export interface NumberWithUnitsRuleInputs {
-  f: NumberWithUnitsAnswer;
-}
-
-export interface NumericExpressionRuleInputs {
-  x: string;
+export interface INumberWithUnitsRuleInputs {
+  f: INumberWithUnitsAnswer;
 }
 
 // NumericInput interaction has multiple types of inputs based on
 // rule type.
-export interface NumericInputEqualRuleInputs {
+export interface INumericInputEqualRuleInputs {
   x: number;
 }
 
-export interface NumericInputIsInclusivelyBetweenRuleInputs {
+export interface INumericInputIsInclusivelyBetweenRuleInputs {
   a: number;
   b: number;
 }
 
-export interface NumericInputIsWithinToleranceRuleInputs {
+export interface INumericInputIsWithinToleranceRuleInputs {
   x: number;
   tol: number;
 }
 
-export type NumericInputRuleInputs = (
-  NumericInputEqualRuleInputs |
-  NumericInputIsInclusivelyBetweenRuleInputs |
-  NumericInputIsWithinToleranceRuleInputs);
+export type INumericInputRuleInputs = (
+  INumericInputEqualRuleInputs |
+  INumericInputIsInclusivelyBetweenRuleInputs |
+  INumericInputIsWithinToleranceRuleInputs);
 
-export interface PencilCodeEditorRuleInputs {
+export interface IPencilCodeEditorRuleInputs {
   x: string;
 }
 
-export interface SetInputRuleInputs {
+export interface ISetInputRuleInputs {
   x: string[];
 }
 
-export interface TextInputRuleInputs {
+export interface ITextInputRuleInputs {
   x: string;
 }
 
-export type InteractionRuleInputs = (
-  AlgebraicExpressionRuleInputs |
-  CodeReplRuleInputs |
-  ContinueRuleInputs |
-  DragAndDropRuleInputs |
-  EndExplorationRuleInputs |
-  FractionRuleInputs |
-  GraphRuleInputs |
-  ImageClickRuleInputs |
-  InteractiveMapRuleInputs |
-  ItemSelectionRuleInputs |
-  LogicProofRuleInputs |
-  MathEquationRuleInputs |
-  MathExpressionRuleInputs |
-  MultipleChoiceRuleInputs |
-  MusicNotesRuleInputs |
-  NumericExpressionRuleInputs |
-  NumberWithUnitsRuleInputs |
-  NumericInputRuleInputs |
-  PencilCodeEditorRuleInputs |
-  SetInputRuleInputs |
-  TextInputRuleInputs);
+export type IInteractionRuleInputs = (
+  IAlgebraicExpressionRuleInputs |
+  ICodeReplRuleInputs |
+  IContinueRuleInputs |
+  IDragAndDropRuleInputs |
+  IEndExplorationRuleInputs |
+  IFractionRuleInputs |
+  IGraphRuleInputs |
+  IImageClickRuleInputs |
+  IInteractiveMapRuleInputs |
+  IItemSelectionRuleInputs |
+  ILogicProofRuleInputs |
+  IMathEquationRuleInputs |
+  IMathExpressionRuleInputs |
+  IMultipleChoiceRuleInputs |
+  IMusicNotesRuleInputs |
+  INumberWithUnitsRuleInputs |
+  INumericInputRuleInputs |
+  IPencilCodeEditorRuleInputs |
+  ISetInputRuleInputs |
+  ITextInputRuleInputs);

@@ -23,7 +23,7 @@ import { UpgradedServices } from 'services/UpgradedServices';
 
 require(
   'pages/exploration-editor-page/editor-tab/' +
-  'exploration-editor-tab.component.ts');
+  'exploration-editor-tab.directive.ts');
 
 require('pages/exploration-editor-page/services/change-list.service.ts');
 require('pages/exploration-editor-page/services/exploration-states.service.ts');

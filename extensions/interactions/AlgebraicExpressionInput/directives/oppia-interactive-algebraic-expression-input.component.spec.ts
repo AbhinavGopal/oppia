@@ -53,7 +53,6 @@ describe('AlgebraicExpressionInputInteractive', function() {
   let guppyConfigurationService = null;
   let mathInteractionsService = null;
   let guppyInitializationService = null;
-  let deviceInfoService = null;
 
   class MockGuppy {
     constructor(id: string, config: Object) {}
@@ -61,13 +60,11 @@ describe('AlgebraicExpressionInputInteractive', function() {
     asciimath() {
       return 'Dummy value';
     }
-    configure(name: string, val: Object): void {}
     static event(name: string, handler: Function): void {
-      handler({focused: true});
+      handler();
     }
     static configure(name: string, val: Object): void {}
     static 'remove_global_symbol'(symbol: string): void {}
-    static 'add_global_symbol'(name: string, symbol: Object): void {}
   }
 
   beforeEach(angular.mock.module('oppia'));
@@ -76,7 +73,6 @@ describe('AlgebraicExpressionInputInteractive', function() {
       new DeviceInfoService(new WindowRef()));
     mathInteractionsService = new MathInteractionsService();
     guppyInitializationService = new GuppyInitializationService();
-    deviceInfoService = new DeviceInfoService(new WindowRef());
 
     $provide.value('CurrentInteractionService',
       mockCurrentInteractionService);
@@ -107,8 +103,7 @@ describe('AlgebraicExpressionInputInteractive', function() {
     spyOn(mockCurrentInteractionService, 'onSubmit');
     ctrl.submitAnswer();
     expect(mockCurrentInteractionService.onSubmit).not.toHaveBeenCalled();
-    expect(ctrl.warningText).toBe(
-      'Your answer seems to be missing a variable/number after the "/".');
+    expect(ctrl.warningText).toBe('/ is not a valid postfix operator.');
   });
 
   it('should correctly validate current answer', function() {
@@ -121,15 +116,6 @@ describe('AlgebraicExpressionInputInteractive', function() {
     // This should be validated as false if the editor has been touched.
     ctrl.value = '';
     expect(ctrl.isCurrentAnswerValid()).toBeFalse();
-    expect(ctrl.warningText).toBe('Please enter an answer before submitting.');
-  });
-
-  it('should set the value of showOSK to true', function() {
-    spyOn(deviceInfoService, 'isMobileUserAgent').and.returnValue(true);
-    spyOn(deviceInfoService, 'hasTouchEvents').and.returnValue(true);
-
-    expect(guppyInitializationService.getShowOSK()).toBeFalse();
-    ctrl.showOSK();
-    expect(guppyInitializationService.getShowOSK()).toBeTrue();
+    expect(ctrl.warningText).toBe('Please enter a non-empty answer.');
   });
 });

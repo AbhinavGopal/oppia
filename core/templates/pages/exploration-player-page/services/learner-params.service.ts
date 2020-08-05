@@ -22,7 +22,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 
-export interface ExplorationParams {
+interface ExplorationParams {
   [paramName: string]: string;
 }
 

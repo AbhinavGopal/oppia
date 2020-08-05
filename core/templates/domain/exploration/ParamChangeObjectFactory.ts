@@ -32,38 +32,38 @@ var DEFAULT_CUSTOMIZATION_ARGS = {
   }
 };
 
-interface CopierCustomizationArgs {
+interface ICopierCustomizationArgs {
   'parse_with_jinja': boolean;
   'value': string;
 }
 
-interface RandomSelectorCustomizationArgs {
+interface IRandomSelectorCustomizationArgs {
   'list_of_values': string[];
 }
 
-type ParamChangeCustomizationArgs = (
-  CopierCustomizationArgs | RandomSelectorCustomizationArgs);
+type IParamChangeCustomizationArgs = (
+  ICopierCustomizationArgs | IRandomSelectorCustomizationArgs);
 
-export interface ParamChangeBackendDict {
-  'customization_args': ParamChangeCustomizationArgs;
+export interface IParamChangeBackendDict {
+  'customization_args': IParamChangeCustomizationArgs;
   'generator_id': string;
   'name': string;
 }
 
 export class ParamChange {
-  customizationArgs: ParamChangeCustomizationArgs;
+  customizationArgs: IParamChangeCustomizationArgs;
   generatorId: string;
   name: string;
 
   constructor(
-      customizationArgs: ParamChangeCustomizationArgs, generatorId: string,
+      customizationArgs: IParamChangeCustomizationArgs, generatorId: string,
       name: string) {
     this.customizationArgs = customizationArgs;
     this.generatorId = generatorId;
     this.name = name;
   }
 
-  toBackendDict(): ParamChangeBackendDict {
+  toBackendDict(): IParamChangeBackendDict {
     return {
       customization_args: this.customizationArgs,
       generator_id: this.generatorId,
@@ -81,7 +81,7 @@ export class ParamChange {
 })
 export class ParamChangeObjectFactory {
   createFromBackendDict(
-      paramChangeBackendDict: ParamChangeBackendDict): ParamChange {
+      paramChangeBackendDict: IParamChangeBackendDict): ParamChange {
     return new ParamChange(
       paramChangeBackendDict.customization_args,
       paramChangeBackendDict.generator_id,

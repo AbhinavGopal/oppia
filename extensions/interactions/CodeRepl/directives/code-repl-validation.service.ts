@@ -21,9 +21,9 @@ import { Injectable } from '@angular/core';
 
 import { AnswerGroup } from
   'domain/exploration/AnswerGroupObjectFactory';
-import { Warning, baseInteractionValidationService } from
+import { IWarning, baseInteractionValidationService } from
   'interactions/base-interaction-validation.service';
-import { CodeReplCustomizationArgs } from
+import { ICodeReplCustomizationArgs } from
   'extensions/interactions/customization-args-defs';
 import { Outcome } from
   'domain/exploration/OutcomeObjectFactory';
@@ -39,7 +39,7 @@ export class CodeReplValidationService {
         baseInteractionValidationService) {}
 
   getCustomizationArgsWarnings(
-      customizationArgs: CodeReplCustomizationArgs): Warning[] {
+      customizationArgs: ICodeReplCustomizationArgs): IWarning[] {
     var warningsList = [];
     this.baseInteractionValidationServiceInstance.requireCustomizationArguments(
       customizationArgs, [
@@ -83,8 +83,8 @@ export class CodeReplValidationService {
   }
 
   getAllWarnings(
-      stateName: string, customizationArgs: CodeReplCustomizationArgs,
-      answerGroups: AnswerGroup[], defaultOutcome: Outcome): Warning[] {
+      stateName: string, customizationArgs: ICodeReplCustomizationArgs,
+      answerGroups: AnswerGroup[], defaultOutcome: Outcome): IWarning[] {
     return this.getCustomizationArgsWarnings(customizationArgs).concat(
       this.baseInteractionValidationServiceInstance.getAllOutcomeWarnings(
         answerGroups, defaultOutcome, stateName));

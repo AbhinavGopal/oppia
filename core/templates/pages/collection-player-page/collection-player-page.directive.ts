@@ -18,7 +18,7 @@
 
 require(
   'components/common-layout-directives/common-elements/' +
-  'attribution-guide.component.ts');
+  'attribution-guide.directive.ts');
 require(
   'components/common-layout-directives/common-elements/' +
   'background-banner.component.ts');
@@ -308,8 +308,9 @@ angular.module('oppia').directive('collectionPlayerPage', [
             // Load the collection the learner wants to view.
             ReadOnlyCollectionBackendApiService.loadCollection(
               ctrl.collectionId).then(
-              function(collection) {
-                ctrl.collection = collection;
+              function(collectionBackendObject) {
+                ctrl.collection = CollectionObjectFactory.create(
+                  collectionBackendObject);
                 $rootScope.$broadcast('collectionLoaded');
 
                 PageTitleService.setPageTitle(
@@ -338,7 +339,10 @@ angular.module('oppia').directive('collectionPlayerPage', [
                       CollectionPlaythroughObjectFactory.create(
                         nextExplorationId, completedExplorationIds));
                   } else {
-                    ctrl.collectionPlaythrough = collection.getPlaythrough();
+                    ctrl.collectionPlaythrough = (
+                      CollectionPlaythroughObjectFactory
+                        .createFromBackendObject(
+                          collectionBackendObject.playthrough_dict));
                   }
                   ctrl.nextExplorationId =
                     ctrl.collectionPlaythrough.getNextExplorationId();

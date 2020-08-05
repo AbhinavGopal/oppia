@@ -74,11 +74,11 @@ angular.module('oppia').directive('reviewTestPage', [
                 var skillIdList = [];
                 var skillDescriptions = [];
                 PageTitleService.setPageTitle(
-                  'Review Test: ' + result.storyName + ' - Oppia');
-                for (var skillId in result.skillDescriptions) {
+                  'Review Test: ' + result.story_name + ' - Oppia');
+                for (var skillId in result.skill_descriptions) {
                   skillIdList.push(skillId);
                   skillDescriptions.push(
-                    result.skillDescriptions[skillId]);
+                    result.skill_descriptions[skillId]);
                 }
                 var questionPlayerConfig = {
                   resultActionButtons: [

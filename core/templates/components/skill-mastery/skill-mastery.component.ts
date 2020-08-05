@@ -44,7 +44,7 @@ export class SkillMasteryViewerComponent implements OnInit {
 
     this.skillMasteryBackendApiService.fetchSkillMasteryDegrees(
       [this.skillId]).then(degreesOfMastery => this.skillMasteryDegree = (
-      degreesOfMastery.getMasteryDegree(this.skillId)));
+      degreesOfMastery[this.skillId]));
   }
 
   getSkillMasteryPercentage(): number {

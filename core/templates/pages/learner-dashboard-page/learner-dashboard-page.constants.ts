@@ -47,18 +47,18 @@ export class LearnerDashboardPageConstants {
 
   public static SUBSCRIPTION_SORT_BY_KEYS_AND_I18N_IDS = {
     USERNAME: {
-      key: 'username',
+      key: 'subscriber_username',
       i18nId: 'I18N_PREFERENCES_USERNAME'
     },
     IMPACT: {
-      key: 'impact',
+      key: 'subscriber_impact',
       i18nId: 'I18N_CREATOR_IMPACT'
     }
   };
 
   public static FEEDBACK_THREADS_SORT_BY_KEYS_AND_I18N_IDS = {
     LAST_UPDATED: {
-      key: 'lastUpdatedMsecs',
+      key: 'last_updated_msecs',
       i18nId: 'I18N_DASHBOARD_EXPLORATIONS_SORT_BY_LAST_UPDATED'
     },
     EXPLORATION: {

@@ -45,16 +45,15 @@ class EmailHashRegenerationOneOffJobTests(test_utils.GenericTestBase):
         self.process_and_flush_pending_tasks()
 
     def test_hashes_get_generated(self):
+        # pylint: disable=unused-argument
         def _generate_hash_for_tests(
-                unused_cls, recipient_id, unused_email_subject,
-                unused_email_body):
+                cls, recipient_id, email_subject, email_body):
             """Generates hash for tests.
 
             Args:
-                unused_cls: cls. Unused cls.
                 recipient_id: str. ID of the recipient.
-                unused_email_subject: str. Subject of the email.
-                unused_email_body: str. Body of the email.
+                email_subject: str. Subject of the email.
+                email_body: str. Body of the email.
 
             Returns:
                 str. Empty if recipient_id is 'recipient_id2', None if

@@ -18,7 +18,7 @@
 
 import { FractionInputRulesService } from
   'interactions/FractionInput/directives/fraction-input-rules.service';
-import { FractionAnswer } from 'interactions/answer-defs';
+import { IFractionAnswer } from 'interactions/answer-defs';
 import { TestBed } from '@angular/core/testing';
 
 describe('Fraction Input rules service', () => {
@@ -32,7 +32,7 @@ describe('Fraction Input rules service', () => {
 
   let createNegativeFractionDict = (
       wholeNumber: number, numerator: number,
-      denominator: number): FractionAnswer => {
+      denominator: number): IFractionAnswer => {
     return {
       isNegative: true,
       wholeNumber: wholeNumber,
@@ -43,7 +43,7 @@ describe('Fraction Input rules service', () => {
 
   let createPositiveFractionDict = (
       wholeNumber: number, numerator: number,
-      denominator: number): FractionAnswer => {
+      denominator: number): IFractionAnswer => {
     return {
       isNegative: false,
       wholeNumber: wholeNumber,
@@ -52,7 +52,7 @@ describe('Fraction Input rules service', () => {
     };
   };
 
-  let RULE_INPUT: {f: FractionAnswer} = {
+  let RULE_INPUT: {f: IFractionAnswer} = {
     f: {
       isNegative: false,
       wholeNumber: 1,
@@ -65,7 +65,7 @@ describe('Fraction Input rules service', () => {
     x: 20
   };
 
-  let FRACTIONAL_RULE_INPUT: {f: FractionAnswer} = {
+  let FRACTIONAL_RULE_INPUT: {f: IFractionAnswer} = {
     f: {
       isNegative: false,
       wholeNumber: 0,

@@ -36,7 +36,6 @@ describe('Merge Skill Modal Controller', function() {
       $uibModalInstance: $uibModalInstance,
       categorizedSkills: categorizedSkills,
       skill: skill,
-      untriagedSkillSummaries: [],
       skillSummaries: skillSummaries
     });
   }));

@@ -40,26 +40,28 @@ angular.module('oppia').controller(
         $scope: $scope,
         $uibModalInstance: $uibModalInstance
       });
-      $scope.instructionMessage = (
-        'Select the skill(s) to link the question to:');
-      $scope.currentMode = MODE_SELECT_DIFFICULTY;
-      SkillBackendApiService.fetchSkill(skillId)
-        .then(function(backendSkillObject) {
-          $scope.skill =
-            SkillObjectFactory.createFromBackendDict(
-              backendSkillObject.skill);
-          $scope.linkedSkillsWithDifficulty = [
-            SkillDifficultyObjectFactory.create(
-              skillId, $scope.skill.getDescription(),
-              DEFAULT_SKILL_DIFFICULTY)
-          ];
-          $scope.skillIdToRubricsObject = {};
-          $scope.skillIdToRubricsObject[skillId] =
-            $scope.skill.getRubrics();
-        }, function(error) {
-          AlertsService.addWarning(
-            `Error populating skill: ${error}.`);
-        });
+      const init = function() {
+        $scope.instructionMessage = (
+          'Select the skill(s) to link the question to:');
+        $scope.currentMode = MODE_SELECT_DIFFICULTY;
+        SkillBackendApiService.fetchSkill(skillId)
+          .then(function(backendSkillObject) {
+            $scope.skill =
+              SkillObjectFactory.createFromBackendDict(
+                backendSkillObject.skill);
+            $scope.linkedSkillsWithDifficulty = [
+              SkillDifficultyObjectFactory.create(
+                skillId, $scope.skill.getDescription(),
+                DEFAULT_SKILL_DIFFICULTY)
+            ];
+            $scope.skillIdToRubricsObject = {};
+            $scope.skillIdToRubricsObject[skillId] =
+              $scope.skill.getRubrics();
+          }, function(error) {
+            AlertsService.addWarning(
+              `Error populating skill: ${error}.`);
+          });
+      };
 
       $scope.startQuestionCreation = function() {
         const result = {
@@ -70,5 +72,7 @@ angular.module('oppia').controller(
         };
         $uibModalInstance.close(result);
       };
+
+      init();
     }
   ]);

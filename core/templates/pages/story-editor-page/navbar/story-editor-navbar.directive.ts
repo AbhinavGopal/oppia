@@ -20,13 +20,12 @@ require(
   'confirm-or-cancel-modal.controller.ts');
 require(
   'components/common-layout-directives/common-elements/' +
-  'loading-dots.component.ts');
+  'loading-dots.directive.ts');
 require('domain/editor/undo_redo/base-undo-redo.service.ts');
 require('domain/editor/undo_redo/undo-redo.service.ts');
 require('domain/story/editable-story-backend-api.service.ts');
 require('domain/utilities/url-interpolation.service.ts');
 require('pages/story-editor-page/services/story-editor-state.service.ts');
-require('pages/story-editor-page/services/story-editor-navigation.service.ts');
 require('services/alerts.service.ts');
 require('services/contextual/url.service.ts');
 
@@ -41,18 +40,16 @@ angular.module('oppia').directive('storyEditorNavbar', [
       controller: [
         '$scope', '$rootScope', '$uibModal', 'AlertsService',
         'EditableStoryBackendApiService', 'UndoRedoService',
-        'StoryEditorStateService', 'StoryEditorNavigationService', 'UrlService',
+        'StoryEditorStateService', 'UrlService',
         'EVENT_STORY_INITIALIZED', 'EVENT_STORY_REINITIALIZED',
         'EVENT_UNDO_REDO_SERVICE_CHANGE_APPLIED',
         function(
             $scope, $rootScope, $uibModal, AlertsService,
             EditableStoryBackendApiService, UndoRedoService,
-            StoryEditorStateService, StoryEditorNavigationService, UrlService,
+            StoryEditorStateService, UrlService,
             EVENT_STORY_INITIALIZED, EVENT_STORY_REINITIALIZED,
             EVENT_UNDO_REDO_SERVICE_CHANGE_APPLIED) {
           var ctrl = this;
-          var EDITOR = 'Editor';
-          var PREVIEW = 'Preview';
           $scope.explorationValidationIssues = [];
 
           $scope.getChangeListLength = function() {
@@ -165,36 +162,8 @@ angular.module('oppia').directive('storyEditorNavbar', [
               });
           };
 
-          $scope.toggleWarningText = function() {
-            $scope.warningsAreShown = !$scope.warningsAreShown;
-          };
-
-          $scope.toggleNavigationOptions = function() {
-            $scope.showNavigationOptions = !$scope.showNavigationOptions;
-          };
-
-          $scope.toggleStoryEditOptions = function() {
-            $scope.showStoryEditOptions = !$scope.showStoryEditOptions;
-          };
-
-          $scope.selectMainTab = function() {
-            $scope.activeTab = EDITOR;
-            StoryEditorNavigationService.navigateToStoryEditor();
-            $scope.showNavigationOptions = false;
-          };
-
-          $scope.selectPreviewTab = function() {
-            $scope.activeTab = PREVIEW;
-            StoryEditorNavigationService.navigateToStoryPreviewTab();
-            $scope.showNavigationOptions = false;
-          };
-
           ctrl.$onInit = function() {
             $scope.forceValidateExplorations = true;
-            $scope.warningsAreShown = false;
-            $scope.activeTab = EDITOR;
-            $scope.showNavigationOptions = false;
-            $scope.showStoryEditOptions = false;
             $scope.story = StoryEditorStateService.getStory();
             $scope.isStoryPublished = StoryEditorStateService.isStoryPublished;
             $scope.isSaveInProgress = StoryEditorStateService.isSavingStory;

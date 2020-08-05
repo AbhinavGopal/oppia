@@ -23,9 +23,9 @@ import { AnswerClassificationService } from
   'pages/exploration-player-page/services/answer-classification.service';
 import { FractionObjectFactory } from
   'domain/objects/FractionObjectFactory';
-import { InteractionAnswer, FractionAnswer, MultipleChoiceAnswer } from
+import { IInteractionAnswer, IFractionAnswer, IMultipleChoiceAnswer } from
   'interactions/answer-defs';
-import { MultipleChoiceInputCustomizationArgs } from
+import { IMultipleChoiceInputCustomizationArgs } from
   'extensions/interactions/customization-args-defs';
 import { InteractionRulesRegistryService } from
   'services/interaction-rules-registry.service';
@@ -35,31 +35,31 @@ import { StateInteractionStatsBackendApiService } from
 
 type Option = string | string[];
 
-interface AnswerData {
-  answer: InteractionAnswer;
+interface IAnswerData {
+  answer: IInteractionAnswer;
   frequency: number;
   isAddressed: boolean;
 }
 
-interface VisualizationInfo {
+interface IVisualizationInfo {
   addressedInfoIsSupported: boolean;
-  data: AnswerData[];
+  data: IAnswerData[];
   id: string;
   options: {
     [option: string]: Option;
   };
 }
 
-export interface StateInteractionStats {
+export interface IStateInteractionStats {
   explorationId: string;
   stateName: string;
-  visualizationsInfo: VisualizationInfo[];
+  visualizationsInfo: IVisualizationInfo[];
 }
 
 @Injectable({providedIn: 'root'})
 export class StateInteractionStatsService {
   // NOTE TO DEVELOPERS: Fulfilled promises can be reused indefinitely.
-  statsCache: Map<string, Promise<StateInteractionStats>> = new Map();
+  statsCache: Map<string, Promise<IStateInteractionStats>> = new Map();
 
   constructor(
       private answerClassificationService: AnswerClassificationService,
@@ -78,15 +78,15 @@ export class StateInteractionStatsService {
 
   // Converts answer to a more-readable representation based on its type.
   private getReadableAnswerString(
-      state: State, answer: InteractionAnswer): InteractionAnswer {
+      state: State, answer: IInteractionAnswer): IInteractionAnswer {
     if (state.interaction.id === 'FractionInput') {
       return this.fractionObjectFactory.fromDict(
-        <FractionAnswer> answer).toString();
+        <IFractionAnswer> answer).toString();
     } else if (state.interaction.id === 'MultipleChoiceInput') {
       const customizationArgs = (
-        <MultipleChoiceInputCustomizationArgs>
+        <IMultipleChoiceInputCustomizationArgs>
         state.interaction.customizationArgs);
-      return customizationArgs.choices.value[<MultipleChoiceAnswer> answer];
+      return customizationArgs.choices.value[<IMultipleChoiceAnswer> answer];
     }
     return answer;
   }
@@ -95,7 +95,7 @@ export class StateInteractionStatsService {
    * Returns a promise which will provide details of the given state's
    * answer-statistics.
    */
-  computeStats(expId: string, state: State): Promise<StateInteractionStats> {
+  computeStats(expId: string, state: State): Promise<IStateInteractionStats> {
     if (this.statsCache.has(state.name)) {
       return this.statsCache.get(state.name);
     }
@@ -104,12 +104,12 @@ export class StateInteractionStatsService {
         state.interaction.id));
 
     const statsPromise = this.stateInteractionStatsBackendApiService.getStats(
-      expId, state.name).then(vizInfo => <StateInteractionStats> {
+      expId, state.name).then(vizInfo => <IStateInteractionStats> {
         explorationId: expId,
         stateName: state.name,
-        visualizationsInfo: vizInfo.map(info => <VisualizationInfo> ({
+        visualizationsInfo: vizInfo.map(info => <IVisualizationInfo> ({
           addressedInfoIsSupported: info.addressedInfoIsSupported,
-          data: info.data.map(datum => <AnswerData>{
+          data: info.data.map(datum => <IAnswerData>{
             answer: this.getReadableAnswerString(state, datum.answer),
             frequency: datum.frequency,
             isAddressed: (

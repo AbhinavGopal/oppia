@@ -63,10 +63,12 @@ class SetupGaeTests(test_utils.GenericTestBase):
         self.print_arr = []
         def mock_print(msg):
             self.print_arr.append(msg)
-        def mock_url_retrieve(unused_url, filename):  # pylint: disable=unused-argument
+        # pylint: disable=unused-argument
+        def mock_url_retrieve(unused_url, filename):
             self.check_function_calls['url_retrieve_is_called'] = True
             if self.raise_error:
                 raise Exception
+        # pylint: enable=unused-argument
         self.walk_swap = self.swap(os, 'walk', mock_walk)
         self.remove_swap = self.swap(os, 'remove', mock_remove)
         self.makedirs_swap = self.swap(os, 'makedirs', mock_makedirs)
@@ -104,8 +106,10 @@ class SetupGaeTests(test_utils.GenericTestBase):
             if path == common.GOOGLE_APP_ENGINE_HOME:
                 return False
             return True
-        def mock_extractall(unused_self, path):  # pylint: disable=unused-argument
+        # pylint: disable=unused-argument
+        def mock_extractall(unused_self, path):
             self.check_function_calls['extractall_is_called'] = True
+        # pylint: enable=unused-argument
         exists_swap = self.swap(os.path, 'exists', mock_exists)
         zipfile_swap = self.swap(
             setup_gae, 'GAE_DOWNLOAD_ZIP_PATH', MOCK_TMP_UNZIP_PATH)
@@ -133,8 +137,7 @@ class SetupGaeTests(test_utils.GenericTestBase):
 
         with self.walk_swap, self.remove_swap, self.makedirs_swap:
             with self.print_swap, self.url_retrieve_swap, exists_swap:
-                with self.assertRaisesRegexp(
-                    Exception, 'Error downloading Google App Engine.'):
+                with self.assertRaises(Exception):
                     setup_gae.main(args=[])
         self.assertEqual(
             self.check_function_calls, self.expected_check_function_calls)
@@ -154,11 +157,13 @@ class SetupGaeTests(test_utils.GenericTestBase):
                 return False
             return True
         temp_file = tarfile.open(name=MOCK_TMP_UNTAR_PATH)
-        def mock_open(name):  # pylint: disable=unused-argument
+        # pylint: disable=unused-argument
+        def mock_open(name):
             self.check_function_calls['open_is_called'] = True
             return temp_file
-        def mock_extractall(unused_self, path):  # pylint: disable=unused-argument
+        def mock_extractall(unused_self, path):
             self.check_function_calls['extractall_is_called'] = True
+        # pylint: enable=unused-argument
         def mock_close(unused_self):
             self.check_function_calls['close_is_called'] = True
         exists_swap = self.swap(os.path, 'exists', mock_exists)
@@ -188,8 +193,7 @@ class SetupGaeTests(test_utils.GenericTestBase):
 
         with self.walk_swap, self.remove_swap, self.makedirs_swap:
             with self.print_swap, self.url_retrieve_swap, exists_swap:
-                with self.assertRaisesRegexp(
-                    Exception, 'Error downloading Google Cloud SDK.'):
+                with self.assertRaises(Exception):
                     setup_gae.main(args=[])
         self.assertEqual(
             self.check_function_calls, self.expected_check_function_calls)

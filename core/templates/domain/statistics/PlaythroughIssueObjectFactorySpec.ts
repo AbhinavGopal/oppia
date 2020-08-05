@@ -17,7 +17,7 @@
  */
 
 import {
-  PlaythroughIssueBackendDict,
+  IPlaythroughIssueBackendDict,
   PlaythroughIssueObjectFactory,
   EarlyQuitPlaythroughIssue
 } from 'domain/statistics/PlaythroughIssueObjectFactory';
@@ -85,7 +85,7 @@ describe('Playthrough Issue Object Factory', () => {
   });
 
   it('should convert exploration issue to backend dict', () => {
-    const playthroughDict: PlaythroughIssueBackendDict = {
+    const playthroughDict: IPlaythroughIssueBackendDict = {
       issue_type: 'EarlyQuit',
       issue_customization_args: {
         state_name: {
@@ -121,51 +121,12 @@ describe('Playthrough Issue Object Factory', () => {
     };
 
     expect(() => {
-      // This throws "Type 'string' is not assignable to type
-      // '"CyclicStateTransitions"'." This is because 'playthroughDict' has an
-      // invalid value of 'issue_type' property. We need to do that in order
-      // to test validations.
-      // @ts-expect-error
+      // TS ignore is used because playthrough dict is assigned a invalid type
+      // to test errors.
+      // @ts-ignore
       piof.createFromBackendDict(playthroughDict);
     }).toThrowError(
       'Backend dict does not match any known issue type: ' +
       JSON.stringify(playthroughDict));
-  });
-
-  it('should return the state in which the issue appears', () => {
-    let eqPlaythrough = piof.createFromBackendDict({
-      issue_type: 'EarlyQuit',
-      issue_customization_args: {
-        state_name: {value: 'state'},
-        time_spent_in_exp_in_msecs: {value: 30000},
-      },
-      playthrough_ids: [],
-      schema_version: 1,
-      is_valid: true
-    });
-    expect(eqPlaythrough.getStateNameWithIssue()).toEqual('state');
-
-    let cstPlaythrough = piof.createFromBackendDict({
-      issue_type: 'CyclicStateTransitions',
-      issue_customization_args: {
-        state_names: {value: ['state3', 'state1']}
-      },
-      playthrough_ids: [],
-      schema_version: 1,
-      is_valid: true
-    });
-    expect(cstPlaythrough.getStateNameWithIssue()).toEqual('state1');
-
-    let misPlaythrough = piof.createFromBackendDict({
-      issue_type: 'MultipleIncorrectSubmissions',
-      issue_customization_args: {
-        state_name: {value: 'state'},
-        num_times_answered_incorrectly: {value: 5},
-      },
-      playthrough_ids: [],
-      schema_version: 1,
-      is_valid: true
-    });
-    expect(misPlaythrough.getStateNameWithIssue()).toEqual('state');
   });
 });

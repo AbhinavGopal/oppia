@@ -23,19 +23,20 @@ import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 
 import { AppConstants } from 'app.constants';
-import { LearnerExplorationSummaryBackendDict } from
-  'domain/summary/learner-exploration-summary-object.factory';
+// eslint-disable-next-line max-len
+import { IExplorationSummaryBackendDict } from
+  'domain/summary/exploration-summary-object.factory';
 
-export interface CollectionNodeBackendDict {
+export interface ICollectionNodeBackendDict {
   'exploration_id'?: string;
-  'exploration_summary'?: LearnerExplorationSummaryBackendDict;
+  'exploration_summary'?: IExplorationSummaryBackendDict;
 }
 
 export class CollectionNode {
   _explorationId: string;
-  _explorationSummaryObject: LearnerExplorationSummaryBackendDict;
+  _explorationSummaryObject: IExplorationSummaryBackendDict;
 
-  constructor(collectionNodeBackendObject: CollectionNodeBackendDict) {
+  constructor(collectionNodeBackendObject: ICollectionNodeBackendDict) {
     this._explorationId = collectionNodeBackendObject.exploration_id;
     this._explorationSummaryObject = cloneDeep(
       collectionNodeBackendObject.exploration_summary);
@@ -80,7 +81,7 @@ export class CollectionNode {
   // frontend exploration summary tile displaying. Changes to the returned
   // object are not reflected in this domain object. The value returned by
   // this function is null if doesExplorationExist() returns false.
-  getExplorationSummaryObject(): LearnerExplorationSummaryBackendDict {
+  getExplorationSummaryObject(): IExplorationSummaryBackendDict {
     // TODO(bhenning): This should be represented by a
     // frontend summary domain object that is also shared with
     // the search result and profile pages.
@@ -89,8 +90,7 @@ export class CollectionNode {
 
   // Sets the raw exploration summary object stored within this node.
   setExplorationSummaryObject(
-      explorationSummaryBackendObject:
-      LearnerExplorationSummaryBackendDict): void {
+      explorationSummaryBackendObject: IExplorationSummaryBackendDict): void {
     this._explorationSummaryObject = cloneDeep(
       explorationSummaryBackendObject);
   }
@@ -110,7 +110,7 @@ export class CollectionNodeObjectFactory {
   // contexts. This function takes a JSON object which represents a backend
   // collection node python dict.
   create(
-      collectionNodeBackendObject: CollectionNodeBackendDict):
+      collectionNodeBackendObject: ICollectionNodeBackendDict):
       CollectionNode {
     return new CollectionNode(collectionNodeBackendObject);
   }

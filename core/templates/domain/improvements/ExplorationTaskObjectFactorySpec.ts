@@ -22,7 +22,7 @@ import { ExplorationTaskObjectFactory } from
   'domain/improvements/ExplorationTaskObjectFactory';
 import { HighBounceRateTask } from
   'domain/improvements/HighBounceRateTaskObjectFactory';
-import { TaskEntryBackendDict } from
+import { ITaskEntryBackendDict } from
   'domain/improvements/TaskEntryObjectFactory';
 import { IneffectiveFeedbackLoopTask } from
   'domain/improvements/IneffectiveFeedbackLoopTaskObjectFactory';
@@ -40,7 +40,7 @@ describe('Exploration task object factory', () => {
 
   beforeEach(() => {
     this.newTaskEntryBackendDict = (
-      (taskType: string): TaskEntryBackendDict => ({
+      (taskType: string): ITaskEntryBackendDict => ({
         entity_type: 'exploration',
         entity_id: 'eid',
         entity_version: 1,
@@ -83,32 +83,10 @@ describe('Exploration task object factory', () => {
     ).toBeInstanceOf(SuccessiveIncorrectAnswersTask);
   });
 
-  it('should build a new resolved exloration task', () => {
-    const task = expTaskObjectFactory.createNewResolvedTask(
-      'eid', 1, 'high_bounce_rate', 'Introduction');
-    expect(task.entityId).toEqual('eid');
-    expect(task.entityVersion).toEqual(1);
-    expect(task.taskType).toEqual('high_bounce_rate');
-    expect(task.targetId).toEqual('Introduction');
-    expect(task.isResolved()).toBeTrue();
-  });
-
-  it('should build a new obsolete exloration task', () => {
-    const task = expTaskObjectFactory.createNewObsoleteTask(
-      'eid', 1, 'high_bounce_rate', 'Introduction');
-    expect(task.entityId).toEqual('eid');
-    expect(task.entityVersion).toEqual(1);
-    expect(task.taskType).toEqual('high_bounce_rate');
-    expect(task.targetId).toEqual('Introduction');
-    expect(task.isObsolete()).toBeTrue();
-  });
-
   it('should throw an error if task type is unknown', () => {
     expect(
       () => expTaskObjectFactory.createFromBackendDict(
         this.newTaskEntryBackendDict('unknown_task_type'))
-    ).toThrowError(new RegExp(
-      'Unsupported task type "unknown_task_type" for backend dict: ' +
-      '{.*"task_type":"unknown_task_type".*}'));
+    ).toThrowError(/Backend dict does not match any known task type/);
   });
 });

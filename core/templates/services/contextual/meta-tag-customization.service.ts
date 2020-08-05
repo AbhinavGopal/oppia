@@ -21,19 +21,13 @@ import { Injectable } from '@angular/core';
 
 import { WindowRef } from './window-ref.service';
 
-interface MetaAttribute {
-  propertyType: string;
-  propertyValue: string;
-  content: string;
-}
-
 @Injectable({
   providedIn: 'root'
 })
 export class MetaTagCustomizationService {
   constructor(private windowRef: WindowRef) {}
 
-  addMetaTags(attrArray: MetaAttribute[]): void {
+  addMetaTags(attrArray: Array<any>): void {
     attrArray.forEach(attr => {
       let meta = this.windowRef.nativeWindow.document.createElement('meta');
       meta.setAttribute(attr.propertyType, attr.propertyValue);

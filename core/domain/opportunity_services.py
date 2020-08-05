@@ -446,15 +446,10 @@ def get_exploration_opportunity_summaries_by_ids(ids):
         opportunity_models.ExplorationOpportunitySummaryModel.get_multi(ids))
     opportunities = []
     for exp_opportunity_summary_model in exp_opportunity_summary_models:
-        if exp_opportunity_summary_model is not None:
-            exp_opportunity_summary = (
-                get_exploration_opportunity_summary_from_model(
-                    exp_opportunity_summary_model))
-            opportunities.append(exp_opportunity_summary)
-        else:
-            logging.warning(
-                'When getting the exploration opportunity summary models for '
-                'ids: %s, one of the models was None.' % ids)
+        exp_opportunity_summary = (
+            get_exploration_opportunity_summary_from_model(
+                exp_opportunity_summary_model))
+        opportunities.append(exp_opportunity_summary)
     return opportunities
 
 
@@ -557,7 +552,7 @@ def create_skill_opportunity(skill_id, skill_description):
         skill_description: str. The skill_description of the opportunity.
 
     Raises:
-        Exception. If a SkillOpportunityModel corresponding to the supplied
+        Exception: If a SkillOpportunityModel corresponding to the supplied
             skill_id already exists.
     """
     skill_opportunity_model = (

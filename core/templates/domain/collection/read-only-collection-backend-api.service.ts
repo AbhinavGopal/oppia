@@ -24,30 +24,8 @@ import { Injectable } from '@angular/core';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { AppConstants } from 'app.constants';
-import { CollectionBackendDict, CollectionObjectFactory, Collection } from
-  'domain/collection/CollectionObjectFactory';
 import { UrlInterpolationService } from
   'domain/utilities/url-interpolation.service';
-
-interface CollectionCache {
-  [collectionId: string]: Collection;
-}
-
-interface CollectionDetails {
-  canEdit: boolean;
-  title: string;
-}
-
-interface CollectionDetailsCache {
-  [collectionId: string]: CollectionDetails;
-}
-
-interface ReadOnlyCollectionBackendResponse {
-  'meta_name': string;
-  'can_edit': boolean;
-  'meta_description': string;
-  'collection': CollectionBackendDict;
-}
 
 // TODO(bhenning): For preview mode, this service should be replaced by a
 // separate CollectionDataService implementation which returns a local copy of
@@ -59,44 +37,42 @@ interface ReadOnlyCollectionBackendResponse {
 export class ReadOnlyCollectionBackendApiService {
   constructor(
     private http: HttpClient,
-    private collectionObjectFactory: CollectionObjectFactory,
     private urlInterpolationService: UrlInterpolationService) {}
-  private _collectionCache: CollectionCache = {};
-  private _collectionDetailsCache: CollectionDetailsCache = {};
+  private _collectionCache = [];
+  private _collectionDetailsCache = [];
 
   private _fetchCollection(
       collectionId: string,
-      successCallback: (value: Collection) => void,
-      errorCallback: (reason: string) => void): void {
+      successCallback: (value?: Object | PromiseLike<Object>) => void,
+      errorCallback: (reason?: any) => void): void {
     var collectionDataUrl = this.urlInterpolationService.interpolateUrl(
       AppConstants.COLLECTION_DATA_URL_TEMPLATE, {
         collection_id: collectionId
       });
 
-    this.http.get<ReadOnlyCollectionBackendResponse>(
-      collectionDataUrl).toPromise().then(response => {
-      this._cacheCollectionDetails(response);
-      var collectionObject = this.collectionObjectFactory.create(
-        response.collection);
-      if (successCallback) {
-        successCallback(collectionObject);
-      }
-    }, errorResponse => {
-      if (errorCallback) {
-        errorCallback(errorResponse.error.error);
-      }
-    });
+    this.http.get(collectionDataUrl).toPromise()
+      .then((response: any) => {
+        var collection = cloneDeep(response.collection);
+        this._cacheCollectionDetails(response);
+        if (successCallback) {
+          successCallback(collection);
+        }
+      }, (errorResponse) => {
+        if (errorCallback) {
+          errorCallback(errorResponse.error);
+        }
+      });
   }
 
-  private _cacheCollectionDetails(
-      details: ReadOnlyCollectionBackendResponse): void {
+  // TODO(#7165): Replace 'any' with the exact type.
+  private _cacheCollectionDetails(details: any) {
     this._collectionDetailsCache[details.collection.id] = {
       canEdit: details.can_edit,
       title: details.collection.title,
     };
   }
 
-  private _isCached(collectionId: string): boolean {
+  private _isCached(collectionId: string) {
     return this._collectionCache.hasOwnProperty(collectionId);
   }
 
@@ -111,7 +87,7 @@ export class ReadOnlyCollectionBackendApiService {
    * rejection callback function is passed the error that occurred and the
    * collection ID.
    */
-  fetchCollection(collectionId: string): Promise<Collection> {
+  fetchCollection(collectionId: string) {
     return new Promise((resolve, reject) => {
       this._fetchCollection(collectionId, resolve, reject);
     });
@@ -126,14 +102,14 @@ export class ReadOnlyCollectionBackendApiService {
    * it will store it in the cache to avoid requests from the backend in
    * further function calls.
    */
-  loadCollection(collectionId: string): Promise<Collection> {
+  loadCollection(collectionId: string) {
     return new Promise((resolve, reject) => {
       if (this._isCached(collectionId)) {
         if (resolve) {
           resolve(cloneDeep(this._collectionCache[collectionId]));
         }
       } else {
-        this._fetchCollection(collectionId, collection => {
+        this._fetchCollection(collectionId, (collection) => {
           // Save the fetched collection to avoid future fetches.
           this._collectionCache[collectionId] = collection;
           if (resolve) {
@@ -144,7 +120,7 @@ export class ReadOnlyCollectionBackendApiService {
     });
   }
 
-  getCollectionDetails(collectionId: string): CollectionDetails {
+  getCollectionDetails(collectionId: string) {
     if (this._collectionDetailsCache[collectionId]) {
       return this._collectionDetailsCache[collectionId];
     } else {
@@ -156,7 +132,7 @@ export class ReadOnlyCollectionBackendApiService {
    * Returns whether the given collection is stored within the local data
    * cache or if it needs to be retrieved from the backend upon a laod.
    */
-  isCached(collectionId: string): boolean {
+  isCached(collectionId: string) {
     return this._isCached(collectionId);
   }
 
@@ -164,7 +140,8 @@ export class ReadOnlyCollectionBackendApiService {
    * Replaces the current collection in the cache given by the specified
    * collection ID with a new collection object.
    */
-  cacheCollection(collectionId: string, collection: Collection): void {
+  // TODO(#7165): Replace 'any' with the exact type.
+  cacheCollection(collectionId: string, collection: any) {
     this._collectionCache[collectionId] = cloneDeep(collection);
   }
 
@@ -172,8 +149,8 @@ export class ReadOnlyCollectionBackendApiService {
    * Clears the local collection data cache, forcing all future loads to
    * re-request the previously loaded collections from the backend.
    */
-  clearCollectionCache(): void {
-    this._collectionCache = {};
+  clearCollectionCache() {
+    this._collectionCache = [];
   }
 }
 

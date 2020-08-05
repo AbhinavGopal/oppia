@@ -251,9 +251,13 @@ describe('Search service', function() {
       hi: true
     };
     var mockInput = document.createElement('input');
+    // @ts-ignore
     var jquerySpy = spyOn(window, '$');
+    // @ts-ignore
     jquerySpy.withArgs('.oppia-search-bar-input').and.returnValue(
+      // @ts-ignore
       $(mockInput).val(searchQuery));
+    // @ts-ignore
     jquerySpy.withArgs(mockInput).and.callThrough();
 
     $httpBackend.expect('GET', '/searchhandler/data?q=example&category=' +
@@ -286,10 +290,14 @@ describe('Search service', function() {
       hi: true
     };
     var mockInput = document.createElement('input');
+    // @ts-ignore
     var jquerySpy = spyOn(window, '$');
 
+    // @ts-ignore
     jquerySpy.withArgs('.oppia-search-bar-input').and.returnValue(
+      // @ts-ignore
       $(mockInput).val('mismatch'));
+    // @ts-ignore
     jquerySpy.withArgs(mockInput).and.callThrough();
 
     $httpBackend.expect('GET', '/searchhandler/data?q=example&category=' +

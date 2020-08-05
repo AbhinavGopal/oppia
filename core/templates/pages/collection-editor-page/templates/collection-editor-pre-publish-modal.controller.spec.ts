@@ -49,11 +49,7 @@ describe('Collection Editor Pre Publish Modal Controller', function() {
       nodes: [{
         exploration_id: 'exp1',
         exploration_summary: {}
-      }],
-      playthrough_dict: {
-        next_exploration_id: 'expId',
-        completed_exploration_ids: ['expId2']
-      }
+      }]
     };
 
     beforeEach(angular.mock.inject(function($injector, $controller) {
@@ -122,11 +118,7 @@ describe('Collection Editor Pre Publish Modal Controller', function() {
       nodes: [{
         exploration_id: 'exp1',
         exploration_summary: {}
-      }],
-      playthrough_dict: {
-        next_exploration_id: 'expId',
-        completed_exploration_ids: ['expId2']
-      }
+      }]
     };
 
     beforeEach(angular.mock.inject(function($injector, $controller) {

@@ -51,11 +51,11 @@ angular.module('oppia').factory('ExplorationCreationService', [
         $http.post('/contributehandler/create_new', {
         }).then(function(response) {
           SiteAnalyticsService.registerCreateNewExplorationEvent(
-            response.data.exploration_id);
+            response.data.explorationId);
           $timeout(function() {
             $window.location = UrlInterpolationService.interpolateUrl(
               CREATE_NEW_EXPLORATION_URL_TEMPLATE, {
-                exploration_id: response.data.exploration_id
+                exploration_id: response.data.explorationId
               }
             );
           }, 150);
@@ -98,7 +98,7 @@ angular.module('oppia').factory('ExplorationCreationService', [
             }).done(function(data) {
               $window.location = UrlInterpolationService.interpolateUrl(
                 CREATE_NEW_EXPLORATION_URL_TEMPLATE, {
-                  exploration_id: data.exploration_id
+                  exploration_id: data.explorationId
                 }
               );
             }).fail(function(data) {

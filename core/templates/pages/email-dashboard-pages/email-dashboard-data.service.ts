@@ -19,7 +19,7 @@
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 
-import { QueryData, EmailDashboardBackendApiService } from
+import { IQueryData, EmailDashboardBackendApiService } from
   'domain/email-dashboard/email-dashboard-backend-api.service';
 import { EmailDashboardQuery } from
   'domain/email-dashboard/email-dashboard-query-object.factory';
@@ -53,7 +53,7 @@ export class EmailDashboardDataService {
     return this.latestCursor;
   }
 
-  submitQuery(data: QueryData): Promise<EmailDashboardQuery[]> {
+  submitQuery(data: IQueryData): Promise<Array<EmailDashboardQuery>> {
     var startQueryIndex = this.currentPageIndex * this.QUERIES_PER_PAGE;
     var endQueryIndex = (this.currentPageIndex + 1) * this.QUERIES_PER_PAGE;
 

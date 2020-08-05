@@ -20,26 +20,26 @@
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 
-import { InteractionRuleInputs } from 'interactions/rule-input-defs';
+import { IInteractionRuleInputs } from 'interactions/rule-input-defs';
 
-export interface RuleBackendDict {
-  'inputs': RuleInputs;
+export interface IBackendRuleDict {
+  'inputs': IRuleInputs;
   'rule_type': string;
 }
 
-export interface RuleInputs {
-  [propName: string]: InteractionRuleInputs;
+export interface IRuleInputs {
+  [propName: string]: IInteractionRuleInputs;
 }
 
 export class Rule {
   type: string;
-  inputs: RuleInputs;
+  inputs: IRuleInputs;
 
-  constructor(type: string, inputs: RuleInputs) {
+  constructor(type: string, inputs: IRuleInputs) {
     this.type = type;
     this.inputs = inputs;
   }
-  toBackendDict(): RuleBackendDict {
+  toBackendDict(): IBackendRuleDict {
     return {
       rule_type: this.type,
       inputs: this.inputs
@@ -51,11 +51,11 @@ export class Rule {
   providedIn: 'root'
 })
 export class RuleObjectFactory {
-  createNew(type: string, inputs: RuleInputs): Rule {
+  createNew(type: string, inputs: IRuleInputs): Rule {
     return new Rule(type, inputs);
   }
 
-  createFromBackendDict(ruleDict: RuleBackendDict): Rule {
+  createFromBackendDict(ruleDict: IBackendRuleDict): Rule {
     return new Rule(ruleDict.rule_type, ruleDict.inputs);
   }
 }

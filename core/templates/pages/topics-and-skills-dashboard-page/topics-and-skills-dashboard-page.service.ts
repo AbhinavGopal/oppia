@@ -19,8 +19,9 @@
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 
-import { TopicSummary } from
-  'domain/topic/TopicSummaryObjectFactory';
+import { ITopicSummaryBackendDict } from
+  // eslint-disable-next-line max-len
+  'domain/topics_and_skills_dashboard/topics-and-skills-dashboard-backend-api.service';
 // eslint-disable-next-line max-len
 import { TopicsAndSkillsDashboardFilter } from
   // eslint-disable-next-line max-len
@@ -40,8 +41,9 @@ export class TopicsAndSkillsDashboardPageService {
    * @returns {Array} filteredTopics - The filtered Topics array
    */
   getFilteredTopics(
-      topicsArray: TopicSummary[],
-      filterObject: TopicsAndSkillsDashboardFilter): TopicSummary[] {
+      topicsArray: Array<ITopicSummaryBackendDict>,
+      filterObject: TopicsAndSkillsDashboardFilter):
+      Array<ITopicSummaryBackendDict> {
     let ESortOptions = TopicsAndSkillsDashboardPageConstants.TOPIC_SORT_OPTIONS;
     let EPublishedOptions = (
       TopicsAndSkillsDashboardPageConstants.TOPIC_PUBLISHED_OPTIONS);
@@ -74,11 +76,11 @@ export class TopicsAndSkillsDashboardPageService {
     if (filterObject.status !== EPublishedOptions.All) {
       filteredTopics = filteredTopics.filter((topic) => {
         if (filterObject.status === EPublishedOptions.Published &&
-            topic.isPublished) {
+            topic.is_published) {
           return true;
         } else if (
           filterObject.status === EPublishedOptions.NotPublished &&
-            !topic.isPublished) {
+            !topic.is_published) {
           return true;
         }
         return false;
@@ -88,19 +90,19 @@ export class TopicsAndSkillsDashboardPageService {
     switch (filterObject.sort) {
       case ESortOptions.IncreasingUpdatedOn:
         filteredTopics.sort((a, b) => (
-          b.topicModelCreatedOn - a.topicModelCreatedOn));
+          b.topic_model_created_on - a.topic_model_created_on));
         break;
       case ESortOptions.DecreasingUpdatedOn:
         filteredTopics.sort((a, b) =>
-          -(b.topicModelCreatedOn - a.topicModelCreatedOn));
+          -(b.topic_model_created_on - a.topic_model_created_on));
         break;
       case ESortOptions.IncreasingCreatedOn:
         filteredTopics.sort((a, b) =>
-          (b.topicModelLastUpdated - a.topicModelLastUpdated));
+          (b.topic_model_last_updated - a.topic_model_last_updated));
         break;
       case ESortOptions.DecreasingCreatedOn:
         filteredTopics.sort((a, b) =>
-          -(b.topicModelLastUpdated - a.topicModelLastUpdated));
+          -(b.topic_model_last_updated - a.topic_model_last_updated));
         break;
       default:
         throw new Error('Invalid filter by sort value provided.');

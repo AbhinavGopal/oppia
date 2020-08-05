@@ -29,10 +29,10 @@
 require('pages/exploration-editor-page/services/exploration-states.service.ts');
 require(
   'pages/exploration-editor-page/statistics-tab/issues/' +
-  'answer-submit-action.component.ts');
+  'answer-submit-action.directive.ts');
 require(
   'pages/exploration-editor-page/statistics-tab/issues/' +
-  'multiple-incorrect-submissions-issue.component.ts');
+  'multiple-incorrect-submissions-issue.directive.ts');
 require('services/exploration-html-formatter.service.ts');
 
 angular.module('oppia').factory('LearnerActionRenderService', [

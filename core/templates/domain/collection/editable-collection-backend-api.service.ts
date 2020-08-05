@@ -20,48 +20,14 @@ import { downgradeInjectable } from '@angular/upgrade/static';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Collection, CollectionBackendDict, CollectionObjectFactory } from
-  'domain/collection/CollectionObjectFactory';
+import cloneDeep from 'lodash/cloneDeep';
+
 import { CollectionEditorPageConstants } from
   'pages/collection-editor-page/collection-editor-page.constants';
 import { ReadOnlyCollectionBackendApiService } from
   'domain/collection/read-only-collection-backend-api.service';
 import { UrlInterpolationService } from
   'domain/utilities/url-interpolation.service';
-
-interface EditableCollectionBackendResponse {
-  collection: CollectionBackendDict;
-}
-
-interface AddNodeCollectionChange {
-  'cmd': 'add_collection_node';
-  'exploration_id': string;
-}
-
-interface SwapNodesCollectionChange {
-  'cmd': 'swap_nodes';
-  'first_index': number;
-  'second_index': number;
-}
-
-interface DeleteNodeCollectionChange {
-  'cmd': 'delete_collection_node',
-  'exploration_id': string;
-}
-
-interface EditCollectionPropertyChange {
-  'cmd': 'edit_collection_property';
-  'property_name': string;
-  'exploration_id': string;
-  'new_value': Object;
-  'old_value': Object;
-}
-
-type CollectionChange = (
-  AddNodeCollectionChange |
-  SwapNodesCollectionChange |
-  DeleteNodeCollectionChange |
-  EditCollectionPropertyChange);
 
 // TODO(bhenning): I think that this might be better merged with the
 // CollectionBackendApiService. However, that violates the principle of a
@@ -82,36 +48,33 @@ export class EditableCollectionBackendApiService {
   constructor(
     private http: HttpClient,
     private readOnlyCollectionService: ReadOnlyCollectionBackendApiService,
-    private collectionObjectFactory: CollectionObjectFactory,
     private urlInterpolationService: UrlInterpolationService) {}
   private _fetchCollection(
       collectionId: string,
-      successCallback: (value: Collection) => void,
-      errorCallback: (reason: string) => void): void {
+      successCallback: (value?: Object | PromiseLike<Object>) => void,
+      errorCallback: (reason?: any) => void): void {
     var collectionDataUrl = this.urlInterpolationService.interpolateUrl(
       CollectionEditorPageConstants.EDITABLE_COLLECTION_DATA_URL_TEMPLATE, {
         collection_id: collectionId
       });
 
-    this.http.get<EditableCollectionBackendResponse>(
-      collectionDataUrl).toPromise().then(response => {
-      var collectionObject = this.collectionObjectFactory.create(
-        response.collection);
+    this.http.get(collectionDataUrl).toPromise().then((response: any) => {
+      var collection = cloneDeep(response.collection);
       if (successCallback) {
-        successCallback(collectionObject);
+        successCallback(collection);
       }
-    }, errorResponse => {
+    }, (errorResponse) => {
       if (errorCallback) {
-        errorCallback(errorResponse.error.error);
+        errorCallback(errorResponse.error);
       }
     });
   }
 
   private _updateCollection(
-      collectionId: string, collectionVersion: number,
-      commitMessage: string, changeList: CollectionChange[],
-      successCallback: (value: Collection) => void,
-      errorCallback: (reason: string) => void): void {
+      collectionId: string, collectionVersion: string,
+      commitMessage: string, changeList: Array<any>,
+      successCallback: (value?: Object | PromiseLike<Object>) => void,
+      errorCallback: (reason?: any) => void): void {
     var editableCollectionDataUrl = this.urlInterpolationService.interpolateUrl(
       CollectionEditorPageConstants.EDITABLE_COLLECTION_DATA_URL_TEMPLATE, {
         collection_id: collectionId
@@ -122,28 +85,27 @@ export class EditableCollectionBackendApiService {
       commit_message: commitMessage,
       change_list: changeList
     };
-    this.http.put<EditableCollectionBackendResponse>(
-      editableCollectionDataUrl, putData).toPromise().then(response => {
-      // The returned data is an updated collection dict.
-      var collectionObject = this.collectionObjectFactory.create(
-        response.collection);
+    this.http.put(editableCollectionDataUrl, putData).toPromise().then(
+      (response: any) => {
+        // The returned data is an updated collection dict.
+        var collection = cloneDeep(response.collection);
 
-      // Update the ReadOnlyCollectionBackendApiService's cache with the new
-      // collection.
-      this.readOnlyCollectionService.cacheCollection(
-        collectionId, collectionObject);
+        // Update the ReadOnlyCollectionBackendApiService's cache with the new
+        // collection.
+        this.readOnlyCollectionService.cacheCollection(
+          collectionId, collection);
 
-      if (successCallback) {
-        successCallback(collectionObject);
-      }
-    }, errorResponse => {
-      if (errorCallback) {
-        errorCallback(errorResponse.error.error);
-      }
-    });
+        if (successCallback) {
+          successCallback(collection);
+        }
+      }, (errorResponse) => {
+        if (errorCallback) {
+          errorCallback(errorResponse.error);
+        }
+      });
   }
 
-  fetchCollection(collectionId: string): Promise<Collection> {
+  fetchCollection(collectionId: string): Promise<object> {
     return new Promise((resolve, reject) => {
       this._fetchCollection(collectionId, resolve, reject);
     });
@@ -163,9 +125,8 @@ export class EditableCollectionBackendApiService {
    * not out-of-date with any updates made by this backend API service.
    */
   updateCollection(
-      collectionId: string, collectionVersion: number,
-      commitMessage: string,
-      changeList: CollectionChange[]): Promise<Collection> {
+      collectionId: string, collectionVersion: string,
+      commitMessage: string, changeList: Array<any>): Promise<object> {
     return new Promise((resolve, reject) => {
       this._updateCollection(
         collectionId, collectionVersion, commitMessage, changeList,

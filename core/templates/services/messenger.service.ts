@@ -25,41 +25,41 @@ import { Injectable } from '@angular/core';
 import { LoggerService } from 'services/contextual/logger.service';
 import { WindowRef } from 'services/contextual/window-ref.service';
 
-interface HeightChangeData {
+interface IHeightChangeData {
   height: number;
   scroll: number;
 }
 
-interface ExplorationLoadedData {
+interface IExplorationLoadedData {
   explorationVersion: number;
   explorationTitle: string;
 }
 
-interface StateTransitionData {
+interface IStateTransitionData {
   explorationVersion: number;
   oldStateName: string;
   jsonAnswer: string;
   newStateName: string;
 }
 
-interface ExplorationCompletedData {
+interface IExplorationCompletedData {
   explorationVersion: number;
 }
 
-interface MessageValidatorsType {
-  heightChange(payload: HeightChangeData): boolean;
+interface IMessageValidatorsType {
+  heightChange(payload: IHeightChangeData): boolean;
   explorationLoaded(): boolean;
-  stateTransition(payload: StateTransitionData): boolean;
+  stateTransition(payload: IStateTransitionData): boolean;
   explorationReset(payload: {stateName: string}): boolean;
   explorationCompleted(): boolean;
 }
 
-interface GetPayloadType {
-  heightChange(data: HeightChangeData): HeightChangeData;
-  explorationLoaded(data: ExplorationLoadedData): ExplorationLoadedData;
-  stateTransition(data: StateTransitionData): StateTransitionData;
+interface IGetPayloadType {
+  heightChange(data: IHeightChangeData): IHeightChangeData;
+  explorationLoaded(data: IExplorationLoadedData): IExplorationLoadedData;
+  stateTransition(data: IStateTransitionData): IStateTransitionData;
   explorationCompleted(
-    data: ExplorationCompletedData): ExplorationCompletedData;
+    data: IExplorationCompletedData): IExplorationCompletedData;
   explorationReset(data: string): {stateName: string};
 }
 
@@ -80,8 +80,8 @@ export class MessengerService {
   SUPPORTED_HASHDICT_VERSIONS: Set<string> = (
     new Set(['0.0.0', '0.0.1', '0.0.2', '0.0.3']));
 
-  MESSAGE_VALIDATORS: MessageValidatorsType = {
-    heightChange(payload: HeightChangeData): boolean {
+  MESSAGE_VALIDATORS: IMessageValidatorsType = {
+    heightChange(payload: IHeightChangeData): boolean {
       const {height, scroll} = payload;
       return (
         Number.isInteger(height) && height > 0 && typeof scroll === 'boolean');
@@ -89,7 +89,7 @@ export class MessengerService {
     explorationLoaded(): boolean {
       return true;
     },
-    stateTransition(payload: StateTransitionData): boolean {
+    stateTransition(payload: IStateTransitionData): boolean {
       return Boolean(payload.oldStateName) || Boolean(payload.newStateName);
     },
     explorationReset(payload: {stateName: string}): boolean {
@@ -100,20 +100,20 @@ export class MessengerService {
     }
   };
 
-  getPayload: GetPayloadType = {
-    heightChange(data: HeightChangeData): HeightChangeData {
+  getPayload: IGetPayloadType = {
+    heightChange(data: IHeightChangeData): IHeightChangeData {
       return {
         height: data.height,
         scroll: data.scroll
       };
     },
-    explorationLoaded(data: ExplorationLoadedData): ExplorationLoadedData {
+    explorationLoaded(data: IExplorationLoadedData): IExplorationLoadedData {
       return {
         explorationVersion: data.explorationVersion,
         explorationTitle: data.explorationTitle
       };
     },
-    stateTransition(data: StateTransitionData): StateTransitionData {
+    stateTransition(data: IStateTransitionData): IStateTransitionData {
       return {
         explorationVersion: data.explorationVersion,
         oldStateName: data.oldStateName,
@@ -122,7 +122,7 @@ export class MessengerService {
       };
     },
     explorationCompleted(
-        data: ExplorationCompletedData): ExplorationCompletedData {
+        data: IExplorationCompletedData): IExplorationCompletedData {
       return {
         explorationVersion: data.explorationVersion
       };

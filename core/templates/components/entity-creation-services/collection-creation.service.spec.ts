@@ -20,7 +20,9 @@ import { HttpClientTestingModule, HttpTestingController }
   from '@angular/common/http/testing';
 import { TestBed, fakeAsync, flushMicrotasks, tick }
   from '@angular/core/testing';
+import { Location } from '@angular/common';
 
+import { AlertsService } from 'services/alerts.service';
 import { CollectionCreationService } from
   'components/entity-creation-services/collection-creation.service';
 import { LoaderService } from 'services/loader.service.ts';
@@ -71,7 +73,7 @@ describe('Collection Creation service', () => {
       let req = httpTestingController.expectOne(
         '/collection_editor_handler/create_new');
       expect(req.request.method).toEqual('POST');
-      req.flush({collection_id: SAMPLE_COLLECTION_ID});
+      req.flush({collectionId: SAMPLE_COLLECTION_ID});
 
       flushMicrotasks();
       tick(150);
@@ -95,9 +97,7 @@ describe('Collection Creation service', () => {
       let req = httpTestingController.expectOne(
         '/collection_editor_handler/create_new');
       expect(req.request.method).toEqual('POST');
-      req.flush({
-        error: 'Error creating a new collection.'
-      }, {
+      req.flush('Error creating a new collection.', {
         status: ERROR_STATUS_CODE,
         statusText: 'Error creating a new collection.'
       });
@@ -126,7 +126,7 @@ describe('Collection Creation service', () => {
       let req = httpTestingController.expectOne(
         '/collection_editor_handler/create_new');
       expect(req.request.method).toEqual('POST');
-      req.flush({collection_id: SAMPLE_COLLECTION_ID});
+      req.flush({collectionId: SAMPLE_COLLECTION_ID});
 
       flushMicrotasks();
       tick(150);

@@ -21,7 +21,7 @@
 /* eslint-disable max-len */
 import { MisconceptionObjectFactory } from
   'domain/skill/MisconceptionObjectFactory';
-import { OutcomeObjectFactory } from
+import { OutcomeObjectFactory, Outcome } from
   'domain/exploration/OutcomeObjectFactory';
 import { RuleObjectFactory } from 'domain/exploration/RuleObjectFactory';
 import { SolutionValidityService } from

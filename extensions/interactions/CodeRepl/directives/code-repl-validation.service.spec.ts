@@ -27,13 +27,13 @@ import { Outcome, OutcomeObjectFactory } from
 
 import { AppConstants } from 'app.constants';
 import { WARNING_TYPES_CONSTANT } from 'app-type.constants';
-import { CodeReplCustomizationArgs } from
+import { ICodeReplCustomizationArgs } from
   'interactions/customization-args-defs';
 
 describe('CodeReplValidationService', () => {
   let WARNING_TYPES: WARNING_TYPES_CONSTANT;
   let validatorService: CodeReplValidationService;
-  let currentState: string, customizationArguments: CodeReplCustomizationArgs;
+  let currentState: string, customizationArguments: ICodeReplCustomizationArgs;
   let goodAnswerGroups: AnswerGroup[], goodDefaultOutcome: Outcome;
   let oof: OutcomeObjectFactory, agof: AnswerGroupObjectFactory;
 
@@ -86,10 +86,8 @@ describe('CodeReplValidationService', () => {
   });
 
   it('should catch non-string value for programming language', () => {
-    // This throws "Type '1' is not assignable to type 'string'."
-    // Here we are assigning the wrong type of value to
-    // "customizationArguments" in order to test validations.
-    // @ts-expect-error
+    // TS ignore is used here to test warnings.
+    // @ts-ignore
     customizationArguments.language.value = 1;
     var warnings = validatorService.getAllWarnings(
       currentState, customizationArguments, [], null);
@@ -100,10 +98,8 @@ describe('CodeReplValidationService', () => {
   });
 
   it('should catch non-string value for placeholder text', () => {
-    // This throws "Type '1' is not assignable to type 'string'."
-    // Here we are assigning the wrong type of value to
-    // "customizationArguments" in order to test validations.
-    // @ts-expect-error
+    // TS ignore is used here to test warnings.
+    // @ts-ignore
     customizationArguments.placeholder.value = 1;
     var warnings = validatorService.getAllWarnings(
       currentState, customizationArguments, [], null);
@@ -114,10 +110,8 @@ describe('CodeReplValidationService', () => {
   });
 
   it('should catch non-string value for preCode text', () => {
-    // This throws "Type '1' is not assignable to type 'string'."
-    // Here we are assigning the wrong type of value to
-    // "customizationArguments" in order to test validations.
-    // @ts-expect-error
+    // TS ignore is used here to test warnings.
+    // @ts-ignore
     customizationArguments.preCode.value = 1;
     var warnings = validatorService.getAllWarnings(
       currentState, customizationArguments, [], null);
@@ -128,10 +122,8 @@ describe('CodeReplValidationService', () => {
   });
 
   it('should catch non-string value for postCode text', () => {
-    // This throws "Type '1' is not assignable to type 'string'."
-    // Here we are assigning the wrong type of value to
-    // "customizationArguments" in order to test validations.
-    // @ts-expect-error
+    // TS ignore is used here to test warnings.
+    // @ts-ignore
     customizationArguments.postCode.value = 1;
     var warnings = validatorService.getAllWarnings(
       currentState, customizationArguments, [], null);

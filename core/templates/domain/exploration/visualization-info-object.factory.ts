@@ -21,11 +21,11 @@ import { Injectable } from '@angular/core';
 
 import { AnswerStats } from
   'domain/exploration/AnswerStatsObjectFactory';
-import { InteractionAnswer } from
+import { IInteractionAnswer } from
   'interactions/answer-defs';
 
-export interface AnswerStatsBackendDict {
-  'answer': InteractionAnswer;
+export interface IAnswerStatsBackendDict {
+  'answer': IInteractionAnswer;
   'frequency': number;
 
   // N/A when the visualization can not present addressed answers.
@@ -38,9 +38,9 @@ export interface AnswerStatsBackendDict {
 
 export type Option = string | string[];
 
-export interface VisualizationInfoBackendDict {
+export interface IVisualizationInfoBackendDict {
     'addressed_info_is_supported': boolean;
-    'data': AnswerStatsBackendDict[];
+    'data': IAnswerStatsBackendDict[];
     'id': string;
     'options': {
       [name: string]: Option
@@ -70,10 +70,10 @@ export class VisualizationInfo {
 })
 export class VisualizationInfoObjectFactory {
   createFromBackendDict(
-      backendDict: VisualizationInfoBackendDict): VisualizationInfo {
+      backendDict: IVisualizationInfoBackendDict): VisualizationInfo {
     let answerStatsDicts = backendDict.data;
     let answerStatsObjects = answerStatsDicts.map((
-        answerStatsDict: AnswerStatsBackendDict) => {
+        answerStatsDict: IAnswerStatsBackendDict) => {
       let answerHtml = (typeof answerStatsDict.answer === 'string') ?
       answerStatsDict.answer : JSON.stringify(answerStatsDict.answer);
       return new AnswerStats(

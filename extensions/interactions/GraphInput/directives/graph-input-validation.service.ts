@@ -21,13 +21,13 @@ import { Injectable } from '@angular/core';
 
 import { AnswerGroup } from
   'domain/exploration/AnswerGroupObjectFactory';
-import { Warning, baseInteractionValidationService } from
+import { IWarning, baseInteractionValidationService } from
   'interactions/base-interaction-validation.service';
-import { GraphInputCustomizationArgs } from
+import { IGraphInputCustomizationArgs } from
   'interactions/customization-args-defs';
 import { Outcome } from
   'domain/exploration/OutcomeObjectFactory';
-import { GraphAnswer } from 'interactions/answer-defs';
+import { IGraphAnswer } from 'interactions/answer-defs';
 
 import { AppConstants } from 'app.constants';
 
@@ -42,7 +42,7 @@ export class GraphInputValidationService {
   VERTICES_LIMIT = 50;
 
   getCustomizationArgsWarnings(
-      customizationArgs: GraphInputCustomizationArgs): Warning[] {
+      customizationArgs: IGraphInputCustomizationArgs): IWarning[] {
     var warningsList = [];
     this.baseInteractionValidationServiceInstance.requireCustomizationArguments(
       customizationArgs,
@@ -78,8 +78,8 @@ export class GraphInputValidationService {
   }
 
   getAllWarnings(
-      stateName: string, customizationArgs: GraphInputCustomizationArgs,
-      answerGroups: AnswerGroup[], defaultOutcome: Outcome): Warning[] {
+      stateName: string, customizationArgs: IGraphInputCustomizationArgs,
+      answerGroups: AnswerGroup[], defaultOutcome: Outcome): IWarning[] {
     var ISOMORPHISM_VERTICES_LIMIT = 10;
 
     var warningsList = [];
@@ -95,7 +95,7 @@ export class GraphInputValidationService {
       var rules = answerGroups[i].rules;
       for (var j = 0; j < rules.length; j++) {
         var rule = rules[j];
-        var gInputs = (<GraphAnswer>rule.inputs.g);
+        var gInputs = (<IGraphAnswer>rule.inputs.g);
         try {
           if (rule.type === 'HasGraphProperty') {
             continue;

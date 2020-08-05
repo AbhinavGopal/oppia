@@ -16,12 +16,12 @@
  * @fileoverview Unit tests for MisconceptionObjectFacfory.
  */
 
-import { MisconceptionObjectFactory, MisconceptionBackendDict } from
+import { MisconceptionObjectFactory } from
   'domain/skill/MisconceptionObjectFactory';
 
 describe('Misconception object factory', () => {
   let misconceptionObjectFactory: MisconceptionObjectFactory;
-  let misconceptionDict: MisconceptionBackendDict;
+  let misconceptionDict: any;
 
   beforeEach(() => {
     misconceptionObjectFactory = new MisconceptionObjectFactory();

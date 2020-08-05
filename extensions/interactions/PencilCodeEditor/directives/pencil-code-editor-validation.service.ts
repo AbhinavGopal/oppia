@@ -21,9 +21,9 @@ import { Injectable } from '@angular/core';
 
 import { AnswerGroup } from
   'domain/exploration/AnswerGroupObjectFactory';
-import { baseInteractionValidationService, Warning } from
+import { baseInteractionValidationService, IWarning } from
   'interactions/base-interaction-validation.service';
-import { PencilCodeCustomizationArgs } from
+import { IPencilCodeCustomizationArgs } from
   'extensions/interactions/customization-args-defs';
 import { Outcome } from
   'domain/exploration/OutcomeObjectFactory';
@@ -37,14 +37,14 @@ export class PencilCodeEditorValidationService {
         baseInteractionValidationService) {}
 
   getCustomizationArgsWarnings(
-      customizationArgs: PencilCodeCustomizationArgs): Warning[] {
+      customizationArgs: IPencilCodeCustomizationArgs): IWarning[] {
     // TODO(juansaba): Implement customization args validations.
     return [];
   }
 
   getAllWarnings(
-      stateName: string, customizationArgs: PencilCodeCustomizationArgs,
-      answerGroups: AnswerGroup[], defaultOutcome: Outcome): Warning[] {
+      stateName: string, customizationArgs: IPencilCodeCustomizationArgs,
+      answerGroups: AnswerGroup[], defaultOutcome: Outcome): IWarning[] {
     return this.getCustomizationArgsWarnings(customizationArgs).concat(
       this.baseInteractionValidationServiceInstance.getAllOutcomeWarnings(
         answerGroups, defaultOutcome, stateName));

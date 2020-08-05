@@ -74,10 +74,8 @@ angular.module('oppia').directive('topicEditorPage', [
           };
 
           var setPageTitle = function() {
-            let topicName = TopicEditorStateService.getTopic().getName();
             PageTitleService.setPageTitle(
-              topicName + ' - Oppia');
-            PageTitleService.setPageSubtitleForMobileView(topicName);
+              TopicEditorStateService.getTopic().getName() + ' - Oppia');
             ctrl.topic = TopicEditorStateService.getTopic();
             ctrl._validateTopic();
           };
@@ -85,15 +83,9 @@ angular.module('oppia').directive('topicEditorPage', [
           ctrl.getChangeListLength = function() {
             return UndoRedoService.getChangeCount();
           };
-          ctrl.isInTopicEditorTabs = function() {
-            var activeTab = TopicEditorRoutingService.getActiveTabName();
-            return !activeTab.startsWith('subtopic');
-          };
           ctrl.openTopicViewer = function() {
             var activeTab = TopicEditorRoutingService.getActiveTabName();
-            var lastSubtopicIdVisited = (
-              TopicEditorRoutingService.getLastSubtopicIdVisited());
-            if (activeTab !== 'subtopic_editor' && !lastSubtopicIdVisited) {
+            if (activeTab !== 'subtopic_editor') {
               if (ctrl.getChangeListLength() > 0) {
                 AlertsService.addInfoMessage(
                   'Please save all pending changes to preview the topic ' +
@@ -101,11 +93,12 @@ angular.module('oppia').directive('topicEditorPage', [
                 return;
               }
               var topicName = ctrl.topic.getName();
-              var newTab = $window.open();
-              newTab.location.href = UrlInterpolationService.interpolateUrl(
-                TOPIC_VIEWER_URL_TEMPLATE, {
-                  topic_name: topicName
-                });
+              $window.open(
+                UrlInterpolationService.interpolateUrl(
+                  TOPIC_VIEWER_URL_TEMPLATE, {
+                    topic_name: topicName
+                  }
+                ), 'blank');
             } else {
               var subtopicId = TopicEditorRoutingService.getSubtopicIdFromUrl();
               TopicEditorRoutingService.navigateToSubtopicPreviewTab(
@@ -113,40 +106,10 @@ angular.module('oppia').directive('topicEditorPage', [
             }
           };
           ctrl.selectMainTab = function() {
-            const activeTab = ctrl.getActiveTabName();
-            const subtopicId = (
-              TopicEditorRoutingService.getSubtopicIdFromUrl() ||
-                TopicEditorRoutingService.getLastSubtopicIdVisited());
-            const lastTabVisited = (
-              TopicEditorRoutingService.getLastTabVisited());
-            if (activeTab.startsWith('subtopic') ||
-                lastTabVisited === 'subtopic') {
-              TopicEditorRoutingService.navigateToSubtopicEditorWithId(
-                subtopicId);
-              return;
-            }
             TopicEditorRoutingService.navigateToMainTab();
-          };
-          ctrl.isMainEditorTabSelected = function() {
-            const activeTab = ctrl.getActiveTabName();
-            return activeTab === 'main' || activeTab === 'subtopic_editor';
           };
           ctrl.selectQuestionsTab = function() {
             TopicEditorRoutingService.navigateToQuestionsTab();
-          };
-          ctrl.getNavbarText = function() {
-            if (TopicEditorStateService.hasLoadedTopic()) {
-              const activeTab = ctrl.getActiveTabName();
-              if (activeTab === 'main') {
-                return 'Topic Editor';
-              } else if (activeTab === 'subtopic_editor') {
-                return 'Subtopic Editor';
-              } else if (activeTab === 'subtopic_preview') {
-                return 'Subtopic Preview';
-              } else if (activeTab === 'questions') {
-                return 'Question Editor';
-              }
-            }
           };
           ctrl._validateTopic = function() {
             ctrl.validationIssues = ctrl.topic.validate();
@@ -174,7 +137,6 @@ angular.module('oppia').directive('topicEditorPage', [
 
           ctrl.$onInit = function() {
             TopicEditorStateService.loadTopic(UrlService.getTopicIdFromUrl());
-            PageTitleService.setPageTitleForMobileView('Topic Editor');
             ctrl.validationIssues = [];
             ctrl.prepublishValidationIssues = [];
             ctrl.warningsAreShown = false;

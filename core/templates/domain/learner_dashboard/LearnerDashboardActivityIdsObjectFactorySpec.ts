@@ -17,14 +17,14 @@
  */
 
 import {
-  LearnerDashboardActivityIdsDict,
+  ILearnerDashboardActivityIdsDict,
   LearnerDashboardActivityIdsObjectFactory
 } from 'domain/learner_dashboard/LearnerDashboardActivityIdsObjectFactory';
 
 describe('Learner dashboard activity ids object factory', () => {
   let learnerDashboardActivityIdsObjectFactory:
     LearnerDashboardActivityIdsObjectFactory;
-  let learnerDashboardActivityIdsDict: LearnerDashboardActivityIdsDict;
+  let learnerDashboardActivityIdsDict: ILearnerDashboardActivityIdsDict;
 
   beforeEach(() => {
     learnerDashboardActivityIdsObjectFactory = (

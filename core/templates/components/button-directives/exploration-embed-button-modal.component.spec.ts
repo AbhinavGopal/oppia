@@ -16,7 +16,7 @@
  * @fileoverview Unit tests for ExplorationEmbedButtonModalComponent.
  */
 
-import { ComponentFixture, fakeAsync, TestBed, async } from
+import { ComponentFixture, fakeAsync, TestBed, async, tick} from
   '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -88,15 +88,7 @@ describe('ExplorationEmbedButtonModalComponent', () => {
   it('should select the embed url', fakeAsync(() => {
     const removeAllRanges = jasmine.createSpy('removeAllRanges');
     const addRange = jasmine.createSpy('addRange');
-    // This throws "Argument of type '{ removeAllRanges:
-    // jasmine.Spy<jasmine.Func>; addRange: jasmine.Spy<jasmine.Func>; }'
-    // is not assignable to parameter of type 'Selection'." This is because
-    // the type of the actual 'getSelection' function doesn't match the type
-    // of function we've mocked it to. We need to suppress this error because
-    // we need to mock 'getSelection' function to our function for testing
-    // purposes.
-    // @ts-expect-error
-    spyOn(window, 'getSelection').and.returnValue({
+    spyOn(window, 'getSelection').and.returnValue(<any>{
       removeAllRanges: removeAllRanges,
       addRange: addRange
     });

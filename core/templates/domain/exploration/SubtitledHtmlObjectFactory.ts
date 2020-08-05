@@ -17,7 +17,7 @@
  * domain objects.
  */
 
-export interface SubtitledHtmlBackendDict {
+export interface ISubtitledHtmlBackendDict {
   'content_id': string;
   'html': string;
 }
@@ -49,7 +49,7 @@ export class SubtitledHtml {
     return !this._html;
   }
 
-  toBackendDict(): SubtitledHtmlBackendDict {
+  toBackendDict(): ISubtitledHtmlBackendDict {
     return {
       html: this._html,
       content_id: this._contentId
@@ -66,7 +66,7 @@ export class SubtitledHtml {
 })
 export class SubtitledHtmlObjectFactory {
   createFromBackendDict(
-      subtitledHtmlBackendDict: SubtitledHtmlBackendDict): SubtitledHtml {
+      subtitledHtmlBackendDict: ISubtitledHtmlBackendDict): SubtitledHtml {
     return new SubtitledHtml(
       subtitledHtmlBackendDict.html, subtitledHtmlBackendDict.content_id);
   }

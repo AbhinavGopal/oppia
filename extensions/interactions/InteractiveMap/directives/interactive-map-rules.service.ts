@@ -19,8 +19,8 @@
 import { Injectable } from '@angular/core';
 import { downgradeInjectable } from '@angular/upgrade/static';
 
-import { InteractiveMapAnswer } from 'interactions/answer-defs';
-import { InteractiveMapRuleInputs } from 'interactions/rule-input-defs';
+import { IInteractiveMapAnswer } from 'interactions/answer-defs';
+import { IInteractiveMapRuleInputs } from 'interactions/rule-input-defs';
 
 @Injectable({
   providedIn: 'root'
@@ -51,15 +51,15 @@ export class InteractiveMapRulesService {
   }
 
   Within(
-      answer: InteractiveMapAnswer,
-      inputs: InteractiveMapRuleInputs) {
+      answer: IInteractiveMapAnswer,
+      inputs: IInteractiveMapRuleInputs) {
     var actualDistance = InteractiveMapRulesService.getDistanceInKm(
       inputs.p, answer);
     return actualDistance <= inputs.d;
   }
   NotWithin(
-      answer: InteractiveMapAnswer,
-      inputs: InteractiveMapRuleInputs) {
+      answer: IInteractiveMapAnswer,
+      inputs: IInteractiveMapRuleInputs) {
     var actualDistance = InteractiveMapRulesService.getDistanceInKm(
       inputs.p, answer);
     return actualDistance > inputs.d;

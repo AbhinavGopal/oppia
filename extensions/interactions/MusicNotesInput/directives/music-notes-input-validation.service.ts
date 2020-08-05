@@ -21,9 +21,9 @@ import { Injectable } from '@angular/core';
 
 import { AnswerGroup } from
   'domain/exploration/AnswerGroupObjectFactory';
-import { Warning, baseInteractionValidationService } from
+import { IWarning, baseInteractionValidationService } from
   'interactions/base-interaction-validation.service';
-import { MusicNotesInputCustomizationArgs } from
+import { IMusicNotesInputCustomizationArgs } from
   'extensions/interactions/customization-args-defs';
 import { Outcome } from
   'domain/exploration/OutcomeObjectFactory';
@@ -37,14 +37,14 @@ export class MusicNotesInputValidationService {
         baseInteractionValidationService) {}
 
   getCustomizationArgsWarnings(
-      customizationArgs: MusicNotesInputCustomizationArgs): Warning[] {
+      customizationArgs: IMusicNotesInputCustomizationArgs): IWarning[] {
     // TODO(juansaba): Implement customization args validations.
     return [];
   }
 
   getAllWarnings(
-      stateName: string, customizationArgs: MusicNotesInputCustomizationArgs,
-      answerGroups: AnswerGroup[], defaultOutcome: Outcome): Warning[] {
+      stateName: string, customizationArgs: IMusicNotesInputCustomizationArgs,
+      answerGroups: AnswerGroup[], defaultOutcome: Outcome): IWarning[] {
     return this.getCustomizationArgsWarnings(customizationArgs).concat(
       this.baseInteractionValidationServiceInstance.getAllOutcomeWarnings(
         answerGroups, defaultOutcome, stateName));

@@ -32,6 +32,8 @@ import python_utils
     models.Registry.import_models(
         [models.NAMES.user, models.NAMES.exploration, models.NAMES.job]))
 
+# pylint: disable=too-many-return-statements
+
 
 class UserQueryOneOffJob(jobs.BaseMapReduceOneOffJobManager):
     """One-off job for excuting query with given query parameters.
@@ -81,29 +83,25 @@ class UserQueryOneOffJob(jobs.BaseMapReduceOneOffJobManager):
             else:
                 return
 
-        query_criteria_satisfied = True
         if query_model.created_at_least_n_exps is not None:
-            query_criteria_satisfied &= (
-                len(user_contributions.created_exploration_ids) >=
-                query_model.created_at_least_n_exps)
+            if (len(user_contributions.created_exploration_ids) <
+                    query_model.created_at_least_n_exps):
+                return
 
         if query_model.created_fewer_than_n_exps is not None:
-            query_criteria_satisfied &= (
-                len(user_contributions.created_exploration_ids) <
-                query_model.created_fewer_than_n_exps)
+            if (len(user_contributions.created_exploration_ids) >=
+                    query_model.created_fewer_than_n_exps):
+                return
 
         if query_model.edited_at_least_n_exps is not None:
-            query_criteria_satisfied &= (
-                len(user_contributions.edited_exploration_ids) >=
-                query_model.edited_at_least_n_exps)
+            if (len(user_contributions.edited_exploration_ids) <
+                    query_model.edited_at_least_n_exps):
+                return
 
         if query_model.edited_fewer_than_n_exps is not None:
-            query_criteria_satisfied &= (
-                len(user_contributions.edited_exploration_ids) <
-                query_model.edited_fewer_than_n_exps)
-
-        if not query_criteria_satisfied:
-            return
+            if (len(user_contributions.edited_exploration_ids) >=
+                    query_model.edited_fewer_than_n_exps):
+                return
 
         yield (query_id, user_id)
 

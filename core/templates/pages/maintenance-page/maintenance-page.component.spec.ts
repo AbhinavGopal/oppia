@@ -16,53 +16,49 @@
  * @fileoverview Unit tests for maintenance page controller.
  */
 
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, async, TestBed } from '@angular/core/testing';
+// TODO(#7222): Remove the following block of unnnecessary imports once
+// App.ts is upgraded to Angular 8.
+import { UpgradedServices } from 'services/UpgradedServices';
+// ^^^ This block is to be removed.
 
-import { MaintenancePageComponent } from
-  'pages/maintenance-page/maintenance-page.component';
-import { DocumentAttributeCustomizationService } from
-  'services/contextual/document-attribute-customization.service';
+require('pages/maintenance-page/maintenance-page.component.ts');
 
-let component: MaintenancePageComponent;
-let fixture: ComponentFixture<MaintenancePageComponent>;
+describe('Maintenance page', function() {
+  var $scope = null;
+  var ctrl = null;
+  var DocumentAttributeCustomizationService = null;
 
-describe('Maintenance page', () => {
-  let documentAttributeCustomizationService:
-    DocumentAttributeCustomizationService = null;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [MaintenancePageComponent],
-      providers: [
-        DocumentAttributeCustomizationService
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
-    documentAttributeCustomizationService =
-      TestBed.get(DocumentAttributeCustomizationService);
+  beforeEach(angular.mock.module('oppia', function($provide) {
+    var ugs = new UpgradedServices();
+    for (let [key, value] of Object.entries(ugs.getUpgradedServices())) {
+      $provide.value(key, value);
+    }
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(MaintenancePageComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(angular.mock.inject(function($injector, $componentController) {
+    DocumentAttributeCustomizationService = $injector.get(
+      'DocumentAttributeCustomizationService');
+    var $rootScope = $injector.get('$rootScope');
+    $scope = $rootScope.$new();
 
+    ctrl = $componentController('maintenancePage', {
+      $scope: $scope
+    });
+  }));
 
-  it('should set document lang when $onInit is called', () => {
-    spyOn(documentAttributeCustomizationService, 'addAttribute').and
+  it('should set document lang when $onInit is called', function() {
+    spyOn(DocumentAttributeCustomizationService, 'addAttribute').and
       .callThrough();
-    component.ngOnInit();
+    ctrl.$onInit();
 
-    expect(component.currentLang).toBe('en');
-    expect(documentAttributeCustomizationService.addAttribute)
+    expect($scope.currentLang).toBe('en');
+    expect(DocumentAttributeCustomizationService.addAttribute)
       .toHaveBeenCalledWith('lang', 'en');
   });
 
-  it('should get static image url', () => {
-    let imagePath = '/path/to/image.png';
-    let staticImageUrl = component.getStaticImageUrl(imagePath);
+  it('should get static image url', function() {
+    var imagePath = '/path/to/image.png';
+    var staticImageUrl = $scope.getStaticImageUrl(imagePath);
 
     expect(staticImageUrl).toBe('/assets/images/path/to/image.png');
   });

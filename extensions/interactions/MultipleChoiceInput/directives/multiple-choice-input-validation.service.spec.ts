@@ -20,7 +20,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { AnswerGroup, AnswerGroupObjectFactory } from
   'domain/exploration/AnswerGroupObjectFactory';
-import { MultipleChoiceInputCustomizationArgs } from
+import { IMultipleChoiceInputCustomizationArgs } from
   'interactions/customization-args-defs';
 /* eslint-disable max-len */
 import { MultipleChoiceInputValidationService } from
@@ -40,7 +40,7 @@ describe('MultipleChoiceInputValidationService', () => {
   let badOutcome: Outcome, goodAnswerGroups: AnswerGroup[],
     goodDefaultOutcome: Outcome;
   let validatorService: MultipleChoiceInputValidationService,
-    customizationArguments: MultipleChoiceInputCustomizationArgs;
+    customizationArguments: IMultipleChoiceInputCustomizationArgs;
   let oof: OutcomeObjectFactory, agof: AnswerGroupObjectFactory;
   let rof: RuleObjectFactory;
 

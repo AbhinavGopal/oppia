@@ -26,7 +26,7 @@ import { Outcome } from
 
 import { AppConstants } from 'app.constants';
 
-export interface Warning {
+export interface IWarning {
   type: string;
   message: string
 }
@@ -60,7 +60,7 @@ export class baseInteractionValidationService {
   }
 
   getAnswerGroupWarnings(
-      answerGroups: AnswerGroup[], stateName: string): Warning[] {
+      answerGroups: AnswerGroup[], stateName: string): IWarning[] {
     var partialWarningsList = [];
 
     // This does not check the default outcome.
@@ -87,7 +87,7 @@ export class baseInteractionValidationService {
   }
 
   getDefaultOutcomeWarnings(
-      defaultOutcome: Outcome, stateName: string): Warning[] {
+      defaultOutcome: Outcome, stateName: string): IWarning[] {
     var partialWarningsList = [];
     if (defaultOutcome && defaultOutcome.isConfusing(stateName)) {
       partialWarningsList.push({

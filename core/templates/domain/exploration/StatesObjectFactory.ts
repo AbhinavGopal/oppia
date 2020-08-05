@@ -20,7 +20,7 @@ import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 
 import {
-  StateBackendDict,
+  IStateBackendDict,
   StateObjectFactory,
   State
 } from 'domain/state/StateObjectFactory';
@@ -28,22 +28,22 @@ import { Voiceover } from 'domain/exploration/VoiceoverObjectFactory';
 
 const INTERACTION_SPECS = require('interactions/interaction_specs.json');
 
-export interface StateObjectsDict {
+export interface IStateObjectsDict {
   [state: string]: State;
 }
 
-export interface StateObjectsBackendDict {
-  [state: string]: StateBackendDict;
+export interface IStateObjectsBackendDict {
+  [state: string]: IStateBackendDict;
 }
 
-export interface VoiceoverObjectsDict {
+export interface IVoiceoverObjectsDict {
   [state: string]: Voiceover[];
 }
 
 export class States {
   constructor(
     private _stateObject: StateObjectFactory,
-    private _states: StateObjectsDict) { }
+    private _states: IStateObjectsDict) { }
 
   getState(stateName: string): State {
     return this._states[stateName];
@@ -53,7 +53,7 @@ export class States {
   // with an object to represent data to be manipulated inside
   // ExplorationDiffService.
 
-  getStateObjects(): StateObjectsDict {
+  getStateObjects(): IStateObjectsDict {
     return this._states;
   }
   addState(newStateName: string): void {
@@ -138,7 +138,7 @@ export class States {
     return allAudioLanguageCodes;
   }
 
-  getAllVoiceovers(languageCode: string): VoiceoverObjectsDict {
+  getAllVoiceovers(languageCode: string): IVoiceoverObjectsDict {
     var allAudioTranslations = {};
     for (var stateName in this._states) {
       var state = this._states[stateName];
@@ -162,7 +162,7 @@ export class States {
 })
 export class StatesObjectFactory {
   constructor(private stateObject: StateObjectFactory) {}
-  createFromBackendDict(statesBackendDict: StateObjectsBackendDict): States {
+  createFromBackendDict(statesBackendDict: IStateObjectsBackendDict): States {
     var stateObjectsDict = {};
     for (var stateName in statesBackendDict) {
       stateObjectsDict[stateName] = this.stateObject.createFromBackendDict(

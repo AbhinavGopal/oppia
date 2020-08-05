@@ -26,7 +26,7 @@ import { ExplorationPlayerConstants } from
 import { UrlInterpolationService } from
   'domain/utilities/url-interpolation.service';
 
-interface StateStats {
+interface IStateStats {
   'total_answers_count': number;
   'useful_feedback_count': number;
   'total_hit_count': number;
@@ -35,12 +35,12 @@ interface StateStats {
   'num_completions': number;
 }
 
-export interface AggregatedStats {
+export interface IAggregatedStats {
   'num_starts': number;
   'num_completions': number;
   'num_actual_starts': number;
   'state_stats_mapping': {
-    [stateName: string]: StateStats
+    [stateName: string]: IStateStats
   };
 }
 
@@ -88,7 +88,7 @@ export class StatsReportingBackendApiService {
   }
 
   postsStats(
-      aggregatedStats: AggregatedStats, expVersion: number,
+      aggregatedStats: IAggregatedStats, expVersion: number,
       explorationId: string, currentStateName: string, nextExpId: string,
       previousStateName: string, nextStateName: string): Promise<Object> {
     return this.http.post(this.getFullStatsUrl(

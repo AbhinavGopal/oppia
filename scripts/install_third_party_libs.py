@@ -45,17 +45,20 @@ for package_name, version_number, target_path in PREREQUISITES:
             subprocess.check_call(command_text + uextention_text)
 
 
-import python_utils  # isort:skip   pylint: disable=wrong-import-position, wrong-import-order
+# pylint: disable=wrong-import-position
+# pylint: disable=wrong-import-order
+import python_utils  # isort:skip
 
-from . import common  # isort:skip  pylint: disable=wrong-import-position, wrong-import-order
-from . import install_third_party  # isort:skip  pylint: disable=wrong-import-position, wrong-import-order
-from . import pre_commit_hook  # isort:skip  pylint: disable=wrong-import-position, wrong-import-order
-from . import pre_push_hook  # isort:skip  pylint: disable=wrong-import-position, wrong-import-order
-from . import setup  # isort:skip  pylint: disable=wrong-import-position, wrong-import-order
-from . import setup_gae  # isort:skip  pylint: disable=wrong-import-position, wrong-import-order
+from . import common  # isort:skip
+from . import install_third_party  # isort:skip
+from . import pre_commit_hook  # isort:skip
+from . import pre_push_hook  # isort:skip
+from . import setup  # isort:skip
+from . import setup_gae  # isort:skip
+# pylint: enable=wrong-import-order
+# pylint: enable=wrong-import-position
 
-_PARSER = argparse.ArgumentParser(
-    description="""
+_PARSER = argparse.ArgumentParser(description="""
 Installation script for Oppia third-party libraries.
 """)
 
@@ -99,7 +102,7 @@ def pip_install(package, version, install_path):
         python_utils.PRINT('Checking if pip is installed on the local machine')
         # Importing pip just to check if its installed.
         import pip  #pylint: disable=unused-variable
-    except ImportError as e:
+    except ImportError:
         common.print_each_string_after_two_new_lines([
             'Pip is required to install Oppia dependencies, but pip wasn\'t '
             'found on your local machine.',
@@ -118,7 +121,7 @@ def pip_install(package, version, install_path):
             python_utils.PRINT(
                 'https://github.com/oppia/oppia/wiki/Installing-Oppia-%28'
                 'Windows%29')
-        raise ImportError('Error importing pip: %s' % e)
+        raise Exception
 
     # The call to python -m is used to ensure that Python and Pip versions are
     # compatible.

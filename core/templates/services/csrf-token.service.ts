@@ -47,7 +47,7 @@ export class CsrfTokenService {
         let actualData = data.substring(5);
         return JSON.parse(actualData);
       },
-    }).then(function(response: {token: string}) {
+    }).then(function(response: any) {
       return response.token;
     });
   }

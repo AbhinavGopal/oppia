@@ -32,7 +32,9 @@ from scripts import common
 from scripts.release_scripts import generate_release_info
 from scripts.release_scripts import update_changelog_and_credits
 
-import github  # isort:skip pylint: disable=wrong-import-position
+# pylint: disable=wrong-import-position
+import github  # isort:skip
+# pylint: enable=wrong-import-position
 
 RELEASE_TEST_DIR = os.path.join('core', 'tests', 'release_sources', '')
 
@@ -93,8 +95,10 @@ class ChangelogAndCreditsUpdateTests(test_utils.GenericTestBase):
                 requester='', headers='', attributes={}, completed='')
         def mock_main(unused_personal_access_token):
             pass
-        def mock_getpass(prompt):  # pylint: disable=unused-argument
+        # pylint: disable=unused-argument
+        def mock_getpass(prompt):
             return 'test-token'
+        # pylint: enable=unused-argument
 
         self.mock_repo = github.Repository.Repository(
             requester='', headers='', attributes={}, completed='')
@@ -145,9 +149,7 @@ class ChangelogAndCreditsUpdateTests(test_utils.GenericTestBase):
             return 'v2.0.7\nv2.0.8\n'
         check_output_swap = self.swap(
             subprocess, 'check_output', mock_check_output)
-        with check_output_swap, self.assertRaisesRegexp(
-            AssertionError,
-            'Previous release version is same as current release version.'):
+        with check_output_swap, self.assertRaises(AssertionError):
             update_changelog_and_credits.get_previous_release_version(
                 'release', '2.0.8')
 
@@ -380,8 +382,10 @@ class ChangelogAndCreditsUpdateTests(test_utils.GenericTestBase):
                 update_changelog_and_credits.main()
 
     def test_missing_personal_access_token(self):
-        def mock_getpass(prompt):  # pylint: disable=unused-argument
+        # pylint: disable=unused-argument
+        def mock_getpass(prompt):
             return None
+        # pylint: enable=unused-argument
         getpass_swap = self.swap(getpass, 'getpass', mock_getpass)
         with self.branch_name_swap, self.release_summary_swap, self.args_swap:
             with getpass_swap, self.assertRaisesRegexp(
@@ -500,17 +504,19 @@ class ChangelogAndCreditsUpdateTests(test_utils.GenericTestBase):
             return github.Branch.Branch(
                 requester='', headers='',
                 attributes={'commit': {'sha': 'test'}}, completed='')
-        def mock_create_git_ref(unused_self, ref, sha):  # pylint: disable=unused-argument
+        # pylint: disable=unused-argument
+        def mock_create_git_ref(unused_self, ref, sha):
             check_function_calls['create_git_ref_gets_called'] = True
-        def mock_get_contents(unused_self, unused_filepath, ref):  # pylint: disable=unused-argument
+        def mock_get_contents(unused_self, unused_filepath, ref):
             check_function_calls['get_contents_gets_called'] = True
             return github.ContentFile.ContentFile(
                 requester='', headers='',
                 attributes={'path': 'path', 'sha': 'sha'}, completed='')
         def mock_update_file(
                 unused_self, unused_path, unused_msg, unused_content,
-                unused_sha, branch):  # pylint: disable=unused-argument
+                unused_sha, branch):
             check_function_calls['update_file_gets_called'] = True
+        # pylint: enable=unused-argument
         def mock_run_cmd(unused_cmd):
             check_function_calls['run_cmd_gets_called'] = True
         def mock_open_new_tab_in_browser_if_possible(unused_url):

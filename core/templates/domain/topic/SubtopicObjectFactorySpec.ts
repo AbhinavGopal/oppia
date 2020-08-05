@@ -23,7 +23,6 @@ import { SubtopicObjectFactory } from 'domain/topic/SubtopicObjectFactory';
 describe('Subtopic object factory', () => {
   let subtopicObjectFactory: SubtopicObjectFactory = null;
   var _sampleSubtopic = null;
-  var skillIds = ['skill_1', 'skill_2'];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -36,7 +35,7 @@ describe('Subtopic object factory', () => {
       thumbnail_filename: 'image.png',
       thumbnail_bg_color: '#a33f40',
       title: 'Title',
-      skill_ids: skillIds
+      skill_ids: ['skill_1', 'skill_2']
     };
     var sampleSkillIdToDesriptionMap = {
       skill_1: 'Description 1',
@@ -48,10 +47,6 @@ describe('Subtopic object factory', () => {
 
   it('should not find issues with a valid subtopic', () => {
     expect(_sampleSubtopic.validate()).toEqual([]);
-  });
-
-  it('should return the skill ids', () => {
-    expect(_sampleSubtopic.getSkillIds()).toEqual(skillIds);
   });
 
   it('should correctly prepublish validate a story', () => {

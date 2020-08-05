@@ -22,30 +22,30 @@ import cloneDeep from 'lodash/cloneDeep';
 import { Injectable } from '@angular/core';
 import { downgradeInjectable } from '@angular/upgrade/static';
 
-import { RevertChangeList, ExplorationChangeList } from
+import { IRevertChangeList, IExplorationChangeList } from
   'domain/exploration/ExplorationDraftObjectFactory';
 
-export interface ExplorationSnapshot {
+export interface IExplorationSnapshot {
   'commit_message': string;
   'committer_id': string;
   'commit_type': string;
   'version_number': number;
   'created_on_ms': number;
-  'commit_cmds': ExplorationChangeList[];
+  'commit_cmds': IExplorationChangeList[];
 }
 
-interface ExplorationSnapshots {
-  [version: number]: ExplorationSnapshot;
+interface IExplorationSnapshots {
+  [version: number]: IExplorationSnapshot;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class VersionTreeService {
-  private _snapshots: ExplorationSnapshots = null;
+  private _snapshots: IExplorationSnapshots = null;
   private _treeParents: {} = null;
 
-  init(snapshotsData: ExplorationSnapshot[]): void {
+  init(snapshotsData: IExplorationSnapshot[]): void {
     this._treeParents = {};
     this._snapshots = {};
     var numberOfVersions = snapshotsData.length;
@@ -63,7 +63,7 @@ export class VersionTreeService {
           if (this._snapshots[versionNum].commit_cmds[i].cmd ===
               'AUTO_revert_version_number') {
             this._treeParents[versionNum] =
-              (<RevertChangeList> this._snapshots[versionNum].commit_cmds[i])
+              (<IRevertChangeList> this._snapshots[versionNum].commit_cmds[i])
                 .version_number;
           }
         }
@@ -143,7 +143,7 @@ export class VersionTreeService {
    * for 'revert':
    *  - 'version_number': version number reverted to
    */
-  getChangeList(version: number): ExplorationChangeList[] {
+  getChangeList(version: number): IExplorationChangeList[] {
     if (this._snapshots === null) {
       throw new Error('snapshots is not initialized');
     } else if (version === 1) {

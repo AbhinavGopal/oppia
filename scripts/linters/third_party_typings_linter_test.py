@@ -41,12 +41,14 @@ class ThirdPartyTypingsLinterTests(test_utils.GenericTestBase):
             ',\"mathExpressions\":{\"version\": \"0.3\"},\"midiJs\":'
             '{\"version\": \"0.4\"}}}}')
         self.package_file = python_utils.string_io(
-            buffer_value='{\"dependencies\":{\"nerdamer\":\"^0.6\"}}')
+            buffer_value='{\"dependencies\":{\"wavesurfer.js\":\"0.5\",'
+            '\"nerdamer\":\"^0.6\"}}')
         self.files_in_typings_dir = [
             'guppy-defs-0.1.d.ts',
             'skulpt-defs-0.2.d.ts',
             'math-expressions-defs-0.3.d.ts',
             'midi-defs-0.4.d.ts',
+            'wavesurfer-defs-0.5.d.ts',
             'nerdamer-defs-0.6.d.ts'
         ]
         self.print_arr = []
@@ -106,6 +108,7 @@ class ThirdPartyTypingsLinterTests(test_utils.GenericTestBase):
             'skulpt-defs-0.2.d.ts',
             'math-expressions-defs-0.3.d.ts',
             'midi-defs-0.4.d.ts',
+            'wavesurfer-defs-0.5.d.ts',
             'nerdamer-defs-0.6.d.ts'
         ]
         expected_summary_messages = [
@@ -127,6 +130,7 @@ class ThirdPartyTypingsLinterTests(test_utils.GenericTestBase):
             'skulpt-defs-0.2.d.ts',
             'math-expressions-defs-0.3.d.ts',
             'midi-defs-0.4.d.ts',
+            'wavesurfer-defs-0.5.d.ts',
             'nerdamer-defs-0.6.d.ts'
         ]
         expected_summary_messages = [

@@ -24,7 +24,6 @@ angular.module('oppia').component('previewThumbnail', {
     getBgColor: '&bgColor',
     getFilename: '&filename',
     getName: '&name',
-    getAspectRatio: '&aspectRatio',
     getDescription: '&description',
     getPreviewFooter: '&previewFooter',
     getThumbnailBgColor: '&thumbnailBgColor',

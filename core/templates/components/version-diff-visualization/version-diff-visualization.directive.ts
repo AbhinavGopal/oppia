@@ -19,7 +19,7 @@
 
 require(
   'components/common-layout-directives/common-elements/' +
-  'loading-dots.component.ts');
+  'loading-dots.directive.ts');
 require(
   'components/version-diff-visualization/codemirror-mergeview.directive.ts');
 require(

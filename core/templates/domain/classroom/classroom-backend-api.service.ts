@@ -23,18 +23,18 @@ import { Injectable } from '@angular/core';
 import { ClassroomDomainConstants } from
   'domain/classroom/classroom-domain.constants';
 import {
-  TopicSummaryBackendDict,
+  ITopicSummaryBackendDict,
   TopicSummary,
   TopicSummaryObjectFactory
 } from 'domain/topic/TopicSummaryObjectFactory';
 import { UrlInterpolationService } from
   'domain/utilities/url-interpolation.service';
 
-interface ClassroomTopicSummaryBackendDict {
-  'topic_summary_dicts': TopicSummaryBackendDict[];
+interface IClassroomTopicSummaryBackendDict {
+  'topic_summary_dicts': ITopicSummaryBackendDict[];
 }
 
-interface ClassroomStatusBackendDict {
+interface IClassroomStatusBackendDict {
   'classroom_page_is_shown': boolean;
 }
 
@@ -50,14 +50,14 @@ export class ClassroomBackendApiService {
   ) {}
 
   _fetchClassroomData(classroomName: string,
-      successCallback: (value: TopicSummary[]) => void,
-      errorCallback: (reason: string) => void): void {
+      successCallback: (value?: Object | PromiseLike<Object>) => void,
+      errorCallback: (reason?: string) => void): void {
     let classroomDataUrl = this.urlInterpolationService.interpolateUrl(
       ClassroomDomainConstants.CLASSROOOM_DATA_URL_TEMPLATE, {
         classroom_name: classroomName
       });
 
-    this.http.get<ClassroomTopicSummaryBackendDict>(
+    this.http.get<IClassroomTopicSummaryBackendDict>(
       classroomDataUrl).toPromise().then(data => {
       this.topicSummaryObjects = data.topic_summary_dicts.map(
         (summaryDict) => {
@@ -68,37 +68,37 @@ export class ClassroomBackendApiService {
       if (successCallback) {
         successCallback(this.topicSummaryObjects);
       }
-    }, errorResponse => {
+    }, (error: string) => {
       if (errorCallback) {
-        errorCallback(errorResponse.error.error);
+        errorCallback(error);
       }
     });
   }
 
   _fetchClassroomPageIsShownStatus(
-      successCallback: (value: boolean) => void,
-      errorCallback: (reason: string) => void): void {
+      successCallback: (value?: Object | PromiseLike<Object>) => void,
+      errorCallback: (reason?: string) => void): void {
     const classroomStatusHandlerUrl = '/classroom_page_status_handler';
 
-    this.http.get<ClassroomStatusBackendDict>(
+    this.http.get<IClassroomStatusBackendDict>(
       classroomStatusHandlerUrl).toPromise().then(data => {
       if (successCallback) {
         successCallback(data.classroom_page_is_shown);
       }
-    }, errorResponse => {
+    }, (error: string) => {
       if (errorCallback) {
-        errorCallback(errorResponse.error.error);
+        errorCallback(error);
       }
     });
   }
 
-  fetchClassroomData(classroomName: string): Promise<TopicSummary[]> {
+  fetchClassroomData(classroomName: string): Promise<Object> {
     return new Promise((resolve, reject) => {
       this._fetchClassroomData(classroomName, resolve, reject);
     });
   }
 
-  fetchClassroomPageIsShownStatus(): Promise<boolean> {
+  fetchClassroomPageIsShownStatus(): Promise<Object> {
     return new Promise((resolve, reject) => {
       this._fetchClassroomPageIsShownStatus(resolve, reject);
     });

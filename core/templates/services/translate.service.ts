@@ -19,7 +19,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { UtilsService } from './utils.service';
 
-import { TranslationsDict, TranslationsBackendApiService } from
+import { ITranslationsDict, TranslationsBackendApiService } from
   'services/translations-backend-api.service';
 
 /**
@@ -58,7 +58,7 @@ export interface LangChangeEvent {
 export class TranslateService {
   currentLang = 'en';
   fallbackLang = 'en';
-  translations: Array<TranslationsDict> = [];
+  translations: Array<ITranslationsDict> = [];
   templateMatcher: RegExp = /\<\[\s?([^{}\s]*)\s?\]\>/g;
 
   private onLangChangeEventEmitter = new EventEmitter<LangChangeEvent>();
@@ -73,10 +73,10 @@ export class TranslateService {
   /**
    * Function to fetch JSON file containing translations.
    * @param {string} languageCode - Code of the language
-   * @returns {Promise<TranslationsDict>} - A promise that resolves to the
+   * @returns {Promise<ITranslationsDict>} - A promise that resolves to the
    * translations
    */
-  fetchTranslations(languageCode: string): Promise<TranslationsDict> {
+  fetchTranslations(languageCode: string): Promise<ITranslationsDict> {
     return this.translationsBackendApiService.fetchTranslations(languageCode);
   }
 

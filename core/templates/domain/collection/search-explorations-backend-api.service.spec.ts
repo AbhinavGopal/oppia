@@ -50,6 +50,10 @@ describe('Exploration search backend API service', () => {
       let failHandler = jasmine.createSpy('fail');
       let query = escape(btoa('three'));
 
+      var explorationMetadataObject = (
+        ExplorationMetadataObjectFactory.createFromBackendDict(
+          {collection_node_metadata_list: []}));
+
       SearchExplorationsService.fetchExplorations('three')
         .then(successHandler, failHandler);
       let req = httpTestingController.expectOne(
@@ -84,10 +88,8 @@ describe('Exploration search backend API service', () => {
         }]
       };
 
-      var explorationMetadataObjects = (
-        searchResults.collection_node_metadata_list.map(
-          explorationMetadataBackendDict => ExplorationMetadataObjectFactory
-            .createFromBackendDict(explorationMetadataBackendDict)));
+      var explorationMetadataObject = (
+        ExplorationMetadataObjectFactory.createFromBackendDict(searchResults));
 
       SearchExplorationsService.fetchExplorations('count')
         .then(successHandler, failHandler);
@@ -97,7 +99,7 @@ describe('Exploration search backend API service', () => {
 
       flushMicrotasks();
 
-      expect(successHandler).toHaveBeenCalledWith(explorationMetadataObjects);
+      expect(successHandler).toHaveBeenCalledWith(explorationMetadataObject);
       expect(failHandler).not.toHaveBeenCalled();
     })
   );

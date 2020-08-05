@@ -32,8 +32,6 @@ describe('Admin Page', function() {
     await users.createUser('moderator2@adminTab.com', 'moderator2');
     await users.createUser(
       'collectionEdtior1@adminTab.com', 'collectionEditor1');
-    await users.createUser(
-      'newQuestionReviewer@adminTab.com', 'newQuestionReviewer');
     await users.createAndLoginAdminUser(
       'management@adminTab.com', 'management');
     await adminPage.get();
@@ -53,12 +51,6 @@ describe('Admin Page', function() {
     await adminPage.updateRole('collectionEditor1', 'collection editor');
     await adminPage.getUsersAsssignedToRole('collection editor');
     await adminPage.expectUsernamesToMatch(['collectionEditor1']);
-
-    await adminPage.get();
-    await adminPage.addReviewer('newQuestionReviewer', 'question');
-    await adminPage.showReviewersAssignedToRole('question');
-    await adminPage.expectReviewerUsernamesStrToMatch(
-      'Usernames: ["newQuestionReviewer"]');
     await users.logout();
   });
 

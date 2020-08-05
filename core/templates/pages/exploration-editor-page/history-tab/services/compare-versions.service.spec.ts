@@ -34,7 +34,7 @@ import { RuleObjectFactory } from 'domain/exploration/RuleObjectFactory';
 import { SubtitledHtmlObjectFactory } from
   'domain/exploration/SubtitledHtmlObjectFactory';
 import { UnitsObjectFactory } from 'domain/objects/UnitsObjectFactory';
-import { ExplorationSnapshot, VersionTreeService } from
+import { IExplorationSnapshot, VersionTreeService } from
   'pages/exploration-editor-page/history-tab/services/version-tree.service';
 import { VoiceoverObjectFactory } from
   'domain/exploration/VoiceoverObjectFactory';
@@ -189,7 +189,7 @@ describe('Compare versions service', function() {
       };
     };
 
-    const testSnapshots1: ExplorationSnapshot[] = [{
+    const testSnapshots1: IExplorationSnapshot[] = [{
       commit_type: 'create',
       version_number: 1,
       committer_id: 'admin',
@@ -698,7 +698,7 @@ describe('Compare versions service', function() {
       }
     );
 
-    var testSnapshots2: ExplorationSnapshot[] = [{
+    var testSnapshots2: IExplorationSnapshot[] = [{
       commit_type: 'create',
       version_number: 1,
       committer_id: 'admin',
@@ -968,7 +968,7 @@ describe('Compare versions service', function() {
 
     // Represents snapshots and exploration data for tests for links
     // Only includes information accessed by getDiffGraphData().
-    var testSnapshots3: ExplorationSnapshot[] = [{
+    var testSnapshots3: IExplorationSnapshot[] = [{
       commit_type: 'create',
       version_number: 1,
       committer_id: 'admin',

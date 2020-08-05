@@ -138,7 +138,7 @@ angular.module('oppia').factory('SearchService', [
             $log.error('Mismatch');
             $log.error('SearchQuery: ' + searchQuery);
             $log.error('Input: ' + (
-              <string>$('.oppia-search-bar-input').val()).trim());
+              <string><any>$('.oppia-search-bar-input').val()).trim());
           }
         })['catch'](function() {
           numSearchesInProgress--;

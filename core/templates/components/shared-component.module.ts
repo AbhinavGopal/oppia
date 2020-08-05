@@ -23,12 +23,6 @@ import { CommonModule } from '@angular/common';
 
 import { BackgroundBannerComponent } from
   './common-layout-directives/common-elements/background-banner.component';
-import { AttributionGuideComponent } from
-  './common-layout-directives/common-elements/attribution-guide.component';
-import { LazyLoadingComponent } from
-  './common-layout-directives/common-elements/lazy-loading.component';
-import { LoadingDotsComponent } from
-  './common-layout-directives/common-elements/loading-dots.component';
 import { MaterialModule } from './material.module';
 import { TranslatePipe } from 'filters/translate.pipe';
 import { SkillMasteryViewerComponent } from
@@ -40,26 +34,22 @@ import { ExplorationEmbedButtonModalComponent } from
 import { SocialButtonsComponent } from
   'components/button-directives/social-buttons.component';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { ExplorationSummaryTileDirective } from
-  './summary-tile/exploration-summary-tile.directive';
+
 
 
 @NgModule({
   imports: [CommonModule, MaterialModule, NgbModalModule],
   declarations: [BackgroundBannerComponent, TranslatePipe,
     SharingLinksComponent, ExplorationEmbedButtonModalComponent,
-    SkillMasteryViewerComponent, AttributionGuideComponent,
-    LazyLoadingComponent, LoadingDotsComponent, SocialButtonsComponent,
-    ExplorationSummaryTileDirective],
+    SkillMasteryViewerComponent, SocialButtonsComponent],
   entryComponents: [BackgroundBannerComponent, SharingLinksComponent,
-    SkillMasteryViewerComponent, AttributionGuideComponent,
-    LazyLoadingComponent, LoadingDotsComponent, SocialButtonsComponent,
     // These elements will remain here even after migration.
-    ExplorationEmbedButtonModalComponent,
+    ExplorationEmbedButtonModalComponent, SkillMasteryViewerComponent,
+    SocialButtonsComponent
   ],
   exports: [
     BackgroundBannerComponent, TranslatePipe,
-    SharingLinksComponent, MaterialModule, ExplorationSummaryTileDirective
+    SharingLinksComponent, MaterialModule
   ],
 })
 

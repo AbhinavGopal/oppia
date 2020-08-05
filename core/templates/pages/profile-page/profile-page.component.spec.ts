@@ -26,8 +26,6 @@ import { ProfilePageBackendApiService } from
   './profile-page-backend-api.service';
 import { OppiaAngularRootComponent } from
   'components/oppia-angular-root.component';
-import { RatingComputationService } from
-  'components/ratings/rating-computation/rating-computation.service';
 
 require('pages/profile-page/profile-page.component.ts');
 
@@ -38,7 +36,6 @@ describe('Profile page', function() {
   var UserService = null;
   var CsrfTokenService = null;
   var DateTimeFormatService = null;
-  var UserProfileObjectFactory = null;
   var $log = null;
   var windowRefMock = {
     nativeWindow: {
@@ -71,8 +68,6 @@ describe('Profile page', function() {
     OppiaAngularRootComponent.profilePageBackendApiService = (
       TestBed.get(ProfilePageBackendApiService)
     );
-    OppiaAngularRootComponent.ratingComputationService = (
-      TestBed.get(RatingComputationService));
   });
 
   beforeEach(angular.mock.inject(function($injector, $componentController) {
@@ -80,7 +75,6 @@ describe('Profile page', function() {
     UserService = $injector.get('UserService');
     CsrfTokenService = $injector.get('CsrfTokenService');
     DateTimeFormatService = $injector.get('DateTimeFormatService');
-    UserProfileObjectFactory = $injector.get('UserProfileObjectFactory');
     $log = $injector.get('$log');
 
     spyOn(CsrfTokenService, 'getTokenAsync')
@@ -108,163 +102,83 @@ describe('Profile page', function() {
   describe('when user has edited explorations', function() {
     var profileData = {
       username: '',
-      username_of_viewed_profile: 'username1',
+      profile_username: 'username1',
       user_bio: 'User bio',
       user_impact_score: 100,
-      profile_is_of_current_user: false,
-      is_user_visiting_own_profile: false,
       created_exp_summary_dicts: [{
-        last_updated_msec: 1591296737470.528,
-        community_owned: false,
-        objective: 'Test Objective',
-        id: '44LKoKLlIbGe',
-        num_views: 0,
-        thumbnail_icon_url: '/subjects/Algebra.svg',
-        human_readable_contributors_summary: {},
-        language_code: 'en',
-        thumbnail_bg_color: '#cd672b',
-        created_on_msec: 1591296635736.666,
-        ratings: {
-          1: 0,
-          2: 0,
-          3: 0,
-          4: 0,
-          5: 0
-        },
-        status: 'public',
-        tags: [],
-        activity_type: 'exploration',
-        category: 'Algebra',
-        title: 'Test Title'
+        ratings: 2,
+      }, {
+        ratings: 1
+      }, {
+        ratings: 2
       }],
-      is_already_subscribed: false,
-      first_contribution_msec: null,
       edited_exp_summary_dicts: [{
-        last_updated_msec: 1591296737470.528,
-        community_owned: false,
-        objective: 'Test Objective',
-        id: '44LKoKLlIbGe',
-        num_views: 0,
-        thumbnail_icon_url: '/subjects/Algebra.svg',
-        human_readable_contributors_summary: {},
-        language_code: 'en',
-        thumbnail_bg_color: '#cd672b',
-        created_on_msec: 1591296635736.666,
-        ratings: {
-          1: 0,
-          2: 0,
-          3: 0,
-          4: 0,
-          5: 0
-        },
-        status: 'public',
-        tags: [],
-        activity_type: 'exploration',
-        category: 'Algebra',
-        title: 'Test Title'
-      }],
-      subject_interests: [],
-      profile_picture_data_url: 'image',
+        ratings: 2,
+      }, {
+        ratings: 1
+      }, {
+        ratings: 2,
+        playthroughs: 1
+      }, {
+        ratings: 2,
+        playthroughs: 1
+      }, {
+        ratings: 2,
+        playthroughs: 0
+      }, {
+        ratings: 2,
+        playthroughs: 3
+      }]
     };
 
     beforeEach(function() {
       spyOn(OppiaAngularRootComponent.profilePageBackendApiService,
-        'fetchProfileData').and.returnValue($q.resolve(
-        UserProfileObjectFactory.createFromBackendDict(profileData)));
+        'fetchProfileData').and.returnValue($q.resolve(profileData));
       ctrl.$onInit();
       $scope.$apply();
     });
 
     it('should get explorations to display when edited explorations are empty',
       function() {
-        var userProfile = UserProfileObjectFactory.createFromBackendDict(
-          profileData);
-        expect(ctrl.getExplorationsToDisplay()).toEqual(
-          userProfile.editedExpSummaries);
+        expect(ctrl.getExplorationsToDisplay()).toEqual([{
+          ratings: 1
+        }, {
+          ratings: 2,
+          playthroughs: 0
+        }, {
+          ratings: 2,
+          playthroughs: 1
+        }, {
+          ratings: 2,
+          playthroughs: 1
+        }, {
+          ratings: 2,
+          playthroughs: 3
+        }, {
+          ratings: 2
+        }]);
       });
   });
 
   describe('when changing pages', function() {
     var profileData = {
       username: '',
-      username_of_viewed_profile: 'username1',
+      profile_username: 'username1',
       user_bio: 'User bio',
       user_impact_score: 100,
-      created_exp_summary_dicts: new Array(7).fill({
-        last_updated_msec: 1591296737470.528,
-        community_owned: false,
-        objective: 'Test Objective',
-        id: '44LKoKLlIbGe',
-        num_views: 10,
-        thumbnail_icon_url: '/subjects/Algebra.svg',
-        human_readable_contributors_summary: {},
-        language_code: 'en',
-        thumbnail_bg_color: '#cd672b',
-        created_on_msec: 1591296635736.666,
-        ratings: {
-          1: 0,
-          2: 0,
-          3: 1,
-          4: 0,
-          5: 0
-        },
-        status: 'public',
-        tags: [],
-        activity_type: 'exploration',
-        category: 'Algebra',
-        title: 'Test Title'
+      created_exp_summary_dicts: new Array(10).fill({
+        ratings: 1,
+        playthroughs: 1
       }),
-      edited_exp_summary_dicts: []
+      edited_exp_summary_dicts: new Array(10).fill({
+        ratings: 1,
+        playthroughs: 1
+      })
     };
 
     beforeEach(function() {
-      for (let i = 0; i < 11; i++) {
-        profileData.edited_exp_summary_dicts.push({
-          last_updated_msec: 1591296737470.528,
-          community_owned: false,
-          objective: 'Test Objective',
-          id: '44LKoKLlIbGe',
-          num_views: 10,
-          thumbnail_icon_url: '/subjects/Algebra.svg',
-          human_readable_contributors_summary: {},
-          language_code: 'en',
-          thumbnail_bg_color: '#cd672b',
-          created_on_msec: 1591296635736.666,
-          ratings: {
-            1: 0,
-            2: 0,
-            3: 1,
-            4: 0,
-            5: 0
-          },
-          status: 'public',
-          tags: [],
-          activity_type: 'exploration',
-          category: 'Algebra',
-          title: 'Test Title'
-        });
-      }
-
-      profileData.edited_exp_summary_dicts[7].ratings = {
-        1: 1,
-        2: 0,
-        3: 0,
-        4: 0,
-        5: 0
-      };
-      profileData.edited_exp_summary_dicts[8].ratings = {
-        1: 0,
-        2: 0,
-        3: 0,
-        4: 1,
-        5: 0
-      };
-      profileData.edited_exp_summary_dicts[9].num_views = 5;
-      profileData.edited_exp_summary_dicts[10].num_views = 15;
-
       spyOn(OppiaAngularRootComponent.profilePageBackendApiService,
-        'fetchProfileData').and.returnValue($q.resolve(
-        UserProfileObjectFactory.createFromBackendDict(profileData)));
+        'fetchProfileData').and.returnValue($q.resolve(profileData));
       ctrl.$onInit();
       $scope.$apply();
     });
@@ -275,7 +189,7 @@ describe('Profile page', function() {
 
       expect(ctrl.currentPageNumber).toBe(1);
       expect(ctrl.startingExplorationNumber).toBe(7);
-      expect(ctrl.endingExplorationNumber).toBe(11);
+      expect(ctrl.endingExplorationNumber).toBe(10);
 
       spyOn($log, 'error').and.callThrough();
       ctrl.goToNextPage();
@@ -298,7 +212,7 @@ describe('Profile page', function() {
   describe('when user is not logged in', function() {
     var profileData = {
       username: '',
-      username_of_viewed_profile: 'username1',
+      profile_username: 'username1',
       user_bio: 'User bio',
       user_impact_score: 100,
       created_exp_summary_dicts: [],
@@ -307,8 +221,7 @@ describe('Profile page', function() {
 
     beforeEach(function() {
       spyOn(OppiaAngularRootComponent.profilePageBackendApiService,
-        'fetchProfileData').and.returnValue($q.resolve(
-        UserProfileObjectFactory.createFromBackendDict(profileData)));
+        'fetchProfileData').and.returnValue($q.resolve(profileData));
       ctrl.$onInit();
       $scope.$apply();
     });
@@ -353,7 +266,7 @@ describe('Profile page', function() {
   describe('when user is logged in', function() {
     var profileData = {
       username: 'username1',
-      username_of_viewed_profile: 'username1',
+      profile_username: 'username1',
       user_bio: 'User bio',
       user_impact_score: 100,
       created_exp_summary_dicts: [],
@@ -363,8 +276,7 @@ describe('Profile page', function() {
 
     beforeEach(function() {
       spyOn(OppiaAngularRootComponent.profilePageBackendApiService,
-        'fetchProfileData').and.returnValue($q.resolve(
-        UserProfileObjectFactory.createFromBackendDict(profileData)));
+        'fetchProfileData').and.returnValue($q.resolve(profileData));
       ctrl.$onInit();
       $scope.$apply();
     });
@@ -379,8 +291,7 @@ describe('Profile page', function() {
       expect(ctrl.isAlreadySubscribed).toBe(true);
       expect(ctrl.subscriptionButtonPopoverText).toBe(
         'Unsubscribe to stop receiving email notifications regarding new' +
-        ' explorations published by ' + profileData.username_of_viewed_profile +
-        '.');
+        ' explorations published by ' + profileData.profile_username + '.');
 
       spyOn(OppiaAngularRootComponent.profilePageBackendApiService,
         'unsubscribe').and.returnValue($q.resolve());
@@ -390,8 +301,7 @@ describe('Profile page', function() {
       expect(ctrl.isAlreadySubscribed).toBe(false);
       expect(ctrl.subscriptionButtonPopoverText).toBe(
         'Receive email notifications, whenever ' +
-        profileData.username_of_viewed_profile +
-        ' publishes a new exploration.');
+        profileData.profile_username + ' publishes a new exploration.');
     });
   });
 });

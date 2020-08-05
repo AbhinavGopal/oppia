@@ -20,14 +20,6 @@ import { downgradeInjectable } from '@angular/upgrade/static';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-interface CollectionCreationBackendDict {
-  'collection_id': string
-}
-
-interface CollectionCreationResponse {
-  collectionId: string;
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -35,29 +27,30 @@ export class CollectionCreationBackendService {
   constructor(private http: HttpClient) {}
 
   private _createCollection(
-      successCallback: (value: CollectionCreationResponse) => void,
-      errorCallback: (reason: string) => void): void {
-    this.http.post<CollectionCreationBackendDict>(
-      '/collection_editor_handler/create_new', {}).toPromise()
-      .then(response => {
+      successCallback: (value?: Object | PromiseLike<Object>) => void,
+      errorCallback: (reason?: any) => void): void {
+    this.http.post('/collection_editor_handler/create_new', {}).toPromise()
+      .then((response) => {
         if (successCallback) {
-          successCallback({
-            collectionId: response.collection_id
-          });
+          successCallback(response);
         }
-      }, errorResponse => {
+      }, () => {
         if (errorCallback) {
-          errorCallback(errorResponse.error.error);
+          errorCallback();
         }
       });
   }
 
 
-  createCollection(): Promise<CollectionCreationResponse> {
+  createCollection(): Promise<object> {
     return new Promise((resolve, reject) => {
       this._createCollection(resolve, reject);
     });
   }
+}
+
+export interface ICollectionCreationResponse {
+  collectionId: string
 }
 
 angular.module('oppia').factory(

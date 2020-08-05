@@ -20,90 +20,56 @@
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 
-export interface TopicSummaryBackendDict {
+export interface ITopicSummaryBackendDict {
   'id': string;
   'name': string;
-  'language_code': string;
-  'description': string;
-  'version': number;
   'canonical_story_count': number;
-  'additional_story_count': number;
   'subtopic_count': number;
   'total_skill_count': number;
   'uncategorized_skill_count': number;
-  'topic_model_created_on': number;
-  'topic_model_last_updated': number;
-  // These properties are optional because they are only present in the
-  // topic summary dict of topic dashboard page.
-  'can_edit_topic'?: boolean;
-  'is_published'?: boolean;
-  'classroom'?: string;
 }
 
 export class TopicSummary {
-  constructor(
-      public id: string,
-      public name: string,
-      public canonicalStoryCount: number,
-      public subtopicCount: number,
-      public totalSkillCount: number,
-      public uncategorizedSkillCount: number,
-      public languageCode: string,
-      public description: string,
-      public version: number,
-      public additionalStoryCount: number,
-      public topicModelCreatedOn: number,
-      public topicModelLastUpdated: number,
-      public canEditTopic: boolean,
-      public isPublished: boolean,
-      public classroom: string) { }
+  _id: string;
+  _name: string;
+  _canonicalStoryCount: number;
+  _subtopicCount: number;
+  _totalSkillCount: number;
+  _uncategorizedSkillCount: number;
+
+  constructor(id, name, canonicalStoryCount, subtopicCount, totalSkillCount,
+      uncategorizedSkillCount) {
+    this._id = id;
+    this._name = name;
+    this._canonicalStoryCount = canonicalStoryCount;
+    this._totalSkillCount = totalSkillCount;
+    this._uncategorizedSkillCount = uncategorizedSkillCount;
+    this._subtopicCount = subtopicCount;
+  }
+  // ---- Instance methods ----
 
   getId(): string {
-    return this.id;
+    return this._id;
   }
 
   getName(): string {
-    return this.name;
+    return this._name;
   }
 
   getCanonicalStoryCount(): number {
-    return this.canonicalStoryCount;
+    return this._canonicalStoryCount;
   }
 
   getSubtopicCount(): number {
-    return this.subtopicCount;
+    return this._subtopicCount;
   }
 
   getTotalSkillCount(): number {
-    return this.totalSkillCount;
+    return this._totalSkillCount;
   }
 
   getUncategorizedSkillCount(): number {
-    return this.uncategorizedSkillCount;
-  }
-
-  getLanguageCode(): string {
-    return this.languageCode;
-  }
-
-  getDescription(): string {
-    return this.description;
-  }
-
-  getVersion(): number {
-    return this.version;
-  }
-
-  getAdditionalStoryCount(): number {
-    return this.additionalStoryCount;
-  }
-
-  getTopicModelCreatedOn(): number {
-    return this.topicModelCreatedOn;
-  }
-
-  getTopicModelLastUpdated(): number {
-    return this.topicModelLastUpdated;
+    return this._uncategorizedSkillCount;
   }
 }
 
@@ -112,23 +78,15 @@ export class TopicSummary {
 })
 export class TopicSummaryObjectFactory {
   createFromBackendDict(
-      topicSummaryBackendDict: TopicSummaryBackendDict): TopicSummary {
+      topicSummaryBackendDict: ITopicSummaryBackendDict): TopicSummary {
     return new TopicSummary(
       topicSummaryBackendDict.id,
       topicSummaryBackendDict.name,
       topicSummaryBackendDict.canonical_story_count,
       topicSummaryBackendDict.subtopic_count,
       topicSummaryBackendDict.total_skill_count,
-      topicSummaryBackendDict.uncategorized_skill_count,
-      topicSummaryBackendDict.language_code,
-      topicSummaryBackendDict.description,
-      topicSummaryBackendDict.version,
-      topicSummaryBackendDict.additional_story_count,
-      topicSummaryBackendDict.topic_model_created_on,
-      topicSummaryBackendDict.topic_model_last_updated,
-      topicSummaryBackendDict.can_edit_topic,
-      topicSummaryBackendDict.is_published,
-      topicSummaryBackendDict.classroom);
+      topicSummaryBackendDict.uncategorized_skill_count
+    );
   }
 }
 

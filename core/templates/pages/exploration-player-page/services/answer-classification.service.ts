@@ -27,7 +27,7 @@ import { AnswerGroup } from 'domain/exploration/AnswerGroupObjectFactory';
 import { AppService } from 'services/app.service';
 import { ExplorationPlayerConstants } from
   'pages/exploration-player-page/exploration-player-page.constants';
-import { InteractionAnswer } from 'interactions/answer-defs';
+import { IInteractionAnswer } from 'interactions/answer-defs';
 import { Interaction } from 'domain/exploration/InteractionObjectFactory';
 import { InteractionSpecsService } from 'services/interaction-specs.service';
 import { Outcome } from 'domain/exploration/OutcomeObjectFactory';
@@ -63,7 +63,7 @@ export class AnswerClassificationService {
    * @return AnswerClassificationResult domain object.
    */
   private classifyAnswer(
-      answer: InteractionAnswer,
+      answer: IInteractionAnswer,
       answerGroups: AnswerGroup[],
       defaultOutcome: Outcome,
       interactionRulesService): AnswerClassificationResult {
@@ -110,7 +110,7 @@ export class AnswerClassificationService {
   getMatchingClassificationResult(
       stateName: string,
       interactionInOldState: Interaction,
-      answer: InteractionAnswer,
+      answer: IInteractionAnswer,
       interactionRulesService): AnswerClassificationResult {
     var answerClassificationResult = null;
 
@@ -180,7 +180,7 @@ export class AnswerClassificationService {
   }
 
   isClassifiedExplicitlyOrGoesToNewState(
-      stateName: string, state: State, answer: InteractionAnswer,
+      stateName: string, state: State, answer: IInteractionAnswer,
       interactionRulesService): boolean {
     const result = this.getMatchingClassificationResult(
       stateName, state.interaction, answer, interactionRulesService);

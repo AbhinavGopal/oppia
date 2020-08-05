@@ -34,8 +34,8 @@ describe('State name service', () => {
   });
 
   it('should evaluate properties before the initialization', () =>{
-    expect(sns.getStateNameSavedMemento()).toBeNull();
-    expect(sns.isStateNameEditorShown()).toBeFalse();
+    expect((sns as any).savedMemento).toBeNull();
+    expect((sns as any).stateNameEditorIsShown).toBeFalse();
   });
 
   it('should call set state functions after init', () => {
@@ -43,9 +43,9 @@ describe('State name service', () => {
     spyOn(sns, 'setStateNameEditorVisibility');
     sns.init();
     expect(sns.setStateNameSavedMemento).toHaveBeenCalled();
-    expect(sns.getStateNameSavedMemento()).toBeNull();
+    expect((sns as any).savedMemento).toBeNull();
     expect(sns.setStateNameEditorVisibility).toHaveBeenCalled();
-    expect(sns.isStateNameEditorShown()).toBe(false);
+    expect((sns as any).stateNameEditorIsShown).toBe(false);
   });
 
   it('tests the get function', () => {
@@ -53,9 +53,9 @@ describe('State name service', () => {
     expect(sns.isStateNameEditorShown()).toBe(false);
     sns.setStateNameSavedMemento('SomeValue');
     expect(sns.getStateNameSavedMemento()).toBe('SomeValue');
-    expect(sns.getStateNameSavedMemento()).toBe('SomeValue');
+    expect((sns as any).savedMemento).toBe('SomeValue');
     sns.setStateNameEditorVisibility(true);
     expect(sns.isStateNameEditorShown()).toBe(true);
-    expect(sns.isStateNameEditorShown()).toBe(true);
+    expect((sns as any).stateNameEditorIsShown).toBe(true);
   });
 });

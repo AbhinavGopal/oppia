@@ -163,7 +163,6 @@ describe('Skills List Directive', function() {
         return [{id: 'dnfsdk', version: 1}];
       };
       $scope.getSkillsCategorizedByTopics = function() {};
-      $scope.getUntriagedSkillSummaries = function() {};
       var skillId = 'CdjnJUE332dd';
 
       ctrl.mergeSkill(skillId);

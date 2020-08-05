@@ -21,9 +21,9 @@ import { Injectable } from '@angular/core';
 
 import { AnswerGroup } from
   'domain/exploration/AnswerGroupObjectFactory';
-import { Warning, baseInteractionValidationService } from
+import { IWarning, baseInteractionValidationService } from
   'interactions/base-interaction-validation.service';
-import { EndExplorationCustomizationArgs } from
+import { IEndExplorationCustomizationArgs } from
   'interactions/customization-args-defs';
 import { Outcome } from
   'domain/exploration/OutcomeObjectFactory';
@@ -39,7 +39,7 @@ export class EndExplorationValidationService {
         baseInteractionValidationService) {}
 
   getCustomizationArgsWarnings(
-      customizationArgs: EndExplorationCustomizationArgs): Warning[] {
+      customizationArgs: IEndExplorationCustomizationArgs): IWarning[] {
     var warningsList = [];
     this.baseInteractionValidationServiceInstance.requireCustomizationArguments(
       customizationArgs, ['recommendedExplorationIds']);
@@ -65,8 +65,8 @@ export class EndExplorationValidationService {
   }
 
   getAllWarnings(
-      stateName: string, customizationArgs: EndExplorationCustomizationArgs,
-      answerGroups: AnswerGroup[], defaultOutcome: Outcome): Warning[] {
+      stateName: string, customizationArgs: IEndExplorationCustomizationArgs,
+      answerGroups: AnswerGroup[], defaultOutcome: Outcome): IWarning[] {
     var warningsList = [];
 
     warningsList = warningsList.concat(
