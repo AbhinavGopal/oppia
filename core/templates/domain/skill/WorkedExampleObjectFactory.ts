@@ -17,15 +17,15 @@
  * worked examples.
  */
 
-export interface WorkedExampleBackendDict {
-  question: SubtitledHtmlBackendDict,
-  explanation: SubtitledHtmlBackendDict
+export interface IWorkedExampleBackendDict {
+  question: ISubtitledHtmlBackendDict,
+  explanation: ISubtitledHtmlBackendDict
 }
 
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 import {
-  SubtitledHtml, SubtitledHtmlObjectFactory, SubtitledHtmlBackendDict
+  SubtitledHtml, SubtitledHtmlObjectFactory, ISubtitledHtmlBackendDict
 } from 'domain/exploration/SubtitledHtmlObjectFactory';
 
 export class WorkedExample {
@@ -37,7 +37,7 @@ export class WorkedExample {
     this._explanation = explanation;
   }
 
-  toBackendDict(): WorkedExampleBackendDict {
+  toBackendDict(): IWorkedExampleBackendDict {
     return {
       question: this._question.toBackendDict(),
       explanation: this._explanation.toBackendDict()
@@ -61,7 +61,7 @@ export class WorkedExampleObjectFactory {
       private subtitledHtmlObjectFactory: SubtitledHtmlObjectFactory) {}
 
   createFromBackendDict(
-      workedExampleDict: WorkedExampleBackendDict): WorkedExample {
+      workedExampleDict: IWorkedExampleBackendDict): WorkedExample {
     return new WorkedExample(
       this.subtitledHtmlObjectFactory.createFromBackendDict(
         workedExampleDict.question),

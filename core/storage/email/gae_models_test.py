@@ -140,18 +140,15 @@ class SentEmailModelUnitTests(test_utils.GenericTestBase):
                 'Email Hash', sent_datetime_lower_bound=time_now1)
             self.assertEqual(len(results), 0)
 
-            time_before = (
-                datetime.datetime.utcnow() - datetime.timedelta(minutes=10))
+            time_before = (datetime.datetime.utcnow() -
+                           datetime.timedelta(minutes=10))
 
             results = email_models.SentEmailModel.get_by_hash(
                 'Email Hash', sent_datetime_lower_bound=time_before)
             self.assertEqual(len(results), 1)
 
             # Check that it accepts only DateTime objects.
-            with self.assertRaisesRegexp(
-                Exception,
-                'Expected datetime, received Not a datetime object of type '
-                '<type \'unicode\'>'):
+            with self.assertRaises(Exception):
                 email_models.SentEmailModel.get_by_hash(
                     'Email Hash',
                     sent_datetime_lower_bound='Not a datetime object')

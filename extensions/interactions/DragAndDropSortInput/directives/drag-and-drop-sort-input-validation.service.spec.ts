@@ -31,7 +31,7 @@ import { Rule, RuleObjectFactory } from
 
 import { AppConstants } from 'app.constants';
 import { WARNING_TYPES_CONSTANT } from 'app-type.constants';
-import { DragAndDropSortInputCustomizationArgs } from
+import { IDragAndDropSortInputCustomizationArgs } from
   'interactions/customization-args-defs';
 
 describe('DragAndDropSortInputValidationService', () => {
@@ -43,9 +43,8 @@ describe('DragAndDropSortInputValidationService', () => {
   let customOutcome: Outcome;
   let equalsListWithEmptyValuesRule: Rule, equalsListWithDuplicatesRule: Rule,
     equalsListWithAllowedValuesRule: Rule, equalsListWithValuesRule: Rule,
-    goodRule1: Rule, goodRule2: Rule, hasXBeforeYRule: Rule,
-    hasElementXAtPositionYRule: Rule;
-  let customizationArgs: DragAndDropSortInputCustomizationArgs;
+    goodRule1: Rule, goodRule2: Rule, hasXBeforeYRule: Rule;
+  let customizationArgs: IDragAndDropSortInputCustomizationArgs;
   let oof: OutcomeObjectFactory, agof: AnswerGroupObjectFactory,
     rof: RuleObjectFactory;
 
@@ -88,7 +87,7 @@ describe('DragAndDropSortInputValidationService', () => {
 
     customizationArgs = {
       choices: {
-        value: ['a', 'b', 'c', 'd']
+        value: ['Item 1', 'Item 2', 'Item 3']
       },
       allowMultipleItemsInSamePosition: {
         value: true
@@ -126,14 +125,14 @@ describe('DragAndDropSortInputValidationService', () => {
     equalsListWithEmptyValuesRule = rof.createFromBackendDict({
       rule_type: 'IsEqualToOrdering',
       inputs: {
-        x: [['a', ''], [], ['c', 'b', 'd']]
+        x: [['a', ''], [], ['c']]
       }
     });
 
     equalsListWithDuplicatesRule = rof.createFromBackendDict({
       rule_type: 'IsEqualToOrderingWithOneItemAtIncorrectPosition',
       inputs: {
-        x: [['a', 'b'], ['b'], ['c', 'a', 'd']]
+        x: [['a', 'b'], ['b'], ['c', 'a']]
       }
     });
 
@@ -142,14 +141,6 @@ describe('DragAndDropSortInputValidationService', () => {
       inputs: {
         x: 'b',
         y: 'b'
-      }
-    });
-
-    hasElementXAtPositionYRule = rof.createFromBackendDict({
-      rule_type: 'HasElementXAtPositionY',
-      inputs: {
-        x: 'x',
-        y: '5'
       }
     });
 
@@ -179,7 +170,7 @@ describe('DragAndDropSortInputValidationService', () => {
     var rules = [rof.createFromBackendDict({
       rule_type: 'IsEqualToOrdering',
       inputs: {
-        x: [['a', 'b'], ['c', 'd']]
+        x: [['a', 'b']]
       }
     })];
     answerGroups = [
@@ -207,10 +198,6 @@ describe('DragAndDropSortInputValidationService', () => {
     expect(warnings).toEqual([{
       type: WARNING_TYPES.ERROR,
       message: 'Please ensure the items are nonempty.'
-    }, {
-      type: WARNING_TYPES.ERROR,
-      message: 'Rule 1 from answer group 1 options do not match ' +
-        'customization argument choices.'
     }]);
   });
 
@@ -223,10 +210,6 @@ describe('DragAndDropSortInputValidationService', () => {
     expect(warnings).toEqual([{
       type: WARNING_TYPES.ERROR,
       message: 'Please ensure the items are unique.'
-    }, {
-      type: WARNING_TYPES.ERROR,
-      message: 'Rule 1 from answer group 1 options do not match ' +
-        'customization argument choices.'
     }]);
   });
 
@@ -234,7 +217,7 @@ describe('DragAndDropSortInputValidationService', () => {
     customizationArgs.choices.value = ['1'];
 
     var warnings = validatorService.getAllWarnings(
-      currentState, customizationArgs, [], goodDefaultOutcome);
+      currentState, customizationArgs, answerGroups, goodDefaultOutcome);
     expect(warnings).toEqual([{
       type: WARNING_TYPES.CRITICAL,
       message: 'Please enter at least two choices.'
@@ -246,7 +229,7 @@ describe('DragAndDropSortInputValidationService', () => {
     customizationArgs.choices.value[0] = '';
 
     var warnings = validatorService.getAllWarnings(
-      currentState, customizationArgs, [], goodDefaultOutcome);
+      currentState, customizationArgs, answerGroups, goodDefaultOutcome);
     expect(warnings).toEqual([{
       type: WARNING_TYPES.CRITICAL,
       message: 'Please ensure that the choices are nonempty.'
@@ -255,10 +238,10 @@ describe('DragAndDropSortInputValidationService', () => {
 
   it('should expect all choices to be unique', () => {
     // Repeat the last choice.
-    customizationArgs.choices.value.push('d');
+    customizationArgs.choices.value.push('Item 3');
 
     var warnings = validatorService.getAllWarnings(
-      currentState, customizationArgs, [], goodDefaultOutcome);
+      currentState, customizationArgs, answerGroups, goodDefaultOutcome);
     expect(warnings).toEqual([{
       type: WARNING_TYPES.CRITICAL,
       message: 'Please ensure that the choices are unique.'
@@ -289,38 +272,6 @@ describe('DragAndDropSortInputValidationService', () => {
           'because both the selected elements are same.'
     }]);
   });
-
-  it(
-    'should catch selected choice not present in custom args for ' +
-    'hasXBeforeY rule', () => {
-      hasXBeforeYRule.inputs.x = 'x';
-      answerGroups[0].rules = [hasXBeforeYRule];
-      var warnings = validatorService.getAllWarnings(
-        currentState, customizationArgs, answerGroups, goodDefaultOutcome);
-      expect(warnings).toEqual([{
-        type: WARNING_TYPES.ERROR,
-        message: 'Rule 1 from answer group 1 contains choices that do ' +
-          'not match any of the choices in the customization arguments.'
-      }]);
-    });
-
-  it(
-    'should catch selected choices not present in custom args for ' +
-    'hasElementXAtPositionY rule', () => {
-      answerGroups[0].rules = [hasElementXAtPositionYRule];
-
-      var warnings = validatorService.getAllWarnings(
-        currentState, customizationArgs, answerGroups, goodDefaultOutcome);
-      expect(warnings).toEqual([{
-        type: WARNING_TYPES.ERROR,
-        message: 'Rule 1 from answer group 1 contains a choice that does ' +
-          'not match any of the choices in the customization arguments.'
-      }, {
-        type: WARNING_TYPES.ERROR,
-        message: 'Rule 1 from answer group 1 refers to an invalid choice ' +
-          'position.'
-      }]);
-    });
 
   it(
     'should throw an error if ' +

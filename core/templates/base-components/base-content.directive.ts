@@ -22,8 +22,6 @@ require('pages/OppiaFooterDirective.ts');
 
 require('services/bottom-navbar-status.service.ts');
 require('services/contextual/url.service.ts');
-require('services/keyboard-shortcut.service.ts');
-require('services/page-title.service.ts');
 require('services/stateful/background-mask.service.ts');
 
 angular.module('oppia').directive('baseContent', [
@@ -44,13 +42,11 @@ angular.module('oppia').directive('baseContent', [
       },
       template: require('./base-content.directive.html'),
       controllerAs: '$ctrl',
-      controller: ['$rootScope', '$scope', '$window', 'BackgroundMaskService',
-        'BottomNavbarStatusService', 'KeyboardShortcutService',
-        'LoaderService', 'PageTitleService', 'SidebarStatusService',
+      controller: ['$rootScope', '$window', 'BackgroundMaskService',
+        'BottomNavbarStatusService', 'SidebarStatusService', 'LoaderService',
         'UrlService',
-        function($rootScope, $scope, $window, BackgroundMaskService,
-            BottomNavbarStatusService, KeyboardShortcutService,
-            LoaderService, PageTitleService, SidebarStatusService,
+        function($rootScope, $window, BackgroundMaskService,
+            BottomNavbarStatusService, SidebarStatusService, LoaderService,
             UrlService) {
           // Mimic redirection behaviour in the backend (see issue #7867 for
           // details).
@@ -61,14 +57,6 @@ angular.module('oppia').directive('baseContent', [
               $window.location.search +
               $window.location.hash);
           }
-
-          $scope.getHeaderText = () => {
-            return PageTitleService.getPageTitleForMobileView();
-          };
-
-          $scope.getSubheaderText = () => {
-            return PageTitleService.getPageSubtitleForMobileView();
-          };
 
           var ctrl = this;
           ctrl.loadingMessage = '';
@@ -103,8 +91,6 @@ angular.module('oppia').directive('baseContent', [
               (message: string) => this.loadingMessage = message
             );
           };
-
-          KeyboardShortcutService.bindNavigationShortcuts();
         }
       ]
     };

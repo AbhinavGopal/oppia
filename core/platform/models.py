@@ -21,7 +21,6 @@ from __future__ import unicode_literals  # pylint: disable=import-only-modules
 
 import inspect
 
-from constants import constants
 import feconf
 import python_utils
 import utils
@@ -45,11 +44,10 @@ class Platform(python_utils.OBJECT):
         classes.
 
         Raises:
-            NotImplementedError. The method is not overwritten in derived
+            NotImplementedError: The method is not overwritten in derived
                 classes.
         """
-        raise NotImplementedError(
-            'import_models() method is not overwritten in derived classes')
+        raise NotImplementedError
 
 
 class _Gae(Platform):
@@ -65,10 +63,10 @@ class _Gae(Platform):
             model_names: list(str). List of storage module names.
 
         Returns:
-            tuple(module). Tuple of storage modules.
+            tuple(module): Tuple of storage modules.
 
         Raises:
-            Exception. Invalid model name.
+            Exception: Invalid model name.
         """
         returned_models = []
         for name in model_names:
@@ -216,30 +214,38 @@ class _Gae(Platform):
         return gae_app_identity_services
 
     @classmethod
+    def import_gae_image_services(cls):
+        """Imports and returns gae_image_services module.
+
+        Returns:
+            module. The gae_image_services module.
+        """
+        from core.platform.image import gae_image_services
+        return gae_image_services
+
+    @classmethod
     def import_email_services(cls):
         """Imports and returns the email services module specified in feconf.py.
-        If in DEV_MODE, uses the dev mode version of email services.
 
         Returns:
             module. The email_services module to use, based on the feconf.py
-            setting and DEV_MODE setting.
+            setting.
 
         Raises:
-            Exception. The value of feconf.EMAIL_SERVICE_PROVIDER does not
-                correspond to a valid email_services module.
+            Exception: feconf.EMAIL_SERVICE_PROVIDER does not correspond
+                to a valid email_services module.
         """
-        if constants.DEV_MODE:
-            from core.platform.email import dev_mode_email_services
-            return dev_mode_email_services
-        elif (
-                feconf.EMAIL_SERVICE_PROVIDER ==
-                feconf.EMAIL_SERVICE_PROVIDER_MAILGUN):
+        if feconf.EMAIL_SERVICE_PROVIDER == feconf.EMAIL_SERVICE_PROVIDER_GAE:
+            from core.platform.email import gae_email_services
+            return gae_email_services
+        elif (feconf.EMAIL_SERVICE_PROVIDER ==
+              feconf.EMAIL_SERVICE_PROVIDER_MAILGUN):
             from core.platform.email import mailgun_email_services
             return mailgun_email_services
         else:
             raise Exception(
-                'Invalid email service provider: %s' % (
-                    feconf.EMAIL_SERVICE_PROVIDER))
+                ('Invalid email service provider: %s'
+                 % feconf.EMAIL_SERVICE_PROVIDER))
 
     @classmethod
     def import_memcache_services(cls):
@@ -290,7 +296,7 @@ class Registry(python_utils.OBJECT):
         imports.
 
         Returns:
-            class. The corresponding platform-specific interface class.
+            class: The corresponding platform-specific interface class.
         """
         return cls._PLATFORM_MAPPING.get(GAE_PLATFORM)
 
@@ -365,6 +371,15 @@ class Registry(python_utils.OBJECT):
             module. The app_identity_services module.
         """
         return cls._get().import_app_identity_services()
+
+    @classmethod
+    def import_gae_image_services(cls):
+        """Imports and returns gae_image_services module.
+
+        Returns:
+            module. The gae_image_services module.
+        """
+        return cls._get().import_gae_image_services()
 
     @classmethod
     def import_email_services(cls):

@@ -31,25 +31,22 @@ import python_utils
 class ComponentValidationUnitTests(test_utils.GenericTestBase):
     """Tests validation of rich text components."""
 
-    def check_validation(
-            self, rte_component_class, valid_items,
-            invalid_items_with_error_messages):
+    def check_validation(self, rte_component_class, valid_items, invalid_items):
         """Test that values are validated correctly.
 
         Args:
-            rte_component_class: object(BaseRTEComponent). The class whose
+            rte_component_class: child of BaseRTEComponent. The class whose
                 validate() method is to be tested.
-            valid_items: list(str). Each of these items is expected to
+            valid_items: a list of values. Each of these items is expected to
                 be validated without any Exception.
-            invalid_items_with_error_messages: list(str). A list of values with
-                corresponding error message. Each of these values is expected to
-                raise a TypeError when validated.
+            invalid_items: a list of values. Each of these is expected to raise
+                a TypeError when validated.
         """
         for item in valid_items:
             rte_component_class.validate(item)
 
-        for item, error_msg in invalid_items_with_error_messages:
-            with self.assertRaisesRegexp(Exception, error_msg):
+        for item in invalid_items:
+            with self.assertRaises(Exception):
                 rte_component_class.validate(item)
 
     def test_collapsible_validation(self):
@@ -61,26 +58,21 @@ class ComponentValidationUnitTests(test_utils.GenericTestBase):
             'content-with-value': '<p>1234</p>',
             'heading-with-value': '1234'
         }]
-        invalid_items_with_error_messages = [
-            ({
-                'content-with-value': (
-                    '<oppia-noninteractive-collapsible content-with-value='
-                    '"&amp;quot;&amp;lt;p&amp;gt;Hello&amp;lt;/p&amp;gt;&amp;'
-                    'quot;" heading-with-value="&amp;quot;SubCollapsible&amp;'
-                    'quot;"></oppia-noninteractive-collapsible><p>&nbsp;</p>'
-                ),
-                'heading-with-value': 'Collaspible'
-            }, 'Nested tabs and collapsible'),
-            ({
-                'content-with-value': '<p>Hello</p>',
-                'heading-collap-with-value': 'Collapsible'
-            },
-             'Missing attributes: heading-with-value, Extra attributes: '
-             'heading-collap-with-value')]
+        invalid_items = [{
+            'content-with-value': (
+                '<oppia-noninteractive-collapsible content-with-value='
+                '"&amp;quot;&amp;lt;p&amp;gt;Hello&amp;lt;/p&amp;gt;&amp;'
+                'quot;" heading-with-value="&amp;quot;SubCollapsible&amp;'
+                'quot;"></oppia-noninteractive-collapsible><p>&nbsp;</p>'
+            ),
+            'heading-with-value': 'Collaspible'
+        }, {
+            'content-with-value': '<p>Hello</p>',
+            'heading-collap-with-value': 'Collapsible'
+        }]
 
         self.check_validation(
-            components.Collapsible, valid_items,
-            invalid_items_with_error_messages)
+            components.Collapsible, valid_items, invalid_items)
 
     def test_image_validation(self):
         """Tests collapsible component validation."""
@@ -93,19 +85,17 @@ class ComponentValidationUnitTests(test_utils.GenericTestBase):
             'alt-with-value': 'hello',
             'caption-with-value': 'abc'
         }]
-        invalid_items_with_error_messages = [
-            ({
-                'filepath-with-value': 'random.png',
-                'caption-with-value': 'abc'
-            }, 'Missing attributes: alt-with-value, Extra attributes: '),
-            ({
-                'filepath-with-value': 'xyz.jpeg.png',
-                'alt-with-value': 'hello',
-                'caption-with-value': 'abc'
-            }, 'Invalid filepath')]
+        invalid_items = [{
+            'filepath-with-value': 'random.png',
+            'caption-with-value': 'abc'
+        }, {
+            'filepath-with-value': 'xyz.jpeg.png',
+            'alt-with-value': 'hello',
+            'caption-with-value': 'abc'
+        }]
 
         self.check_validation(
-            components.Image, valid_items, invalid_items_with_error_messages)
+            components.Image, valid_items, invalid_items)
 
     def test_link_validation(self):
         """Tests collapsible component validation."""
@@ -116,20 +106,16 @@ class ComponentValidationUnitTests(test_utils.GenericTestBase):
             'url-with-value': 'https://hello.com',
             'text-with-value': '1234'
         }]
-        invalid_items_with_error_messages = [
-            ({
-                'url-with-value': 'javascript:alert(5);',
-                'text-with-value': 'Hello'
-            },
-             r'Invalid URL: Sanitized URL should start with \'http://\' or '
-             r'\'https://\'; received javascript:alert%285%29%3B'),
-            ({
-                'url-with-value': 'http://link.com',
-                'text-with-value': 1234
-            }, 'Expected unicode string, received 1234')]
+        invalid_items = [{
+            'url-with-value': 'javascript:alert(5);',
+            'text-with-value': 'Hello'
+        }, {
+            'url-with-value': 'http://link.com',
+            'text-with-value': 1234
+        }]
 
         self.check_validation(
-            components.Link, valid_items, invalid_items_with_error_messages)
+            components.Link, valid_items, invalid_items)
 
     # TODO(#9379): Add validations for svg_filename field and add proper
     # values in the tests.
@@ -146,30 +132,24 @@ class ComponentValidationUnitTests(test_utils.GenericTestBase):
                 u'svg_filename': u''
             }
         }]
-        invalid_items_with_error_messages = [
-            ({
-                'math_content-with-value': False
-            }, 'Expected dict, received False'),
-            ({
-                'url-with-value': 'http://link.com'
-            },
-             'Missing attributes: math_content-with-value, Extra attributes: '
-             'url-with-value'),
-            ({
-                'math_content-with-value': {
-                    u'raw_latex': True,
-                    u'svg_filename': False
-                }
-            }, 'Expected unicode string, received True'),
-            ({
-                'math_content-with-value': {
-                    u'raw_latex': 123,
-                    u'svg_filename': 11
-                }
-            }, 'Expected unicode string, received 123')]
+        invalid_items = [{
+            'math_content-with-value': False
+        }, {
+            'url-with-value': 'http://link.com'
+        }, {
+            'math_content-with-value': {
+                u'raw_latex': True,
+                u'svg_filename': False
+            }
+        }, {
+            'math_content-with-value': {
+                u'raw_latex': 123,
+                u'svg_filename': 11
+            }
+        }]
 
         self.check_validation(
-            components.Math, valid_items, invalid_items_with_error_messages)
+            components.Math, valid_items, invalid_items)
 
     def test_skillreview_validation(self):
         """Tests skillreview component validation."""
@@ -177,17 +157,13 @@ class ComponentValidationUnitTests(test_utils.GenericTestBase):
             'skill_id-with-value': 'skill_id',
             'text-with-value': 'Skill Link Text'
         }]
-        invalid_items_with_error_messages = [
-            ({
-                'skill_id-with-value': 20,
-                'url-with-value': 'Hello'
-            },
-             'Missing attributes: text-with-value, Extra attributes: '
-             'url-with-value')]
+        invalid_items = [{
+            'skill_id-with-value': 20,
+            'url-with-value': 'Hello'
+        }]
 
         self.check_validation(
-            components.Skillreview, valid_items,
-            invalid_items_with_error_messages)
+            components.Skillreview, valid_items, invalid_items)
 
     def test_tabs_validation(self):
         """Tests collapsible component validation."""
@@ -207,30 +183,24 @@ class ComponentValidationUnitTests(test_utils.GenericTestBase):
                 ), 'title': 'Tabs'
             }]
         }]
-        invalid_items_with_error_messages = [
-            ({
-                'tab_contents-with-value': [{
-                    'content': 1234, 'title': 'hello'
-                }, {
-                    'content': '<p>oppia</p>', 'title': 'Savjet 1'
-                }]
-            }, 'Expected unicode HTML string, received 1234'),
-            ({
-                'tab_content-with-value': [{
-                    'content': '<p>hello</p>', 'title': 'hello'
-                }]
-            },
-             'Missing attributes: tab_contents-with-value, Extra attributes: '
-             'tab_content-with-value'),
-            ({
-                'tab_contents-with-value': [{
-                    'content': '<p>hello</p>', 'tab-title': 'hello'
-                }]
-            },
-             r'Missing keys: \[u\'title\'\], Extra keys: \[u\'tab-title\'\]')]
+        invalid_items = [{
+            'tab_contents-with-value': [{
+                'content': 1234, 'title': 'hello'
+            }, {
+                'content': '<p>oppia</p>', 'title': 'Savjet 1'
+            }]
+        }, {
+            'tab_content-with-value': [{
+                'content': '<p>hello</p>', 'title': 'hello'
+            }]
+        }, {
+            'tab_contents-with-value': [{
+                'content': '<p>hello</p>', 'tab-title': 'hello'
+            }]
+        }]
 
         self.check_validation(
-            components.Tabs, valid_items, invalid_items_with_error_messages)
+            components.Tabs, valid_items, invalid_items)
 
     def test_video_validation(self):
         """Tests collapsible component validation."""
@@ -245,28 +215,25 @@ class ComponentValidationUnitTests(test_utils.GenericTestBase):
             'end-with-value': 100,
             'autoplay-with-value': True
         }]
-        invalid_items_with_error_messages = [
-            ({
-                'video_id-with-value': 'lorem',
-                'start-with-value': 0,
-                'end-with-value': 10,
-                'autoplay-with-value': False
-            }, 'Video id length is not 11'),
-            ({
-                'video_id-with-value': 'hello12345',
-                'start-with-value': '10',
-                'end-with-value': '100',
-                'autoplay-with-value': False
-            }, 'Video id length is not 11'),
-            ({
-                'video_id-with-value': 'hello12345',
-                'start-with-value': 10,
-                'end-with-value': 100,
-                'autoplay-with-value': 90
-            }, 'Expected bool, received 90')]
+        invalid_items = [{
+            'video_id-with-value': 'lorem',
+            'start-with-value': 0,
+            'end-with-value': 10,
+            'autoplay-with-value': False
+        }, {
+            'video_id-with-value': 'hello12345',
+            'start-with-value': '10',
+            'end-with-value': '100',
+            'autoplay-with-value': False
+        }, {
+            'video_id-with-value': 'hello12345',
+            'start-with-value': 10,
+            'end-with-value': 100,
+            'autoplay-with-value': 90
+        }]
 
         self.check_validation(
-            components.Video, valid_items, invalid_items_with_error_messages)
+            components.Video, valid_items, invalid_items)
 
     def test_svg_diagram_validation(self):
         """Tests svg diagram component validation."""
@@ -277,23 +244,19 @@ class ComponentValidationUnitTests(test_utils.GenericTestBase):
             'svg_filename-with-value': 'xyz.svg',
             'alt-with-value': 'hello'
         }]
-        invalid_items_with_error_messages = [
-            ({
-                'svg_filename-with-value': 'random.png',
-                'alt-with-value': 'abc'
-            }, 'Invalid filename'),
-            ({
-                'svg_filename-with-value': 'xyz.svg.svg',
-                'alt-with-value': 'hello'
-            }, 'Invalid filename'),
-            ({
-                'svg_filename-with-value': 'xyz.png.svg',
-                'alt-with-value': 'hello'
-            }, 'Invalid filename')]
+        invalid_items = [{
+            'svg_filename-with-value': 'random.png',
+            'alt-with-value': 'abc'
+        }, {
+            'svg_filename-with-value': 'xyz.svg.svg',
+            'alt-with-value': 'hello'
+        }, {
+            'svg_filename-with-value': 'xyz.png.svg',
+            'alt-with-value': 'hello'
+        }]
 
         self.check_validation(
-            components.Svgdiagram, valid_items,
-            invalid_items_with_error_messages)
+            components.Svgdiagram, valid_items, invalid_items)
 
 
 class ComponentDefinitionTests(test_utils.GenericTestBase):
@@ -347,4 +310,7 @@ class ComponentE2eTests(test_utils.GenericTestBase):
                 text_inside_constant = text_inside_constant[
                     text_inside_constant.find(',') + 1:]
 
+        # TODO(#9356): Add svgdiagram to validations once the e2e tests for it
+        # are created in the 2nd milestone.
+        actual_components.remove('Svgdiagram')
         self.assertEqual(set(actual_components), set(rte_components_with_test))

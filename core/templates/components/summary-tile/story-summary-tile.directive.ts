@@ -46,19 +46,6 @@ angular.module('oppia').directive('storySummaryTile', [
               });
           };
 
-          ctrl.isChapterCompleted = function(title) {
-            return ctrl.getStorySummary().isNodeCompleted(title);
-          };
-
-          ctrl.isPreviousChapterCompleted = function(index) {
-            if (index === 0) {
-              return true;
-            }
-            var previousNodeTitle = (
-              ctrl.getStorySummary().getNodeTitles()[index - 1]);
-            return ctrl.getStorySummary().isNodeCompleted(previousNodeTitle);
-          };
-
           ctrl.showAllChapters = function() {
             ctrl.initialCount = ctrl.chaptersDisplayed;
             ctrl.chaptersDisplayed = ctrl.nodeCount;

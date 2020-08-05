@@ -138,10 +138,12 @@ class PreCommitHookTests(test_utils.GenericTestBase):
     def test_start_subprocess_for_result(self):
         process = subprocess.Popen(
             ['echo', 'test'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        def mock_popen(  # pylint: disable=unused-argument
+        # pylint: disable=unused-argument
+        def mock_popen(
                 unused_cmd_tokens, stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE):
             return process
+        # pylint: enable=unused-argument
 
         with self.swap(subprocess, 'Popen', mock_popen):
             self.assertEqual(
@@ -255,8 +257,8 @@ class PreCommitHookTests(test_utils.GenericTestBase):
             pre_commit_hook, 'check_changes_in_config',
             mock_check_changes_in_config)
         with package_lock_swap, package_lock_in_current_folder_swap:
-            with check_config_swap, self.print_swap, self.assertRaisesRegexp(
-                SystemExit, '1'):
+            with check_config_swap, self.print_swap, self.assertRaises(
+                SystemExit):
                 pre_commit_hook.main(args=[])
         self.assertTrue(
             '-----------COMMIT ABORTED-----------' in self.print_arr)

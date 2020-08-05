@@ -21,15 +21,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import {
-  VisualizationInfoBackendDict,
+  IVisualizationInfoBackendDict,
   VisualizationInfo,
   VisualizationInfoObjectFactory
 } from 'domain/exploration/visualization-info-object.factory';
 import { UrlInterpolationService } from
   'domain/utilities/url-interpolation.service';
 
-interface StateInteractionStatsBackendDict {
-  'visualizations_info': VisualizationInfoBackendDict[];
+interface IStateInteractionStatsBackendDict {
+  'visualizations_info': IVisualizationInfoBackendDict[];
 }
 
 @Injectable({
@@ -45,22 +45,18 @@ export class StateInteractionStatsBackendApiService {
     private urlInterpolationService: UrlInterpolationService) {}
 
   getStats(explorationId: string, name: string): Promise<VisualizationInfo[]> {
-    return new Promise((resolve, reject) => {
-      this.http.get<StateInteractionStatsBackendDict>(
-        this.urlInterpolationService.interpolateUrl(
-          this.STATE_INTERACTION_STATS_URL_TEMPLATE, {
-            exploration_id: explorationId,
-            state_name: name
-          })).toPromise().then(backendDict => {
-        let visualizationInfoObjects = backendDict.visualizations_info.map((
-            visInfoDict) => {
-          return this.visualizationInfoObjectFactory.createFromBackendDict(
-            visInfoDict);
-        });
-        resolve(visualizationInfoObjects);
-      }, errorResponse => {
-        reject(errorResponse.error.error);
+    return this.http.get<IStateInteractionStatsBackendDict>(
+      this.urlInterpolationService.interpolateUrl(
+        this.STATE_INTERACTION_STATS_URL_TEMPLATE, {
+          exploration_id: explorationId,
+          state_name: name
+        })).toPromise().then(backendDict => {
+      let visualizationInfoObjects = backendDict.visualizations_info.map((
+          visInfoDict) => {
+        return this.visualizationInfoObjectFactory.createFromBackendDict(
+          visInfoDict);
       });
+      return visualizationInfoObjects;
     });
   }
 }

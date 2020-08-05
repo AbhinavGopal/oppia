@@ -23,7 +23,6 @@ var interactions = require('../../../extensions/interactions/protractor.js');
 var ruleTemplates = require(
   '../../../extensions/interactions/rule_templates.json');
 var waitFor = require('../protractor_utils/waitFor.js');
-var action = require('./action.js');
 
 var _NEW_STATE_OPTION = 'A New Card Called...';
 var _CURRENT_STATE_OPTION = '(try again)';
@@ -88,10 +87,10 @@ var ExplorationEditorMainTab = function() {
   };
   var responseTab = element.all(by.css('.protractor-test-response-tab'));
   var ruleBlock = element.all(by.css('.protractor-test-rule-block'));
+  var stateEditContent = element(
+    by.css('.protractor-test-edit-content'));
   var stateContentDisplay = element(
     by.css('.protractor-test-state-content-display'));
-  var stateEditButton = element(
-    by.css('.protractor-test-edit-content-pencil-button'));
   var stateNameContainer = element(
     by.css('.protractor-test-state-name-container'));
   var stateNameInput = element(
@@ -497,10 +496,12 @@ var ExplorationEditorMainTab = function() {
     // Wait for browser to time out the popover, which is 4000 ms.
     await waitFor.invisibilityOf(
       postTutorialPopover, 'Post-tutorial popover does not disappear.');
-    await action.click('stateEditButton', stateEditButton);
+
+    await waitFor.elementToBeClickable(
+      stateEditContent,
+      'stateEditContent taking too long to appear to set content');
+    await stateEditContent.click();
     var stateEditorTag = element(by.tagName('state-content-editor'));
-    await waitFor.visibilityOf(
-      stateEditorTag, 'State editor tag not showing up');
     var stateContentEditor = stateEditorTag.element(
       by.css('.protractor-test-state-content-editor'));
     await waitFor.visibilityOf(
@@ -639,7 +640,6 @@ var ExplorationEditorMainTab = function() {
       SetInput: 'Math',
       AlgebraicExpressionInput: 'Math',
       MathEquationInput: 'Math',
-      NumericExpressionInput: 'Math',
       NumberWithUnits: 'Math',
       CodeRepl: 'Programming',
       PencilCodeEditor: 'Programming',

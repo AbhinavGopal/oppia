@@ -96,8 +96,9 @@ angular.module('oppia').factory('SkillEditorStateService', [
       _skillRights.copyFromSkillRights(skillRights);
     };
 
-    var _updateSkillRights = function(newSkillRightsObject) {
-      _setSkillRights(newSkillRightsObject);
+    var _updateSkillRights = function(newBackendSkillRightsObject) {
+      _setSkillRights(SkillRightsObjectFactory.createFromBackendDict(
+        newBackendSkillRightsObject));
     };
     return {
       /**
@@ -124,8 +125,8 @@ angular.module('oppia').factory('SkillEditorStateService', [
             _skillIsBeingLoaded = false;
           });
         SkillRightsBackendApiService.fetchSkillRights(
-          skillId).then(function(newSkillRightsObject) {
-          _updateSkillRights(newSkillRightsObject);
+          skillId).then(function(newBackendSkillRightsObject) {
+          _updateSkillRights(newBackendSkillRightsObject);
           _skillIsBeingLoaded = false;
         }, function(error) {
           AlertsService.addWarning(

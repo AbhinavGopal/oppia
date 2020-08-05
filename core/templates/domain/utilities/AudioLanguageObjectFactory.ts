@@ -19,7 +19,7 @@
 import { Injectable } from '@angular/core';
 import { downgradeInjectable } from '@angular/upgrade/static';
 
-export interface AudioLanguageBackendDict {
+export interface IAudioLanguageBackendDict {
   id: string;
   description: string;
   relatedLanguages: string[];
@@ -41,7 +41,7 @@ export class AudioLanguage {
   providedIn: 'root'
 })
 export class AudioLanguageObjectFactory {
-  createFromDict(audioLanguageDict: AudioLanguageBackendDict): AudioLanguage {
+  createFromDict(audioLanguageDict: IAudioLanguageBackendDict): AudioLanguage {
     return new AudioLanguage(
       audioLanguageDict.id,
       audioLanguageDict.description,

@@ -25,9 +25,8 @@ require('filters/format-rte-preview.filter.ts');
 // multiple-choice input and image-click input.
 angular.module('oppia').filter('parameterizeRuleDescription', [
   '$filter', 'INTERACTION_SPECS', 'FractionObjectFactory',
-  'NumberWithUnitsObjectFactory', 'POSITION_OF_TERMS_MAPPING',
-  function( $filter, INTERACTION_SPECS, FractionObjectFactory,
-      NumberWithUnitsObjectFactory, POSITION_OF_TERMS_MAPPING) {
+  'NumberWithUnitsObjectFactory', function( $filter, INTERACTION_SPECS,
+      FractionObjectFactory, NumberWithUnitsObjectFactory) {
     return function(rule, interactionId, choices) {
       if (!rule) {
         return '';
@@ -161,14 +160,8 @@ angular.module('oppia').filter('parameterizeRuleDescription', [
           varType === 'CodeString' || varType === 'UnicodeString' ||
           varType === 'LogicErrorCategory' || varType === 'NormalizedString' ||
           varType === 'AlgebraicExpression' || varType === 'MathEquation' ||
-          varType === 'NumericExpression') {
+          varType === 'PositionOfTerms') {
           replacementText = inputs[varName];
-        } else if (varType === 'PositionOfTerms') {
-          for (var i = 0; i < POSITION_OF_TERMS_MAPPING.length; i++) {
-            if (POSITION_OF_TERMS_MAPPING[i].name === inputs[varName]) {
-              replacementText = POSITION_OF_TERMS_MAPPING[i].humanReadableName;
-            }
-          }
         } else if (varType === 'ListOfCodeEvaluation') {
           replacementText = '[';
           for (var i = 0; i < inputs[varName].length; i++) {

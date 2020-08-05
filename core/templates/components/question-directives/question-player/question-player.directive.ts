@@ -92,7 +92,7 @@ require('filters/string-utility-filters/normalize-whitespace.filter.ts');
 
 require(
   'components/common-layout-directives/common-elements/' +
-  'attribution-guide.component.ts');
+  'attribution-guide.directive.ts');
 require(
   'components/common-layout-directives/common-elements/' +
   'background-banner.component.ts');
@@ -191,12 +191,11 @@ angular.module('oppia').directive('questionPlayer', [
             if (actionButtonType === 'BOOST_SCORE') {
               iconHtml = `<picture>
               <source type="image/webp" 
-              srcset="${getStaticImageUrl('/icons/rocket@2x.webp')}">
+              src="${getStaticImageUrl('/icons/rocket@2x.webp')}">
               <source type="image/png" 
-              srcset="${getStaticImageUrl('/icons/rocket@2x.png')}">
-              <img alt=""
-                   class="action-button-icon" 
-                   src="${getStaticImageUrl('/icons/rocket@2x.png')}"/>
+              src="${getStaticImageUrl('/icons/rocket@2x.png')}">
+              <img class="action-button-icon" src="
+              ${getStaticImageUrl('/icons/rocket@2x.png')}"/>
               </picture>`;
             } else if (actionButtonType === 'RETRY_SESSION') {
               iconHtml = '<i class="material-icons md-36 ' +

@@ -24,7 +24,7 @@ require(
   'components/state-editor/state-editor-properties-services/' +
   'state-editor.service.ts');
 require('domain/editor/undo_redo/question-undo-redo.service.ts');
-require('domain/skill/ShortSkillSummaryObjectFactory.ts');
+require('domain/skill/SkillSummaryObjectFactory.ts');
 require('domain/utilities/url-interpolation.service.ts');
 require('services/alerts.service.ts');
 require('services/context.service.ts');
@@ -33,19 +33,19 @@ require('services/image-local-storage.service.ts');
 angular.module('oppia').controller('QuestionEditorModalController', [
   '$scope', '$uibModal', '$uibModalInstance', 'AlertsService', 'ContextService',
   'ImageLocalStorageService', 'QuestionUndoRedoService',
-  'QuestionValidationService', 'ShortSkillSummaryObjectFactory',
+  'QuestionValidationService', 'SkillSummaryObjectFactory',
   'UrlInterpolationService', 'associatedSkillSummaries', 'canEditQuestion',
   'categorizedSkills', 'groupedSkillSummaries', 'misconceptionsBySkill',
   'newQuestionIsBeingCreated', 'question', 'questionId', 'questionStateData',
-  'rubrics', 'skillNames', 'untriagedSkillSummaries',
+  'rubrics', 'skillNames',
   function(
       $scope, $uibModal, $uibModalInstance, AlertsService, ContextService,
       ImageLocalStorageService, QuestionUndoRedoService,
-      QuestionValidationService, ShortSkillSummaryObjectFactory,
+      QuestionValidationService, SkillSummaryObjectFactory,
       UrlInterpolationService, associatedSkillSummaries, canEditQuestion,
       categorizedSkills, groupedSkillSummaries, misconceptionsBySkill,
       newQuestionIsBeingCreated, question, questionId, questionStateData,
-      rubrics, skillNames, untriagedSkillSummaries) {
+      rubrics, skillNames) {
     var returnModalObject = {
       skillLinkageModificationsArray: [],
       commitMessage: ''
@@ -105,8 +105,7 @@ angular.module('oppia').controller('QuestionEditorModalController', [
           skillsInSameTopicCount: () => skillsInSameTopicCount,
           sortedSkillSummaries: () => sortedSkillSummaries,
           categorizedSkills: () => categorizedSkills,
-          allowSkillsFromOtherTopics: () => allowSkillsFromOtherTopics,
-          untriagedSkillSummaries: () => untriagedSkillSummaries
+          allowSkillsFromOtherTopics: () => allowSkillsFromOtherTopics
         },
         controller: 'SelectSkillModalController',
         windowClass: 'skill-select-modal',
@@ -122,7 +121,7 @@ angular.module('oppia').controller('QuestionEditorModalController', [
           }
         }
         $scope.associatedSkillSummaries.push(
-          ShortSkillSummaryObjectFactory.create(
+          SkillSummaryObjectFactory.create(
             summary.id, summary.description));
         returnModalObject.skillLinkageModificationsArray.push({
           id: summary.id,

@@ -17,7 +17,6 @@
  */
 
 require('domain/utilities/url-interpolation.service.ts');
-require('pages/topic-editor-page/services/topic-editor-routing.service.ts');
 require('pages/topic-editor-page/services/topic-editor-state.service.ts');
 require('services/stateful/focus-manager.service.ts');
 
@@ -30,18 +29,12 @@ angular.module('oppia').directive('topicEditorNavbarBreadcrumb', [
         '/pages/topic-editor-page/navbar/' +
         'topic-editor-navbar-breadcrumb.directive.html'),
       controller: [
-        '$scope', 'TopicEditorStateService', 'TopicEditorRoutingService',
+        '$scope', 'TopicEditorStateService',
+        'FocusManagerService', 'TOPIC_NAME_INPUT_FOCUS_LABEL',
         function(
-            $scope, TopicEditorStateService, TopicEditorRoutingService) {
+            $scope, TopicEditorStateService,
+            FocusManagerService, TOPIC_NAME_INPUT_FOCUS_LABEL) {
           var ctrl = this;
-          $scope.canNavigateToTopicEditorPage = function() {
-            const activeTab = TopicEditorRoutingService.getActiveTabName();
-            return (activeTab.startsWith('subtopic') ||
-                TopicEditorRoutingService.getLastTabVisited() === 'subtopic');
-          };
-          $scope.navigateToMainTab = function() {
-            TopicEditorRoutingService.navigateToMainTab();
-          };
           ctrl.$onInit = function() {
             $scope.topic = TopicEditorStateService.getTopic();
           };

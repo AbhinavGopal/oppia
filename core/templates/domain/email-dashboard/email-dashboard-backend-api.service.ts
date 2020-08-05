@@ -21,17 +21,17 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import {
+  IEmailDashboardQueryResultsBackendDict,
   EmailDashboardQueryResults,
-  EmailDashboardQueryResultsBackendDict,
   EmailDashboardQueryResultsObjectFactory
 } from 'domain/email-dashboard/email-dashboard-query-results-object.factory';
 import {
+  IEmailDashboardQueryBackendDict,
   EmailDashboardQuery,
-  EmailDashboardQueryBackendDict,
   EmailDashboardQueryObjectFactory
 } from 'domain/email-dashboard/email-dashboard-query-object.factory';
 
-export interface QueryData {
+export interface IQueryData {
   hasNotLoggedInForNDays?: string;
   inactiveInLastNDays?: string;
   createdAtLeastNExps?: string;
@@ -61,38 +61,29 @@ export class EmailDashboardBackendApiService {
     if (cursor) {
       params.cursor = cursor;
     }
-
-    return new Promise((resolve, reject) => {
-      this.http.get<EmailDashboardQueryResultsBackendDict>(
-        this.QUERY_DATA_URL, {
-          params: params
-        }).toPromise().then(data => {
-        let emailDashboardQueryResultsObject = (
-          this.queryResultsObjectFactory.createFromBackendDict(data));
-        resolve(emailDashboardQueryResultsObject);
-      }, errorResponse => {
-        reject(errorResponse.error.error);
-      });
+    return this.http.get<IEmailDashboardQueryResultsBackendDict>(
+      this.QUERY_DATA_URL, {
+        params: params
+      }).toPromise().then(data => {
+      let emailDashboardQueryResultsObject = (
+        this.queryResultsObjectFactory.createFromBackendDict(data));
+      return emailDashboardQueryResultsObject;
     });
   }
 
   fetchQuery(queryId: string): Promise<EmailDashboardQuery> {
-    return new Promise((resolve, reject) => {
-      this.http.get<EmailDashboardQueryBackendDict>(
-        this.QUERY_STATUS_CHECK_URL, {
-          params: {
-            query_id: queryId
-          }
-        }).toPromise().then(data => {
-        let queryObject = this.queryObjectFactory.createFromBackendDict(data);
-        resolve(queryObject);
-      }, errorResponse => {
-        reject(errorResponse.error.error);
-      });
+    return this.http.get<IEmailDashboardQueryBackendDict>(
+      this.QUERY_STATUS_CHECK_URL, {
+        params: {
+          query_id: queryId
+        }
+      }).toPromise().then(data => {
+      let queryObject = this.queryObjectFactory.createFromBackendDict(data);
+      return queryObject;
     });
   }
 
-  submitQuery(data: QueryData): Promise<EmailDashboardQuery> {
+  submitQuery(data: IQueryData): Promise<EmailDashboardQuery> {
     const postData = {
       has_not_logged_in_for_n_days: data.hasNotLoggedInForNDays,
       inactive_in_last_n_days: data.inactiveInLastNDays,
@@ -102,15 +93,11 @@ export class EmailDashboardBackendApiService {
       edited_fewer_than_n_exps: data.editedFewerThanNExps
     };
 
-    return new Promise((resolve, reject) => {
-      this.http.post<EmailDashboardQueryBackendDict>(
-        this.QUERY_DATA_URL, {
-          data: postData}).toPromise().then(data => {
-        let queryObject = this.queryObjectFactory.createFromBackendDict(data);
-        resolve(queryObject);
-      }, errorResponse => {
-        reject(errorResponse.error.error);
-      });
+    return this.http.post<IEmailDashboardQueryBackendDict>(
+      this.QUERY_DATA_URL, {
+        data: postData}).toPromise().then(data => {
+      let queryObject = this.queryObjectFactory.createFromBackendDict(data);
+      return queryObject;
     });
   }
 }

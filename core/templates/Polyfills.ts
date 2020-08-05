@@ -117,11 +117,7 @@ if (!('outerHTML' in SVGElement.prototype)) {
 // Older browsers might not implement mediaDevices at all,
 // so we set an empty object first.
 if (navigator.mediaDevices === undefined) {
-  // This throws "Cannot assign to 'mediaDevices' because it
-  // is a read-only property." We need to suppress this since some browsers
-  // may not have this property at all. So, we need to set it to an empty
-  // object.
-  // @ts-ignore
+  // @ts-ignore: mediaDevices is read-only error.
   navigator.mediaDevices = {};
 }
 
@@ -134,12 +130,8 @@ if (navigator.mediaDevices.getUserMedia === undefined) {
   navigator.mediaDevices.getUserMedia = function(constraints) {
     // First get ahold of the legacy getUserMedia, if present.
     var getUserMedia = (
-      // This throws "Property 'webkitGetUserMedia' does not exist on
-      // type 'Navigator'." This is because this API is deprecated.
-      // (https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getUserMedia)
-      // We need to suppress this because some browsers
-      // still have this functionality.
-      // @ts-ignore
+      // @ts-ignore: 'webkitGetUserMedia' and 'mozGetUserMedia'
+      // property does not exist error.
       navigator.webkitGetUserMedia || navigator.mozGetUserMedia);
 
     // If getUserMedia is not implemented, return a rejected promise

@@ -21,30 +21,30 @@ import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 
 import {
-  TranslationBackendDict,
+  ITranslationBackendDict,
   WrittenTranslation,
   WrittenTranslationObjectFactory
 } from 'domain/exploration/WrittenTranslationObjectFactory';
 
-export interface WrittenTranslationsBackendDict {
+export interface IWrittenTranslationsBackendDict {
   'translations_mapping': {
     [contentId: string]: {
-      [langCode: string]: TranslationBackendDict
+      [langCode: string]: ITranslationBackendDict
     }
   }
 }
 
-interface WrittenTranslationsMapping {
+interface IWrittenTranslationsMapping {
   [contentId: string]: {
     [langCode: string]: WrittenTranslation
   }
 }
 
 export class WrittenTranslations {
-  translationsMapping: WrittenTranslationsMapping;
+  translationsMapping: IWrittenTranslationsMapping;
   _writtenTranslationObjectFactory: WrittenTranslationObjectFactory;
   constructor(
-      translationsMapping: WrittenTranslationsMapping,
+      translationsMapping: IWrittenTranslationsMapping,
       writtenTranslationObjectFactory: WrittenTranslationObjectFactory) {
     this.translationsMapping = translationsMapping;
     this._writtenTranslationObjectFactory = writtenTranslationObjectFactory;
@@ -128,7 +128,7 @@ export class WrittenTranslations {
     writtenTranslations[languageCode].toggleNeedsUpdateAttribute();
   }
 
-  toBackendDict(): WrittenTranslationsBackendDict {
+  toBackendDict(): IWrittenTranslationsBackendDict {
     var translationsMappingDict = {};
     for (var contentId in this.translationsMapping) {
       var languageToWrittenTranslation = this.translationsMapping[contentId];
@@ -152,7 +152,7 @@ export class WrittenTranslationsObjectFactory {
     private writtenTranslationObjectFactory: WrittenTranslationObjectFactory) {}
 
   createFromBackendDict(
-      writtenTranslationsDict: WrittenTranslationsBackendDict):
+      writtenTranslationsDict: IWrittenTranslationsBackendDict):
       WrittenTranslations {
     var translationsMapping = {};
     Object.keys(writtenTranslationsDict.translations_mapping).forEach(

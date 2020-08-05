@@ -51,19 +51,14 @@ angular.module('oppia').factory('EntityCreationService', [
         templateUrl: UrlInterpolationService.getDirectiveTemplateUrl(
           '/pages/topic-editor-page/modal-templates/' +
           'create-new-subtopic-modal.template.html'),
-        backdrop: 'static',
+        backdrop: true,
         resolve: {
           topic: () => topic
         },
         controllerAs: '$ctrl',
-        windowClass: 'create-new-subtopic',
         controller: 'CreateNewSubtopicModalController'
       }).result.then(function(subtopicId) {
         TopicEditorRoutingService.navigateToSubtopicEditorWithId(subtopicId);
-      }, function() {
-        // Note to developers:
-        // This callback is triggered when the Cancel button is clicked.
-        // No further action is needed.
       });
     };
 

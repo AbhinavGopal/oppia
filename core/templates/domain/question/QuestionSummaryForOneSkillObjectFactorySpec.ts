@@ -19,7 +19,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import {
-  QuestionSummaryForOneSkillBackendDict,
+  IQuestionSummaryForOneSkillBackendDict,
   QuestionSummaryForOneSkillObjectFactory
 } from 'domain/question/QuestionSummaryForOneSkillObjectFactory';
 
@@ -27,7 +27,7 @@ describe('Question summary for one skill object factory', () => {
   describe('QuestionSummaryForOneSkillObjectFactory', () => {
     let questionSummaryForOneSkillObjectFactory:
       QuestionSummaryForOneSkillObjectFactory = null;
-    let backendDict: QuestionSummaryForOneSkillBackendDict;
+    let backendDict: IQuestionSummaryForOneSkillBackendDict;
 
     beforeEach(() => {
       TestBed.configureTestingModule({

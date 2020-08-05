@@ -225,9 +225,7 @@ describe('Concept card backend API service', () => {
         successHandler, failHandler);
       var req = httpTestingController.expectOne('/concept_card_handler/1');
       expect(req.request.method).toEqual('GET');
-      req.flush({
-        error: 'Error loading skill 1.'
-      }, {
+      req.flush('Error loading skill 1.', {
         status: 500, statusText: 'Error loading skill 1.'
       });
 

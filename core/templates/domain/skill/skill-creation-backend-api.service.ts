@@ -20,25 +20,21 @@ import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-export interface RubricBackendDict {
-  difficulty: string;
-  explanations: string[];
+export interface IRubricBackend {
+  difficulty: string,
+  explanations: Array<string>
 }
 
-export interface SkillCreationBackendDict {
-  'description': string,
+export interface ISkillCreationBackend {
+  description: string,
   'explanation_dict': string,
   'linked_topic_ids': string[],
-  'rubrics': RubricBackendDict
+  rubrics: IRubricBackend
 }
 
-export interface ImageData {
+export interface IImageData {
   filename: string,
   imageBlob: Blob
-}
-
-interface SkillCreationBackendResponse {
-  skillId: string;
 }
 
 @Injectable({
@@ -64,11 +60,11 @@ export class SkillCreationBackendApiService {
    * @param {Blob} imageData.imageBlob - Image data represented as a Blob.
    */
   _createSkill(
-      successCallback: (value: SkillCreationBackendResponse) => void,
-      errorCallback: (reason: string) => void,
-      description: string, rubrics: RubricBackendDict, explanation: string,
-      linkedTopicIds: string[], imagesData: ImageData[]): void {
-    let postData:SkillCreationBackendDict = {
+      successCallback: (value?: Object | PromiseLike<Object>) => void,
+      errorCallback:(reason?: any) => void,
+      description: string, rubrics: IRubricBackend, explanation: string,
+      linkedTopicIds: string[], imagesData: IImageData[]): void {
+    let postData:ISkillCreationBackend = {
       description: description,
       linked_topic_ids: linkedTopicIds,
       explanation_dict: explanation,
@@ -82,9 +78,9 @@ export class SkillCreationBackendApiService {
       body.append(filenames[idx], imageBlobs[idx]);
     }
 
-    this.http.post<SkillCreationBackendResponse>(
+    this.http.post(
       '/skill_editor_handler/create_new', body).toPromise()
-      .then(response => {
+      .then((response: { skillId: string }) => {
         if (successCallback) {
           successCallback({
             skillId: response.skillId
@@ -97,9 +93,9 @@ export class SkillCreationBackendApiService {
       });
   }
 
-  createSkill(description: string, rubrics: RubricBackendDict,
-      explanation: string, linkedTopicIds: string[], imagesData: ImageData[]
-  ): Promise<SkillCreationBackendResponse> {
+  createSkill(description: string, rubrics: IRubricBackend,
+      explanation: string, linkedTopicIds: string[], imagesData: IImageData[]
+  ): PromiseLike<Object> {
     return new Promise((resolve, reject) => {
       this._createSkill(resolve, reject,
         description, rubrics, explanation, linkedTopicIds, imagesData);

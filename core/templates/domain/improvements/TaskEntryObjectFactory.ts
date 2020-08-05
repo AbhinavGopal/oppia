@@ -22,20 +22,11 @@ import { Injectable } from '@angular/core';
 import { ImprovementsConstants } from
   'domain/improvements/improvements.constants';
 
-/**
- * Encodes the back-end response of a task entry. This interface is intended to
- * be extended with a stronger "TaskType" to help the compiler enforce that the
- * fields are set correctly.
- *
- * When the task type is excluded, it is assumed to be a simple string that can
- * match any task. This is used when, for example, rendering the list of tasks
- * as a table (where the type doesn't matter).
- */
-export interface TaskEntryBackendDict<TaskType = string> {
+export interface ITaskEntryBackendDict {
   'entity_type': string;
   'entity_id': string;
   'entity_version': number;
-  'task_type': TaskType;
+  'task_type': string;
   'target_type': string;
   'target_id': string;
   'issue_description': string;
@@ -45,37 +36,19 @@ export interface TaskEntryBackendDict<TaskType = string> {
   'resolved_on_msecs': number;
 }
 
-/**
- * Encodes the minimal details required to store a task to the back-end. This
- * interface is intended to be extended with a stronger "TaskType" to help the
- * compiler enforce that the fields are set correctly.
- *
- * When the task type is excluded, it is assumed to be a simple string that can
- * match any task. This is used when, for example, rendering the list of tasks
- * as a table (where the type doesn't matter).
- */
-export interface TaskEntryPayloadDict<TaskType = string> {
+export interface ITaskEntryPayloadDict {
   'entity_version': number;
-  'task_type': TaskType;
+  'task_type': string;
   'target_id': string;
   'issue_description': string;
   'status': string;
 }
 
-/**
- * Encodes a task's management details. This class is intended to be extended
- * with a stronger "TaskType" to help the compiler enforce that the fields are
- * set correctly.
- *
- * When the task type is excluded, it is assumed to be a simple string that can
- * match any task. This is used when, for example, rendering the list of tasks
- * as a table (where the type doesn't matter).
- */
-export class TaskEntry<TaskType = string> {
+export class TaskEntry {
   public readonly entityType: string;
   public readonly entityId: string;
   public readonly entityVersion: number;
-  public readonly taskType: TaskType;
+  public readonly taskType: string;
   public readonly targetType: string;
   public readonly targetId: string;
   public readonly resolverUsername: string;
@@ -84,7 +57,7 @@ export class TaskEntry<TaskType = string> {
   protected issueDescription: string;
   private taskStatus: string;
 
-  constructor(backendDict: TaskEntryBackendDict<TaskType>) {
+  constructor(backendDict: ITaskEntryBackendDict) {
     this.entityType = backendDict.entity_type;
     this.entityId = backendDict.entity_id;
     this.entityVersion = backendDict.entity_version;
@@ -99,23 +72,7 @@ export class TaskEntry<TaskType = string> {
     this.taskStatus = backendDict.status;
   }
 
-  public toBackendDict(): TaskEntryBackendDict<TaskType> {
-    return {
-      entity_type: this.entityType,
-      entity_id: this.entityId,
-      entity_version: this.entityVersion,
-      task_type: this.taskType,
-      target_type: this.targetType,
-      target_id: this.targetId,
-      issue_description: this.issueDescription,
-      status: this.taskStatus,
-      resolver_username: this.resolverUsername,
-      resolver_profile_picture_data_url: this.resolverProfilePictureDataUrl,
-      resolved_on_msecs: this.resolvedOnMsecs,
-    };
-  }
-
-  public toPayloadDict(): TaskEntryPayloadDict<TaskType> {
+  public toPayloadDict(): ITaskEntryPayloadDict {
     return {
       entity_version: this.entityVersion,
       task_type: this.taskType,
@@ -123,10 +80,6 @@ export class TaskEntry<TaskType = string> {
       issue_description: this.issueDescription,
       status: this.taskStatus,
     };
-  }
-
-  public getStatus(): string {
-    return this.taskStatus;
   }
 
   public getIssueDescription(): string {
@@ -145,12 +98,12 @@ export class TaskEntry<TaskType = string> {
     return this.taskStatus === ImprovementsConstants.TASK_STATUS_RESOLVED;
   }
 
-  public markAsObsolete(): void {
-    this.taskStatus = ImprovementsConstants.TASK_STATUS_OBSOLETE;
-  }
-
   protected markAsOpen(): void {
     this.taskStatus = ImprovementsConstants.TASK_STATUS_OPEN;
+  }
+
+  protected markAsObsolete(): void {
+    this.taskStatus = ImprovementsConstants.TASK_STATUS_OBSOLETE;
   }
 
   protected markAsResolved(): void {
@@ -162,7 +115,7 @@ export class TaskEntry<TaskType = string> {
   providedIn: 'root'
 })
 export class TaskEntryObjectFactory {
-  createFromBackendDict(backendDict: TaskEntryBackendDict): TaskEntry {
+  createFromBackendDict(backendDict: ITaskEntryBackendDict): TaskEntry {
     return new TaskEntry(backendDict);
   }
 }

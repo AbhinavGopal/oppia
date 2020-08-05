@@ -22,8 +22,6 @@ import { CollectionNodeObjectFactory } from
   'domain/collection/collection-node-object.factory';
 import { CollectionObjectFactory } from
   'domain/collection/CollectionObjectFactory';
-import { CollectionPlaythroughObjectFactory } from
-  'domain/collection/CollectionPlaythroughObjectFactory';
 import { ChangeObjectFactory } from
   'domain/editor/undo_redo/ChangeObjectFactory';
 import { CollectionRightsObjectFactory } from
@@ -63,8 +61,7 @@ describe('Collection editor state service', function() {
     var _fetchOrUpdateCollection = function() {
       return $q(function(resolve, reject) {
         if (!self.failure) {
-          resolve(collectionObjectFactory.create(
-            self.newBackendCollectionObject));
+          resolve(self.newBackendCollectionObject);
         } else {
           reject();
         }
@@ -113,8 +110,7 @@ describe('Collection editor state service', function() {
       'CollectionNodeObjectFactory', new CollectionNodeObjectFactory());
     $provide.value(
       'CollectionObjectFactory', new CollectionObjectFactory(
-        new CollectionNodeObjectFactory(),
-        new CollectionPlaythroughObjectFactory()));
+        new CollectionNodeObjectFactory()));
     $provide.value(
       'CollectionRightsObjectFactory', new CollectionRightsObjectFactory());
   }));
@@ -163,11 +159,7 @@ describe('Collection editor state service', function() {
         exploration_id: '0'
       }, {
         exploration_id: '1'
-      }],
-      playthrough_dict: {
-        next_exploration_id: 'expId',
-        completed_exploration_ids: ['expId2']
-      }
+      }]
     };
     secondBackendCollectionObject = {
       id: '5',
@@ -180,11 +172,7 @@ describe('Collection editor state service', function() {
       version: '3',
       nodes: [{
         exploration_id: '0'
-      }],
-      playthrough_dict: {
-        next_exploration_id: 'expId',
-        completed_exploration_ids: ['expId2']
-      }
+      }]
     };
 
     var privateCollectionRightsObject = {

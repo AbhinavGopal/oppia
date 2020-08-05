@@ -20,17 +20,17 @@
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 
-export interface TranslationCountsDict {
+export interface ITranslationCountsDict {
   [languageCode: string]: number
 }
 
-export interface ExplorationOpportunitySummaryBackendDict {
+export interface IExplorationOpportunitySummaryBackendDict {
   'id': string;
   'topic_name': string;
   'story_title': string;
   'chapter_title': string;
   'content_count': number;
-  'translation_counts': TranslationCountsDict;
+  'translation_counts': ITranslationCountsDict;
 }
 
 export class ExplorationOpportunitySummary {
@@ -39,12 +39,12 @@ export class ExplorationOpportunitySummary {
   storyTitle: string;
   chapterTitle: string;
   contentCount: number;
-  translationCounts: TranslationCountsDict;
+  translationCounts: ITranslationCountsDict;
 
   constructor(
       expId: string, topicName: string, storyTitle: string,
       chapterTitle: string, contentCount: number,
-      translationCounts: TranslationCountsDict) {
+      translationCounts: ITranslationCountsDict) {
     this.id = expId;
     this.topicName = topicName;
     this.storyTitle = storyTitle;
@@ -85,7 +85,7 @@ export class ExplorationOpportunitySummary {
 })
 export class ExplorationOpportunitySummaryObjectFactory {
   createFromBackendDict(
-      backendDict: ExplorationOpportunitySummaryBackendDict):
+      backendDict: IExplorationOpportunitySummaryBackendDict):
       ExplorationOpportunitySummary {
     return new ExplorationOpportunitySummary(
       backendDict.id, backendDict.topic_name, backendDict.story_title,

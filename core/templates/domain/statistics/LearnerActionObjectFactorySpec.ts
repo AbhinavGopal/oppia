@@ -208,11 +208,9 @@ describe('Learner Action Object Factory', () => {
     };
 
     expect(() => {
-      // This throws "Type 'string' is not assignable to type
-      // '"ExplorationQuit"'." This is because 'playthroughDict' has an
-      // invalid value of 'action_type' property. We need to do that in order
-      // to test validations.
-      // @ts-expect-error
+      // TS ignore is used because playthrough dict is assigned a invalid type
+      // to test errors.
+      // @ts-ignore
       learnerActionObjectFactory.createFromBackendDict(playthroughDict);
     }).toThrowError(
       'Backend dict does not match any known action type: ' +

@@ -16,23 +16,21 @@
  * @fileoverview Factory for creating and mutating instances of frontend
  * skill rights domain objects.
  */
-
-import { downgradeInjectable } from '@angular/upgrade/static';
-import { Injectable } from '@angular/core';
-
-export interface SkillRightsBackendDict {
+export interface ISkillRightBackend {
   'can_edit_skill_description': boolean,
   'skill_id': string
 }
+import { downgradeInjectable } from '@angular/upgrade/static';
+import { Injectable } from '@angular/core';
 
 export class SkillRights {
   _skillId: string;
-  _canEditSkillDescription: boolean;
+  _skillDescriptionIsEditable: boolean;
 
   constructor(
       skillId: string, canEditSkillDescription: boolean) {
     this._skillId = skillId;
-    this._canEditSkillDescription = canEditSkillDescription;
+    this._skillDescriptionIsEditable = canEditSkillDescription;
   }
 
   getSkillId(): string {
@@ -40,12 +38,14 @@ export class SkillRights {
   }
 
   canEditSkillDescription(): boolean {
-    return this._canEditSkillDescription;
+    return this._skillDescriptionIsEditable;
   }
 
-  copyFromSkillRights(otherSkillRights: SkillRights):void {
+  copyFromSkillRights(otherSkillRights: {
+      getSkillId: () => string; canEditSkillDescription: () => boolean;
+    }):void {
     this._skillId = otherSkillRights.getSkillId();
-    this._canEditSkillDescription =
+    this._skillDescriptionIsEditable =
       otherSkillRights.canEditSkillDescription();
   }
 }
@@ -55,7 +55,7 @@ export class SkillRights {
 })
 export class SkillRightsObjectFactory {
   createFromBackendDict(
-      skillRightsBackendDict: SkillRightsBackendDict): SkillRights {
+      skillRightsBackendDict: ISkillRightBackend): SkillRights {
     return new SkillRights(
       skillRightsBackendDict.skill_id,
       skillRightsBackendDict.can_edit_skill_description);

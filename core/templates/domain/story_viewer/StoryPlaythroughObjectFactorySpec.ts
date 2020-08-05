@@ -41,27 +41,7 @@ describe('Story playthrough object factory', () => {
       outline_is_finalized: false,
       exp_summary_dict: {
         title: 'Title',
-        status: 'private',
-        last_updated_msec: 1591296737470.528,
-        community_owned: false,
-        objective: 'Test Objective',
-        id: '44LKoKLlIbGe',
-        num_views: 0,
-        thumbnail_icon_url: '/subjects/Algebra.svg',
-        human_readable_contributors_summary: {},
-        language_code: 'en',
-        thumbnail_bg_color: '#cd672b',
-        created_on_msec: 1591296635736.666,
-        ratings: {
-          1: 0,
-          2: 0,
-          3: 0,
-          4: 0,
-          5: 0
-        },
-        tags: [],
-        activity_type: 'exploration',
-        category: 'Algebra'
+        status: 'private'
       },
       completed: true,
       thumbnail_bg_color: '#bb8b2f',
@@ -79,39 +59,16 @@ describe('Story playthrough object factory', () => {
       outline_is_finalized: false,
       exp_summary_dict: {
         title: 'Title',
-        status: 'private',
-        last_updated_msec: 1591296737470.528,
-        community_owned: false,
-        objective: 'Test Objective',
-        id: '44LKoKLlIbGe',
-        num_views: 0,
-        thumbnail_icon_url: '/subjects/Algebra.svg',
-        human_readable_contributors_summary: {},
-        language_code: 'en',
-        thumbnail_bg_color: '#cd672b',
-        created_on_msec: 1591296635736.666,
-        ratings: {
-          1: 0,
-          2: 0,
-          3: 0,
-          4: 0,
-          5: 0
-        },
-        tags: [],
-        activity_type: 'exploration',
-        category: 'Algebra'
+        status: 'private'
       },
       completed: false,
       thumbnail_bg_color: '#bb8b2f',
-      thumbnail_filename: 'filename',
+      thumbnail_filename: 'filename'
     };
     var storyPlaythroughBackendObject = {
       story_nodes: [
         firstSampleReadOnlyStoryNodeBackendDict,
-        secondSampleReadOnlyStoryNodeBackendDict],
-      story_title: 'Story',
-      story_description: 'Description',
-      topic_name: 'Topic 1'
+        secondSampleReadOnlyStoryNodeBackendDict]
     };
     _samplePlaythroughObject =
       storyPlaythroughObjectFactory.createFromBackendDict(

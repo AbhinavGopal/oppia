@@ -20,7 +20,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { AnswerGroup, AnswerGroupObjectFactory } from
   'domain/exploration/AnswerGroupObjectFactory';
-import { EndExplorationCustomizationArgs } from
+import { IEndExplorationCustomizationArgs } from
   'interactions/customization-args-defs';
 import { EndExplorationValidationService } from
   'interactions/EndExploration/directives/end-exploration-validation.service';
@@ -36,7 +36,7 @@ describe('EndExplorationValidationService', () => {
 
   let currentState: string;
   let badOutcome: Outcome, goodAnswerGroups: AnswerGroup[];
-  let customizationArguments: EndExplorationCustomizationArgs;
+  let customizationArguments: IEndExplorationCustomizationArgs;
   let oof: OutcomeObjectFactory, agof: AnswerGroupObjectFactory;
 
   beforeEach(() => {
@@ -136,10 +136,9 @@ describe('EndExplorationValidationService', () => {
 
   it('should catch non-string value for recommended exploration ID',
     () => {
-      // This throws "Type 'number' is not assignable to type 'string'."
-      // Here we are assigning the wrong type of value to
-      // "customizationArguments" in order to test validations.
-      // @ts-expect-error
+      // TS ignore is used here because we are assigning the wrong type of
+      // value to test the warnings.
+      // @ts-ignore
       customizationArguments.recommendedExplorationIds.value = [1];
       var warnings = validatorService.getAllWarnings(
         currentState, customizationArguments, [], null);
@@ -151,10 +150,9 @@ describe('EndExplorationValidationService', () => {
 
   it('should have warnings for non-list format of recommended exploration IDs',
     () => {
-      // This throws "Type '"ExpID0"' is not assignable to type 'string[]'."
-      // Here we are assigning the wrong type of value to
-      // "customizationArguments" in order to test validations.
-      // @ts-expect-error
+      // TS ignore is used here because we are assigning the wrong type of
+      // value to test the warnings.
+      // @ts-ignore
       customizationArguments.recommendedExplorationIds.value = 'ExpID0';
       var warnings = validatorService.getAllWarnings(
         currentState, customizationArguments, [], null);

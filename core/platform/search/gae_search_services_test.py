@@ -88,9 +88,7 @@ class SearchAddToIndexTests(test_utils.GenericTestBase):
         self.assertEqual(values, set(['val1', 'val2', 'val3']))
 
     def test_disallow_unsuported_value_types(self):
-        with self.assertRaisesRegexp(
-            ValueError,
-            'document should be a dictionary, got <type \'unicode\'>'):
+        with self.assertRaises(ValueError):
             doc = {'abc': set('xyz')}
             gae_search_services.add_documents_to_index(doc, 'my_index')
 
@@ -163,9 +161,8 @@ class SearchAddToIndexTests(test_utils.GenericTestBase):
             gae_search_services,
             'add_documents_to_index',
             add_docs_counter)
-        assert_raises_ctx = self.assertRaisesRegexp(
-            gae_search_services.SearchFailureError,
-            '<class \'google.appengine.api.search.search.PutError\'>: lol')
+        assert_raises_ctx = self.assertRaises(
+            gae_search_services.SearchFailureError)
         with put_ctx, add_docs_ctx, assert_raises_ctx as context_mgr:
             gae_search_services.add_documents_to_index([doc], 'my_index')
 
@@ -189,9 +186,8 @@ class SearchAddToIndexTests(test_utils.GenericTestBase):
         put_ctx = self.swap(search.Index, 'put', failing_put)
         add_docs_ctx = self.swap(
             gae_search_services, 'add_documents_to_index', add_docs_counter)
-        assert_raises_ctx = self.assertRaisesRegexp(
-            gae_search_services.SearchFailureError,
-            '<class \'google.appengine.api.search.search.PutError\'>: lol')
+        assert_raises_ctx = self.assertRaises(
+            gae_search_services.SearchFailureError)
         with put_ctx, add_docs_ctx, assert_raises_ctx:
             gae_search_services.add_documents_to_index(
                 [doc], 'my_index', retries=42)
@@ -268,9 +264,8 @@ class SearchAddToIndexTests(test_utils.GenericTestBase):
             'add_documents_to_index',
             add_docs_counter)
         put_ctx = self.swap(search.Index, 'put', failing_put)
-        assert_raises_ctx = self.assertRaisesRegexp(
-            gae_search_services.SearchFailureError,
-            '<class \'google.appengine.api.search.search.PutError\'>: lol')
+        assert_raises_ctx = self.assertRaises(
+            gae_search_services.SearchFailureError)
         with add_docs_ctx, put_ctx, assert_raises_ctx as e:
             gae_search_services.add_documents_to_index(docs, 'my_index')
 
@@ -281,11 +276,7 @@ class SearchAddToIndexTests(test_utils.GenericTestBase):
 
     def test_raise_error_when_document_type_is_invalid(self):
         doc = {'abc': set('xyz')}
-        with self.assertRaisesRegexp(
-            ValueError,
-            r'Value for document field abc should be a \(unicode\) string, '
-            r'numeric type, datetime.date, datetime.datetime or list of such '
-            r'types, got <type \'set\'>'):
+        with self.assertRaises(ValueError):
             gae_search_services.add_documents_to_index([doc], 'my_index')
 
 
@@ -319,10 +310,7 @@ class SearchRemoveFromIndexTests(test_utils.GenericTestBase):
                 'index')
 
     def test_index_must_be_string(self):
-        with self.assertRaisesRegexp(
-            ValueError,
-            'Index must be the unicode/str name of an index, got '
-            '<class \'google.appengine.api.search.search.Index\''):
+        with self.assertRaises(ValueError):
             gae_search_services.delete_documents_from_index(
                 ['doc_id'], search.Index('ind'))
 
@@ -357,9 +345,8 @@ class SearchRemoveFromIndexTests(test_utils.GenericTestBase):
             gae_search_services,
             'delete_documents_from_index',
             delete_docs_counter)
-        assert_raises_ctx = self.assertRaisesRegexp(
-            gae_search_services.SearchFailureError,
-            '<class \'google.appengine.api.search.search.DeleteError\'>: lol')
+        assert_raises_ctx = self.assertRaises(
+            gae_search_services.SearchFailureError)
         with delete_ctx, delete_docs_ctx, assert_raises_ctx as context_mgr:
             gae_search_services.delete_documents_from_index(
                 ['doc'], 'my_index')
@@ -383,9 +370,8 @@ class SearchRemoveFromIndexTests(test_utils.GenericTestBase):
             gae_search_services,
             'delete_documents_from_index',
             delete_docs_counter)
-        assert_raises_ctx = self.assertRaisesRegexp(
-            gae_search_services.SearchFailureError,
-            '<class \'google.appengine.api.search.search.DeleteError\'>: lol')
+        assert_raises_ctx = self.assertRaises(
+            gae_search_services.SearchFailureError)
         with delete_ctx, delete_docs_ctx, assert_raises_ctx:
             gae_search_services.delete_documents_from_index(
                 ['id'], 'index', retries=42)
@@ -458,9 +444,8 @@ class SearchRemoveFromIndexTests(test_utils.GenericTestBase):
             'delete_documents_from_index',
             delete_docs_counter)
         delete_ctx = self.swap(search.Index, 'delete', delete_spy)
-        assert_raises_ctx = self.assertRaisesRegexp(
-            gae_search_services.SearchFailureError,
-            '<class \'google.appengine.api.search.search.DeleteError\'>: lol')
+        assert_raises_ctx = self.assertRaises(
+            gae_search_services.SearchFailureError)
         with delete_docs_ctx, delete_ctx, assert_raises_ctx as e:
             gae_search_services.delete_documents_from_index(
                 ['a', 'b', 'c'],
@@ -621,7 +606,7 @@ class SearchQueryTests(test_utils.GenericTestBase):
         time.sleep(1)
         gae_search_services.add_documents_to_index([dict3], 'my_index')
         result = gae_search_services.search(
-            'k:abc', 'my_index', ids_only=True)[0]
+            'k:abc', index='my_index', ids_only=True)[0]
         self.assertEqual(result, ['doc3', 'doc2', 'doc1'])
 
     def test_search_with_custom_rank_and_language(self):
@@ -629,7 +614,7 @@ class SearchQueryTests(test_utils.GenericTestBase):
         doc2 = {'id': 'doc2', 'k': 'abc ghi', 'rank': 1, 'language_code': 'fr'}
         doc3 = {'id': 'doc3', 'k': 'abc jkl', 'rank': 2, 'language_code': 'nl'}
         gae_search_services.add_documents_to_index([doc1, doc2, doc3], 'index')
-        result = gae_search_services.search('k:abc', 'index')[0]
+        result = gae_search_services.search('k:abc', index='index')[0]
         self.assertEqual(result, [doc1, doc3, doc2])
 
     def test_search_using_single_sort_expression(self):
@@ -687,10 +672,8 @@ class SearchQueryTests(test_utils.GenericTestBase):
         search_ctx = self.swap(search.Index, 'search', failing_index_search)
         search_counter_ctx = self.swap(
             gae_search_services, 'search', search_counter)
-        assert_raises_ctx = self.assertRaisesRegexp(
-            gae_search_services.SearchFailureError,
-            '<class \'google.appengine.api.search.search.TransientError\'>: '
-            'oops')
+        assert_raises_ctx = self.assertRaises(
+            gae_search_services.SearchFailureError)
         with search_ctx, search_counter_ctx, assert_raises_ctx as context_mgr:
             gae_search_services.search('query', 'my_index')
 
@@ -712,10 +695,8 @@ class SearchQueryTests(test_utils.GenericTestBase):
         index_ctx = self.swap(search.Index, 'search', failing_index_search)
         search_counter_ctx = self.swap(
             gae_search_services, 'search', search_counter)
-        assert_raises_ctx = self.assertRaisesRegexp(
-            gae_search_services.SearchFailureError,
-            '<class \'google.appengine.api.search.search.TransientError\'>:'
-            ' oops')
+        assert_raises_ctx = self.assertRaises(
+            gae_search_services.SearchFailureError)
         with index_ctx, search_counter_ctx, assert_raises_ctx:
             gae_search_services.search('query', 'my_index', retries=3)
 
@@ -793,8 +774,8 @@ class ClearIndexTests(test_utils.GenericTestBase):
     def test_clear_index(self):
         doc = {'id': 'doc1', 'k': 'abc def', 'rank': 3, 'language_code': 'en'}
         gae_search_services.add_documents_to_index([doc], 'index')
-        result = gae_search_services.search('k:abc', 'index')[0]
+        result = gae_search_services.search('k:abc', index='index')[0]
         self.assertEqual(result, [doc])
         gae_search_services.clear_index('index')
-        result = gae_search_services.search('k:abc', 'index')[0]
+        result = gae_search_services.search('k:abc', index='index')[0]
         self.assertEqual(result, [])

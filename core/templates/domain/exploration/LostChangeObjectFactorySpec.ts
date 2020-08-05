@@ -17,7 +17,7 @@
  */
 
 import { TestBed } from '@angular/core/testing';
-import { LostChangeObjectFactory } from
+import { LostChangeObjectFactory, LostChange } from
   'domain/exploration/LostChangeObjectFactory';
 import { OutcomeObjectFactory } from './OutcomeObjectFactory';
 

@@ -19,7 +19,7 @@
 import { Injectable } from '@angular/core';
 import { downgradeInjectable } from '@angular/upgrade/static';
 
-import { GraphAnswer } from 'interactions/answer-defs.ts';
+import { IGraphAnswer } from 'interactions/answer-defs.ts';
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +47,7 @@ export class GraphUtilsService {
    *   (undirected)
    */
   constructAdjacencyLists(
-      graph: GraphAnswer, adjacencyListMode: string): number[][] {
+      graph: IGraphAnswer, adjacencyListMode: string): number[][] {
     var adjacencyLists = [];
     for (var i = 0; i < graph.vertices.length; i++) {
       adjacencyLists.push([]);
@@ -117,7 +117,7 @@ export class GraphUtilsService {
     return false;
   }
 
-  constructAdjacencyMatrix(graph: GraphAnswer): number[][] {
+  constructAdjacencyMatrix(graph: IGraphAnswer): number[][] {
     var adjMatrix = [];
     for (var i = 0; i < graph.vertices.length; i++) {
       var adjMatrixRow = [];

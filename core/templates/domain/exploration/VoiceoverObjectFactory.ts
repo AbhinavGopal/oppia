@@ -16,7 +16,7 @@
  * @fileoverview Factory for creating new frontend instances of
  * Voiceover domain objects.
  */
-export interface VoiceoverBackendDict {
+export interface IVoiceoverDict {
   'duration_secs': number;
   'filename': string;
   'file_size_bytes': number;
@@ -53,7 +53,7 @@ export class Voiceover {
     return this.fileSizeBytes / NUM_BYTES_IN_MB;
   }
 
-  toBackendDict(): VoiceoverBackendDict {
+  toBackendDict(): IVoiceoverDict {
     return {
       filename: this.filename,
       file_size_bytes: this.fileSizeBytes,
@@ -73,7 +73,7 @@ export class VoiceoverObjectFactory {
   }
 
   createFromBackendDict(
-      translationBackendDict: VoiceoverBackendDict): Voiceover {
+      translationBackendDict: IVoiceoverDict): Voiceover {
     return new Voiceover(
       translationBackendDict.filename,
       translationBackendDict.file_size_bytes,

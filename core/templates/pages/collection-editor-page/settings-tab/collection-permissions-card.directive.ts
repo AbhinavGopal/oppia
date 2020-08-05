@@ -22,12 +22,14 @@ require(
   'pages/collection-editor-page/services/collection-editor-state.service.ts');
 
 angular.module('oppia').directive('collectionPermissionsCard', [
-  function() {
+  'UrlInterpolationService', function(UrlInterpolationService) {
     return {
       restrict: 'E',
       scope: {},
       bindToController: {},
-      template: require('./collection-permissions-card.directive.html'),
+      templateUrl: UrlInterpolationService.getDirectiveTemplateUrl(
+        '/pages/collection-editor-page/settings-tab/' +
+        'collection-permissions-card.directive.html'),
       controllerAs: '$ctrl',
       controller: [
         'CollectionEditorStateService',
@@ -44,14 +46,3 @@ angular.module('oppia').directive('collectionPermissionsCard', [
       ]
     };
   }]);
-
-import { Directive, ElementRef, Injector } from '@angular/core';
-import { UpgradeComponent } from '@angular/upgrade/static';
-@Directive({
-  selector: 'collection-permissions-card'
-})
-export class CollectionPermissionsCard extends UpgradeComponent {
-  constructor(elementRef: ElementRef, injector: Injector) {
-    super('collectionPermissionsCard', elementRef, injector);
-  }
-}

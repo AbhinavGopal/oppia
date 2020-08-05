@@ -205,9 +205,8 @@ def create_message(
         if suggestion:
             suggestion.put()
 
-    if (feconf.CAN_SEND_EMAILS and (
-            feconf.CAN_SEND_FEEDBACK_MESSAGE_EMAILS and
-            user_services.is_user_registered(author_id))):
+    if (feconf.CAN_SEND_EMAILS and feconf.CAN_SEND_FEEDBACK_MESSAGE_EMAILS and
+            user_services.is_user_registered(author_id)):
         _add_message_to_email_buffer(
             author_id, thread_id, message_id, len(text), old_status, new_status)
 
@@ -221,7 +220,7 @@ def update_messages_read_by_the_user(user_id, thread_id, message_ids):
     function.
 
     Args:
-        user_id: str. The id of the user reading the messages.
+        user_id: str. The id of the user reading the messages,
         thread_id: str. The id of the thread.
         message_ids: list(int). The ids of the messages in the thread read by
             the user.
@@ -240,7 +239,7 @@ def add_message_id_to_read_by_list(thread_id, user_id, message_id):
 
     Args:
         thread_id: str. The id of the thread.
-        user_id: str. The id of the user reading the messages.
+        user_id: str. The id of the user reading the messages,
         message_id: int. The id of the message.
     """
     feedback_thread_user_model = (
@@ -365,8 +364,7 @@ def get_total_open_threads(feedback_analytics_list):
     FeedbackAnalytics domain objects.
 
     Args:
-        feedback_analytics_list: list(FeedbackAnalytics). A list of
-            FeedbackAnalytics objects to get the count of all open threads.
+        feedback_analytics_list: list(FeedbackAnalytics).
 
     Returns:
         int. The count of all open threads for the given the given list of
@@ -395,8 +393,7 @@ def _get_thread_from_model(thread_model):
     """Converts the given FeedbackThreadModel to a FeedbackThread object.
 
     Args:
-        thread_model: FeedbackThreadModel. The FeedbackThread model object to be
-            converted to FeedbackThread object.
+        thread_model: FeedbackThreadModel.
 
     Returns:
         FeedbackThread. The corresponding FeedbackThread domain object.
@@ -545,8 +542,7 @@ def get_closed_threads(entity_type, entity_id, has_suggestion):
     """
     return [
         thread for thread in get_threads(entity_type, entity_id)
-        if (
-            thread.has_suggestion == has_suggestion and
+        if (thread.has_suggestion == has_suggestion and
             thread.status != feedback_models.STATUS_CHOICES_OPEN)
     ]
 
@@ -604,8 +600,7 @@ def _enqueue_feedback_thread_status_change_email_task(
 
     Args:
         user_id: str. The user to be notified.
-        reference: FeedbackMessageReference. The feedback message reference
-            object to be converted to dict.
+        reference: FeedbackMessageReference.
         old_status: str. One of STATUS_CHOICES.
         new_status: str. One of STATUS_CHOICES.
     """
@@ -668,7 +663,7 @@ def update_feedback_email_retries(user_id):
     corresponding user's UnsentEmailFeedbackModel.
 
     Args:
-        user_id: str. The id of the given user.
+        user_id: str.
     """
     model = feedback_models.UnsentFeedbackEmailModel.get(user_id)
     time_since_buffered = (
@@ -685,7 +680,7 @@ def pop_feedback_message_references(user_id, num_references_to_pop):
     processed already.
 
     Args:
-        user_id: str. The id of the current user.
+        user_id: str.
         num_references_to_pop: int. Number of feedback message references that
             have been processed already.
     """

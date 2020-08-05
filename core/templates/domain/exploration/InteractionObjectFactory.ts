@@ -21,40 +21,38 @@ import { Injectable } from '@angular/core';
 
 import cloneDeep from 'lodash/cloneDeep';
 
-import { AnswerGroup, AnswerGroupBackendDict, AnswerGroupObjectFactory } from
+import { IAnswerGroupBackendDict, AnswerGroup, AnswerGroupObjectFactory } from
   'domain/exploration/AnswerGroupObjectFactory';
-import { HintBackendDict, Hint, HintObjectFactory } from
+import { IHintBackendDict, Hint, HintObjectFactory } from
   'domain/exploration/HintObjectFactory';
-import { OutcomeBackendDict, Outcome, OutcomeObjectFactory } from
+import { IOutcomeBackendDict, Outcome, OutcomeObjectFactory } from
   'domain/exploration/OutcomeObjectFactory';
-import { SolutionBackendDict, Solution, SolutionObjectFactory } from
+import { ISolutionBackendDict, Solution, SolutionObjectFactory } from
   'domain/exploration/SolutionObjectFactory';
-import { InteractionCustomizationArgs } from
+import { IInteractionCustomizationArgs } from
   'interactions/customization-args-defs';
-import { InteractionAnswer } from 'interactions/answer-defs';
 
-export interface InteractionBackendDict {
-  'default_outcome': OutcomeBackendDict;
-  'answer_groups': AnswerGroupBackendDict[];
-  'confirmed_unclassified_answers': InteractionAnswer[];
-  'customization_args': InteractionCustomizationArgs;
-  'hints': HintBackendDict[];
+export interface IInteractionBackendDict {
+  'default_outcome': IOutcomeBackendDict;
+  'answer_groups': IAnswerGroupBackendDict[];
+  'confirmed_unclassified_answers': any;
+  'customization_args': IInteractionCustomizationArgs;
+  'hints': IHintBackendDict[];
   'id': string;
-  'solution': SolutionBackendDict;
+  'solution': ISolutionBackendDict;
 }
 
 export class Interaction {
   answerGroups: AnswerGroup[];
-  confirmedUnclassifiedAnswers: InteractionAnswer[];
-  customizationArgs: InteractionCustomizationArgs;
+  confirmedUnclassifiedAnswers: any;
+  customizationArgs: IInteractionCustomizationArgs;
   defaultOutcome: Outcome;
   hints: Hint[];
   id: string;
   solution: Solution;
   constructor(
-      answerGroups: AnswerGroup[],
-      confirmedUnclassifiedAnswers: InteractionAnswer[],
-      customizationArgs: InteractionCustomizationArgs,
+      answerGroups: AnswerGroup[], confirmedUnclassifiedAnswers: any,
+      customizationArgs: IInteractionCustomizationArgs,
       defaultOutcome: Outcome, hints: Hint[], id: string, solution: Solution) {
     this.answerGroups = answerGroups;
     this.confirmedUnclassifiedAnswers = confirmedUnclassifiedAnswers;
@@ -77,7 +75,7 @@ export class Interaction {
     this.defaultOutcome = newValue;
   }
 
-  setCustomizationArgs(newValue: InteractionCustomizationArgs): void {
+  setCustomizationArgs(newValue: IInteractionCustomizationArgs): void {
     this.customizationArgs = newValue;
   }
 
@@ -100,7 +98,7 @@ export class Interaction {
     this.solution = cloneDeep(otherInteraction.solution);
   }
 
-  toBackendDict(): InteractionBackendDict {
+  toBackendDict(): IInteractionBackendDict {
     return {
       answer_groups: this.answerGroups.map(function(answerGroup) {
         return answerGroup.toBackendDict();
@@ -129,7 +127,7 @@ export class InteractionObjectFactory {
     private outcomeFactory: OutcomeObjectFactory) {}
 
   createFromBackendDict(
-      interactionDict: InteractionBackendDict): Interaction {
+      interactionDict: IInteractionBackendDict): Interaction {
     var defaultOutcome;
     if (interactionDict.default_outcome) {
       defaultOutcome = this.outcomeFactory.createFromBackendDict(
@@ -149,7 +147,7 @@ export class InteractionObjectFactory {
   }
 
   generateAnswerGroupsFromBackend(
-      answerGroupBackendDicts: AnswerGroupBackendDict[]) {
+      answerGroupBackendDicts: IAnswerGroupBackendDict[]) {
     return answerGroupBackendDicts.map((
         answerGroupBackendDict) => {
       return this.answerGroupFactory.createFromBackendDict(
@@ -157,13 +155,13 @@ export class InteractionObjectFactory {
     });
   }
 
-  generateHintsFromBackend(hintBackendDicts: HintBackendDict[]) {
+  generateHintsFromBackend(hintBackendDicts: IHintBackendDict[]) {
     return hintBackendDicts.map((hintBackendDict) => {
       return this.hintFactory.createFromBackendDict(hintBackendDict);
     });
   }
 
-  generateSolutionFromBackend(solutionBackendDict: SolutionBackendDict) {
+  generateSolutionFromBackend(solutionBackendDict: ISolutionBackendDict) {
     return this.solutionFactory.createFromBackendDict(solutionBackendDict);
   }
 }

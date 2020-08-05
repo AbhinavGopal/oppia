@@ -24,16 +24,16 @@ import { Injectable } from '@angular/core';
 import { downgradeInjectable } from '@angular/upgrade/static';
 
 import {
-  QuestionSummaryBackendDict,
+  IQuestionSummaryBackendDict,
   QuestionSummary,
   QuestionSummaryObjectFactory
 } from 'domain/question/QuestionSummaryObjectFactory';
 
-export interface QuestionSummaryForOneSkillBackendDict {
+export interface IQuestionSummaryForOneSkillBackendDict {
   'skill_id': string;
   'skill_description': string;
   'skill_difficulty': number;
-  'summary': QuestionSummaryBackendDict;
+  'summary': IQuestionSummaryBackendDict;
 }
 
 export class QuestionSummaryForOneSkill {
@@ -76,7 +76,7 @@ export class QuestionSummaryForOneSkillObjectFactory {
     private questionSummaryObjectFactory: QuestionSummaryObjectFactory) {}
   createFromBackendDict(
       backendDict:
-      QuestionSummaryForOneSkillBackendDict): QuestionSummaryForOneSkill {
+      IQuestionSummaryForOneSkillBackendDict): QuestionSummaryForOneSkill {
     var questionSummary =
       this.questionSummaryObjectFactory.createFromBackendDict(
         backendDict.summary);

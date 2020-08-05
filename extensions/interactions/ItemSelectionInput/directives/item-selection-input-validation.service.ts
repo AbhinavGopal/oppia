@@ -21,9 +21,9 @@ import { Injectable } from '@angular/core';
 
 import { AnswerGroup } from
   'domain/exploration/AnswerGroupObjectFactory';
-import { Warning, baseInteractionValidationService } from
+import { IWarning, baseInteractionValidationService } from
   'interactions/base-interaction-validation.service';
-import { ItemSelectionInputCustomizationArgs } from
+import { IItemSelectionInputCustomizationArgs } from
   'interactions/customization-args-defs';
 import { Outcome } from
   'domain/exploration/OutcomeObjectFactory';
@@ -39,7 +39,7 @@ export class ItemSelectionInputValidationService {
         baseInteractionValidationService) {}
 
   getCustomizationArgsWarnings(
-      customizationArgs: ItemSelectionInputCustomizationArgs): Warning[] {
+      customizationArgs: IItemSelectionInputCustomizationArgs): IWarning[] {
     var warningsList = [];
 
     this.baseInteractionValidationServiceInstance.requireCustomizationArguments(
@@ -111,8 +111,8 @@ export class ItemSelectionInputValidationService {
 
   getAllWarnings(
       stateName: string, customizationArgs:
-      ItemSelectionInputCustomizationArgs, answerGroups: AnswerGroup[],
-      defaultOutcome: Outcome): Warning[] {
+      IItemSelectionInputCustomizationArgs, answerGroups: AnswerGroup[],
+      defaultOutcome: Outcome): IWarning[] {
     var warningsList = [];
 
     warningsList = warningsList.concat(

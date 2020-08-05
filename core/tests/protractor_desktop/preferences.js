@@ -44,7 +44,7 @@ describe('Preferences', function() {
     await preferencesPage.get();
     await waitFor.pageToFullyLoad();
     await preferencesPage.uploadProfilePhoto(
-      '../data/dummy_large_image.jpg', false);
+      '../data/dummyLargeImage.jpg', false);
     await preferencesPage.expectUploadError();
   });
 

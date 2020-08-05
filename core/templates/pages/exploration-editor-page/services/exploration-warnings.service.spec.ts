@@ -16,12 +16,6 @@
  * @fileoverview Unit tests for ExplorationWarningsService.
  */
 
-import { fakeAsync } from '@angular/core/testing';
-
-import { AnswerStats } from 'domain/exploration/AnswerStatsObjectFactory';
-import { StateTopAnswersStats } from
-  'domain/statistics/state-top-answers-stats-object.factory';
-
 // TODO(#7222): Remove the following block of unnnecessary imports once
 // exploration-editor-tab.directive.ts is upgraded to Angular 8.
 import { AngularNameService } from
@@ -84,7 +78,6 @@ describe('Exploration Warnings Service', function() {
   var ExplorationWarningsService = null;
   var ExplorationStatesService = null;
   var StateTopAnswersStatsService = null;
-  var StateTopAnswersStatsBackendApiService = null;
 
   beforeEach(angular.mock.module('oppia'));
   beforeEach(angular.mock.module('oppia', function($provide) {
@@ -180,8 +173,6 @@ describe('Exploration Warnings Service', function() {
     beforeEach(angular.mock.inject(function($injector) {
       ExplorationWarningsService = $injector.get('ExplorationWarningsService');
       ExplorationStatesService = $injector.get('ExplorationStatesService');
-      StateTopAnswersStatsBackendApiService = $injector.get(
-        'StateTopAnswersStatsBackendApiService');
       StateTopAnswersStatsService = $injector.get(
         'StateTopAnswersStatsService');
     }));
@@ -526,7 +517,7 @@ describe('Exploration Warnings Service', function() {
       });
 
     it('should update warnings when state top answers stats is initiated',
-      fakeAsync(async function() {
+      function() {
         ExplorationStatesService.init({
           Hola: {
             content: {
@@ -582,14 +573,18 @@ describe('Exploration Warnings Service', function() {
             },
           }
         });
-        spyOn(StateTopAnswersStatsBackendApiService, 'fetchStatsAsync')
-          .and.returnValue(Promise.resolve(
-            new StateTopAnswersStats(
-              {Hola: [new AnswerStats('hola', 'hola', 7, false)]},
-              {Hola: 'TextInput'})));
-        await StateTopAnswersStatsService.initAsync(
-          'expId', ExplorationStatesService.getStates());
-
+        StateTopAnswersStatsService.init({
+          answers: {
+            Hola: [{
+              answer: 'hola',
+              frequency: 7,
+              isAddressed: false
+            }]
+          },
+          interaction_ids: {
+            Hola: 'TextInput'
+          },
+        });
         ExplorationWarningsService.updateWarnings();
 
         expect(ExplorationWarningsService.getWarnings()).toEqual([{
@@ -625,7 +620,7 @@ describe('Exploration Warnings Service', function() {
               ' question type.'
             ]
           });
-      }));
+      });
 
     it('should update warnings when state name is not equal to the default' +
     ' outcome destination', function() {

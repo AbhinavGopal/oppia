@@ -19,16 +19,16 @@
 import { Injectable } from '@angular/core';
 import { downgradeInjectable } from '@angular/upgrade/static';
 
-import { MathExpressionAnswer } from 'interactions/answer-defs';
-import { MathExpressionRuleInputs } from 'interactions/rule-input-defs';
+import { IMathExpressionAnswer } from 'interactions/answer-defs';
+import { IMathExpressionRuleInputs } from 'interactions/rule-input-defs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MathExpressionInputRulesService {
   IsMathematicallyEquivalentTo(
-      answer: MathExpressionAnswer,
-      inputs: MathExpressionRuleInputs): boolean | Error {
+      answer: IMathExpressionAnswer,
+      inputs: IMathExpressionRuleInputs): boolean | Error {
     try {
       MathExpression.fromLatex(answer.latex);
     } catch (e) {

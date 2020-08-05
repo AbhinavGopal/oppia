@@ -22,13 +22,13 @@ import { TestBed, fakeAsync, flushMicrotasks } from '@angular/core/testing';
 
 import { ExplorationRecommendationsBackendApiService } from
   'domain/recommendations/exploration-recommendations-backend-api.service';
-import { LearnerExplorationSummaryObjectFactory } from
-  'domain/summary/learner-exploration-summary-object.factory';
+import { ExplorationSummaryObjectFactory } from
+  'domain/summary/exploration-summary-object.factory';
 
 describe('Exploration recommendations backend api service', () => {
   let httpTestingController: HttpTestingController;
   let erbas: ExplorationRecommendationsBackendApiService;
-  let lesof: LearnerExplorationSummaryObjectFactory;
+  let esof: ExplorationSummaryObjectFactory;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -37,7 +37,7 @@ describe('Exploration recommendations backend api service', () => {
 
     httpTestingController = TestBed.get(HttpTestingController);
     erbas = TestBed.get(ExplorationRecommendationsBackendApiService);
-    lesof = TestBed.get(LearnerExplorationSummaryObjectFactory);
+    esof = TestBed.get(ExplorationSummaryObjectFactory);
   });
 
   afterEach(() => {
@@ -73,7 +73,7 @@ describe('Exploration recommendations backend api service', () => {
     };
 
     let expectedObject = backendResponse.summaries.map(
-      lesof.createFromBackendDict);
+      esof.createFromBackendDict);
 
     erbas.getRecommendedSummaryDicts(
       ['0'], 'false', 'collectionId', 'storyId', 'nodeId', 'expId').then((

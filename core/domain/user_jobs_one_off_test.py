@@ -1366,13 +1366,12 @@ class CleanupUserSubscriptionsModelUnitTests(test_utils.GenericTestBase):
             exp_models.ExplorationModel.get('%s' % exp_id).delete(
                 self.owner_id, 'deleted exploration')
 
-        owner_subscription_model = user_models.UserSubscriptionsModel.get(
-            self.owner_id)
-        self.assertEqual(len(owner_subscription_model.activity_ids), 3)
-
-        user_subscription_model = user_models.UserSubscriptionsModel.get(
-            self.user_id)
-        self.assertEqual(len(user_subscription_model.activity_ids), 3)
+        self.assertEqual(
+            len(user_models.UserSubscriptionsModel.get(self.owner_id)
+                .activity_ids), 3)
+        self.assertEqual(
+            len(user_models.UserSubscriptionsModel.get(self.user_id)
+                .activity_ids), 3)
 
         job = user_jobs_one_off.CleanupActivityIdsFromUserSubscriptionsModelOneOffJob # pylint: disable=line-too-long
         job_id = job.create_new()
@@ -1382,13 +1381,12 @@ class CleanupUserSubscriptionsModelUnitTests(test_utils.GenericTestBase):
                 taskqueue_services.QUEUE_NAME_ONE_OFF_JOBS), 1)
         self.process_and_flush_pending_tasks()
 
-        owner_subscription_model = user_models.UserSubscriptionsModel.get(
-            self.owner_id)
-        self.assertEqual(len(owner_subscription_model.activity_ids), 0)
-
-        user_subscription_model = user_models.UserSubscriptionsModel.get(
-            self.user_id)
-        self.assertEqual(len(user_subscription_model.activity_ids), 0)
+        self.assertEqual(
+            len(user_models.UserSubscriptionsModel.get(self.owner_id)
+                .activity_ids), 0)
+        self.assertEqual(
+            len(user_models.UserSubscriptionsModel.get(self.user_id)
+                .activity_ids), 0)
         actual_output = job.get_output(job_id)
         expected_output = [
             u'[u\'Successfully cleaned up UserSubscriptionsModel %s and '

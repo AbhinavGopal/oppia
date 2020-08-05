@@ -36,8 +36,7 @@ import utils
 # If evaluating differences in YAML, conversion to dict form via
 # utils.dict_from_yaml can isolate differences quickly.
 
-SAMPLE_YAML_CONTENT = (
-    """category: A category
+SAMPLE_YAML_CONTENT = ("""category: A category
 language_code: en
 nodes:
 - exploration_id: an_exploration_id
@@ -634,10 +633,7 @@ class YamlCreationUnitTests(test_utils.GenericTestBase):
         self.assertEqual(yaml_content_2, yaml_content)
 
         # Should not be able to create a collection from no YAML content.
-        with self.assertRaisesRegexp(
-            Exception, 'Please ensure that you are uploading a YAML text file, '
-            'not a zip file. The YAML parser returned the following error: '
-            '\'NoneType\' object has no attribute \'read\''):
+        with self.assertRaises(Exception):
             collection_domain.Collection.from_yaml('collection3', None)
 
     def test_from_yaml_with_no_schema_version_specified_raises_error(self):
@@ -714,8 +710,7 @@ class SchemaMigrationMethodsUnitTests(test_utils.GenericTestBase):
 class SchemaMigrationUnitTests(test_utils.GenericTestBase):
     """Test migration methods for yaml content."""
 
-    YAML_CONTENT_V1 = (
-        """category: A category
+    YAML_CONTENT_V1 = ("""category: A category
 nodes:
 - acquired_skills:
   - Skill1
@@ -730,8 +725,7 @@ objective: ''
 schema_version: 1
 title: A title
 """)
-    YAML_CONTENT_V2 = (
-        """category: A category
+    YAML_CONTENT_V2 = ("""category: A category
 language_code: en
 nodes:
 - acquired_skills:
@@ -748,8 +742,7 @@ schema_version: 2
 tags: []
 title: A title
 """)
-    YAML_CONTENT_V3 = (
-        """category: A category
+    YAML_CONTENT_V3 = ("""category: A category
 language_code: en
 nodes:
 - acquired_skills:
@@ -766,8 +759,7 @@ schema_version: 2
 tags: []
 title: A title
 """)
-    YAML_CONTENT_V4 = (
-        """category: A category
+    YAML_CONTENT_V4 = ("""category: A category
 language_code: en
 next_skill_id: 2
 nodes:
@@ -792,8 +784,7 @@ skills:
 tags: []
 title: A title
 """)
-    YAML_CONTENT_V5 = (
-        """category: A category
+    YAML_CONTENT_V5 = ("""category: A category
 language_code: en
 next_skill_index: 2
 nodes:
@@ -818,8 +809,7 @@ skills:
 tags: []
 title: A title
 """)
-    YAML_CONTENT_V6 = (
-        """category: A category
+    YAML_CONTENT_V6 = ("""category: A category
 language_code: en
 nodes:
 - exploration_id: Exp1

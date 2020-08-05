@@ -21,7 +21,7 @@ require(
   'background-banner.component.ts');
 require(
   'components/common-layout-directives/common-elements/' +
-  'loading-dots.component.ts');
+  'loading-dots.directive.ts');
 require('components/summary-tile/collection-summary-tile.directive.ts');
 require('components/summary-tile/exploration-summary-tile.directive.ts');
 require('filters/string-utility-filters/truncate.filter.ts');
@@ -285,7 +285,7 @@ angular.module('oppia').component('learnerDashboardPage', {
           if (ctrl.threadSummaries[index].threadId === threadId) {
             threadIndex = index;
             var threadSummary = ctrl.threadSummaries[index];
-            if (!threadSummary.lastMessageIsRead) {
+            if (!threadSummary.lastMessageRead) {
               ctrl.numberOfUnreadThreads -= 1;
             }
             threadSummary.markTheLastTwoMessagesAsRead();
@@ -370,15 +370,13 @@ angular.module('oppia').component('learnerDashboardPage', {
               LEARNER_DASHBOARD_SECTION_I18N_IDS.INCOMPLETE) {
             if (subsectionName ===
                 LEARNER_DASHBOARD_SUBSECTION_I18N_IDS.EXPLORATIONS) {
-              var index = ctrl.incompleteExplorationsList.findIndex(
-                exp => exp.id === activity.id);
+              var index = ctrl.incompleteExplorationsList.indexOf(activity);
               if (index !== -1) {
                 ctrl.incompleteExplorationsList.splice(index, 1);
               }
             } else if (subsectionName ===
                       LEARNER_DASHBOARD_SUBSECTION_I18N_IDS.COLLECTIONS) {
-              var index = ctrl.incompleteCollectionsList.findIndex(
-                collection => collection.id === activity.id);
+              var index = ctrl.incompleteCollectionsList.indexOf(activity);
               if (index !== -1) {
                 ctrl.incompleteCollectionsList.splice(index, 1);
               }
@@ -387,15 +385,13 @@ angular.module('oppia').component('learnerDashboardPage', {
                     LEARNER_DASHBOARD_SECTION_I18N_IDS.PLAYLIST) {
             if (subsectionName ===
                 LEARNER_DASHBOARD_SUBSECTION_I18N_IDS.EXPLORATIONS) {
-              var index = ctrl.explorationPlaylist.findIndex(
-                exp => exp.id === activity.id);
+              var index = ctrl.explorationPlaylist.indexOf(activity);
               if (index !== -1) {
                 ctrl.explorationPlaylist.splice(index, 1);
               }
             } else if (subsectionName ===
                       LEARNER_DASHBOARD_SUBSECTION_I18N_IDS.COLLECTIONS) {
-              var index = ctrl.collectionPlaylist.findIndex(
-                collection => collection.id === activity.id);
+              var index = ctrl.collectionPlaylist.indexOf(activity);
               if (index !== -1) {
                 ctrl.collectionPlaylist.splice(index, 1);
               }
@@ -459,34 +455,59 @@ angular.module('oppia').component('learnerDashboardPage', {
             ctrl.startIncompleteCollectionIndex = 0;
             ctrl.startCompletedCollectionIndex = 0;
             ctrl.completedExplorationsList = (
-              responseData.completedExplorationsList);
+              responseData.completed_explorations_list
+            );
             ctrl.completedCollectionsList = (
-              responseData.completedCollectionsList);
+              responseData.completed_collections_list
+            );
             ctrl.incompleteExplorationsList = (
-              responseData.incompleteExplorationsList);
+              responseData.incomplete_explorations_list
+            );
             ctrl.incompleteCollectionsList = (
-              responseData.incompleteCollectionsList);
-            ctrl.subscriptionsList = responseData.subscriptionList;
+              responseData.incomplete_collections_list
+            );
+            ctrl.subscriptionsList = (
+              responseData.subscription_list
+            );
             ctrl.numberNonexistentIncompleteExplorations = (
-              responseData.numberOfNonexistentActivities
-                .incompleteExplorations);
+              responseData.number_of_nonexistent_activities
+                .incomplete_explorations
+            );
             ctrl.numberNonexistentIncompleteCollections = (
-              responseData.numberOfNonexistentActivities.incompleteCollections);
+              responseData.number_of_nonexistent_activities
+                .incomplete_collections
+            );
             ctrl.numberNonexistentCompletedExplorations = (
-              responseData.numberOfNonexistentActivities.completedExplorations);
+              responseData.number_of_nonexistent_activities
+                .completed_explorations
+            );
             ctrl.numberNonexistentCompletedCollections = (
-              responseData.numberOfNonexistentActivities.completedCollections);
+              responseData.number_of_nonexistent_activities
+                .completed_collections
+            );
             ctrl.numberNonexistentExplorationsFromPlaylist = (
-              responseData.numberOfNonexistentActivities.explorationPlaylist);
+              responseData.number_of_nonexistent_activities
+                .exploration_playlist
+            );
             ctrl.numberNonexistentCollectionsFromPlaylist = (
-              responseData.numberOfNonexistentActivities.collectionPlaylist);
+              responseData.number_of_nonexistent_activities
+                .collection_playlist
+            );
             ctrl.completedToIncompleteCollections = (
-              responseData.completedToIncompleteCollections);
-            ctrl.threadSummaries = responseData.threadSummaries;
+              responseData.completed_to_incomplete_collections
+            );
+            var threadSummaryDicts = responseData.thread_summaries;
+            ctrl.threadSummaries = [];
+            for (
+              var index = 0; index < threadSummaryDicts.length; index++) {
+              ctrl.threadSummaries.push(
+                FeedbackThreadSummaryObjectFactory.createFromBackendDict(
+                  threadSummaryDicts[index]));
+            }
             ctrl.numberOfUnreadThreads =
-              responseData.numberOfUnreadThreads;
-            ctrl.explorationPlaylist = responseData.explorationPlaylist;
-            ctrl.collectionPlaylist = responseData.collectionPlaylist;
+              responseData.number_of_unread_threads;
+            ctrl.explorationPlaylist = responseData.exploration_playlist;
+            ctrl.collectionPlaylist = responseData.collection_playlist;
             ctrl.activeSection =
               LEARNER_DASHBOARD_SECTION_I18N_IDS.INCOMPLETE;
             ctrl.activeSubsection = (

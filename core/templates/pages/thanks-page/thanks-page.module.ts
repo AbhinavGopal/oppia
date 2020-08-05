@@ -26,36 +26,33 @@ angular.module('oppia', [
   'toastr', 'ui.bootstrap', 'ui.sortable', 'ui.tree', 'ui.validate'
 ]);
 
-import { NgModule, StaticProvider } from '@angular/core';
+import { Component, NgModule, StaticProvider } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { downgradeComponent } from '@angular/upgrade/static';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-
-import { ThanksPageComponent } from './thanks-page.component';
-import { AppConstants } from 'app.constants';
+import { RequestInterceptor } from 'services/request-interceptor.service';
+import { SharedComponentsModule } from 'components/shared-component.module';
 import { OppiaAngularRootComponent } from
   'components/oppia-angular-root.component';
-import { SharedComponentsModule } from 'components/shared-component.module';
-import { ObjectsDomainConstants } from
-  'domain/objects/objects-domain.constants';
+
+import { AppConstants } from 'app.constants';
 import { InteractionsExtensionsConstants } from
   'interactions/interactions-extension.constants';
-import { RequestInterceptor } from 'services/request-interceptor.service';
+import { ObjectsDomainConstants } from
+  'domain/objects/objects-domain.constants';
 
 @NgModule({
   imports: [
     BrowserModule,
     HttpClientModule,
-    SharedComponentsModule,
+    SharedComponentsModule
   ],
   declarations: [
-    OppiaAngularRootComponent,
-    ThanksPageComponent
+    OppiaAngularRootComponent
   ],
   entryComponents: [
-    OppiaAngularRootComponent,
-    ThanksPageComponent
+    OppiaAngularRootComponent
   ],
   providers: [
     AppConstants,

@@ -165,7 +165,7 @@ export class SpeechSynthesisChunkerService {
         this.RTE_COMPONENT_NAMES[componentSpec] =
         ServicesConstants.RTE_COMPONENT_SPECS[componentSpec].frontend_id;
       });
-    interface MathExpressionContent {
+    interface IMathExpressionContent {
       'raw_latex': string,
       'svg_filename': string
     }
@@ -173,7 +173,7 @@ export class SpeechSynthesisChunkerService {
     // Convert links into speakable text by extracting the readable value.
     elt.find('oppia-noninteractive-' + this.RTE_COMPONENT_NAMES.Link)
       .replaceWith(function() {
-        var element = <HTMLElement> this;
+        var element = <HTMLElement><any> this;
         if (element.attributes['text-with-value'] !== undefined) {
           const newTextContent = element.attributes[
             'text-with-value'].textContent.replace(/&quot;/g, '');
@@ -188,9 +188,9 @@ export class SpeechSynthesisChunkerService {
     // Convert LaTeX to speakable text.
     elt.find('oppia-noninteractive-' + this.RTE_COMPONENT_NAMES.Math)
       .replaceWith(function() {
-        var element = <HTMLElement> this;
+        var element = <HTMLElement><any> this;
         if (element.attributes['math_content-with-value'] !== undefined) {
-          var mathContent = <MathExpressionContent>(
+          var mathContent = <IMathExpressionContent>(
             _this.htmlEscaper.escapedJsonToObj(
               element.attributes['math_content-with-value'].textContent));
           const latexSpeakableText = _this._formatLatexToSpeakableText(

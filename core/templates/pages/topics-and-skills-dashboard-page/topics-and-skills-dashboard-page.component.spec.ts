@@ -44,8 +44,6 @@ describe('Topics and Skills Dashboard Page', function() {
   var TopicsAndSkillsDashboardBackendApiService = null;
   var WindowDimensionsService = null;
   var TopicsAndSkillsDashboardFilterObjectFactory = null;
-  var TopicSummaryObjectFactory = null;
-  var SkillSummaryObjectFactory = null;
   var SAMPLE_TOPIC_ID = 'hyuy4GUlvTqJ';
   var AlertsService = null;
 
@@ -90,35 +88,15 @@ describe('Topics and Skills Dashboard Page', function() {
         'TopicsAndSkillsDashboardFilterObjectFactory');
       TopicsAndSkillsDashboardBackendApiService = $injector.get(
         'TopicsAndSkillsDashboardBackendApiService');
-      TopicSummaryObjectFactory = $injector.get(
-        'TopicSummaryObjectFactory');
-      SkillSummaryObjectFactory = $injector.get(
-        'SkillSummaryObjectFactory');
-
       var MockTopicsAndSkillsDashboardBackendApiService = {
         fetchDashboardData: () => {
           var deferred = $q.defer();
-          deferred.resolve({
-            topicSummaries: sampleDataResults.topic_summary_dicts.map(
-              backendDict => TopicSummaryObjectFactory
-                .createFromBackendDict(backendDict)),
-            untriagedSkillSummaries: (
-              sampleDataResults.untriaged_skill_summary_dicts.map(
-                backendDict => SkillSummaryObjectFactory
-                  .createFromBackendDict(backendDict))),
-            allClassroomNames: sampleDataResults.all_classroom_names,
-            canCreateTopic: sampleDataResults.can_create_topic,
-            canCreateSkill: sampleDataResults.can_create_skill,
-            canDeleteTopic: sampleDataResults.can_delete_topic,
-            canDeleteSkill: sampleDataResults.can_delete_skill
-          });
+          deferred.resolve(sampleDataResults);
           return deferred.promise;
         },
         fetchSkillsDashboardData: () => {
           var deferred = $q.defer();
-          deferred.resolve({
-            skillSummaries: sampleDataResults.skill_summary_dicts
-          });
+          deferred.resolve(sampleDataResults);
           return deferred.promise;
         }
       };
@@ -158,11 +136,9 @@ describe('Topics and Skills Dashboard Page', function() {
 
       expect(ctrl.activeTab).toEqual('topics');
       expect(ctrl.totalTopicSummaries).toEqual(
-        sampleDataResults.topic_summary_dicts.map(
-          dict => TopicSummaryObjectFactory.createFromBackendDict(dict)));
+        sampleDataResults.topic_summary_dicts);
       expect(ctrl.untriagedSkillSummaries).toEqual(
-        sampleDataResults.untriaged_skill_summary_dicts.map(
-          dict => SkillSummaryObjectFactory.createFromBackendDict(dict)));
+        sampleDataResults.untriaged_skill_summary_dicts);
       expect(ctrl.totalEntityCountToDisplay).toEqual(1);
       expect(ctrl.userCanCreateTopic).toEqual(true);
       expect(ctrl.userCanCreateSkill).toEqual(true);
@@ -298,22 +274,22 @@ describe('Topics and Skills Dashboard Page', function() {
     });
 
     it('should apply the filters', function() {
-      const topic1 = TopicSummaryObjectFactory.createFromBackendDict({
+      const topic1 = {
         is_published: true, name: 'Alpha', classroom: 'Math',
         description: 'Alpha description',
-      });
-      const topic2 = TopicSummaryObjectFactory.createFromBackendDict({
+      };
+      const topic2 = {
         is_published: false, name: 'Alpha2', classroom: 'Math',
         description: 'Alp2 desc',
-      });
-      const topic3 = TopicSummaryObjectFactory.createFromBackendDict({
+      };
+      const topic3 = {
         is_published: false, name: 'Beta', classroom: 'Math',
         description: 'Beta description',
-      });
-      const topic4 = TopicSummaryObjectFactory.createFromBackendDict({
+      };
+      const topic4 = {
         is_published: true, name: 'Gamma', classroom: 'Math',
         description: 'Gamma description',
-      });
+      };
       ctrl.filterObject = (
         TopicsAndSkillsDashboardFilterObjectFactory.createDefault());
       ctrl.totalTopicSummaries = [topic1, topic2, topic3, topic4];
@@ -363,10 +339,6 @@ describe('Topics and Skills Dashboard Page', function() {
         'TopicsAndSkillsDashboardFilterObjectFactory');
       TopicsAndSkillsDashboardBackendApiService = $injector.get(
         'TopicsAndSkillsDashboardBackendApiService');
-      TopicSummaryObjectFactory = $injector.get(
-        'TopicSummaryObjectFactory');
-      SkillSummaryObjectFactory = $injector.get(
-        'SkillSummaryObjectFactory');
       var sampleDataResults2 = {
         topic_summary_dicts: [],
         skill_summary_dicts: [],
@@ -381,26 +353,19 @@ describe('Topics and Skills Dashboard Page', function() {
       var MockTopicsAndSkillsDashboardBackendApiService = {
         fetchDashboardData: () => {
           var deferred = $q.defer();
-          deferred.resolve({
-            topicSummaries: sampleDataResults2.topic_summary_dicts,
-            untriagedSkillSummaries: (
-              sampleDataResults2.untriaged_skill_summary_dicts.map(
-                dict => SkillSummaryObjectFactory.createFromBackendDict(dict))),
-            canCreateTopic: sampleDataResults2.can_create_topic,
-            canCreateSkill: sampleDataResults2.can_create_skill
-          });
+          deferred.resolve(sampleDataResults2);
           return deferred.promise;
         },
         fetchSkillsDashboardData: () => {
           var deferred = $q.defer();
           deferred.resolve({
-            skillSummaries: [
+            skill_summary_dicts: [
               {id: 'id1', description: 'description1'},
               {id: 'id2', description: 'description2'},
               {id: 'id3', description: 'description3'},
               {id: 'id4', description: 'description4'}],
             more: true,
-            nextCursor: 'kasfmk424'
+            next_cursor: 'kasfmk424'
           });
           return deferred.promise;
         }

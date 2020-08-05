@@ -26,10 +26,10 @@ import cloneDeep from 'lodash/cloneDeep';
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 
-import { MisconceptionBackendDict } from
+import { IMisconceptionBackendDict } from
   'domain/skill/MisconceptionObjectFactory';
 
-interface BackendChangeObject {
+interface IBackendChangeObject {
   // This interface may not have all the possible values.
   // Add properties with a '?' if you find any that needs to be here.
   'cmd'?: string;
@@ -44,7 +44,7 @@ interface BackendChangeObject {
 
   'exploration_id'?: string;
 
-  'new_misconception_dict'?: MisconceptionBackendDict;
+  'new_misconception_dict'?: IMisconceptionBackendDict;
   'misconception_id'?: string;
 
   'skill_id'?: string;
@@ -67,12 +67,12 @@ interface BackendChangeObject {
 }
 
 export class Change {
-  _backendChangeObject: BackendChangeObject;
+  _backendChangeObject: IBackendChangeObject;
   _applyChangeToObject: Function;
   _reverseChangeToObject: Function;
 
   constructor(
-      backendChangeObject: BackendChangeObject, applyChangeToObject: Function,
+      backendChangeObject: IBackendChangeObject, applyChangeToObject: Function,
       reverseChangeToObject: Function) {
     this._backendChangeObject = cloneDeep(backendChangeObject);
     this._applyChangeToObject = applyChangeToObject;
@@ -81,25 +81,25 @@ export class Change {
 
   // Returns the JSON object which represents a backend python dict of this
   // change. Changes to this object are not reflected in this domain object.
-  getBackendChangeObject(): BackendChangeObject {
+  getBackendChangeObject(): IBackendChangeObject {
     return cloneDeep(this._backendChangeObject);
   }
 
   setBackendChangeObject(
-      backendChangeObject: BackendChangeObject): BackendChangeObject {
+      backendChangeObject: IBackendChangeObject): IBackendChangeObject {
     return this._backendChangeObject = cloneDeep(backendChangeObject);
   }
 
   // Applies this change to the related object (such as a frontend collection
   // domain object).
-  applyChange(domainObject: BackendChangeObject): void {
+  applyChange(domainObject: IBackendChangeObject): void {
     this._applyChangeToObject(this._backendChangeObject, domainObject);
   }
 
   // Reverse-applies this change to the related object (such as a frontend
   // collection domain object). This method should only be used to reverse a
   // change that was previously applied by calling the applyChange() method.
-  reverseChange(domainObject: BackendChangeObject): void {
+  reverseChange(domainObject: IBackendChangeObject): void {
     this._reverseChangeToObject(this._backendChangeObject, domainObject);
   }
 }
@@ -117,7 +117,7 @@ export class ChangeObjectFactory {
   // parameter and takes the same inputs, except it should reverse the change
   // for the provided domain object.
   create(
-      backendChangeObject: BackendChangeObject, applyChangeToObject: Function,
+      backendChangeObject: IBackendChangeObject, applyChangeToObject: Function,
       reverseChangeToObject: Function): Change {
     return new Change(
       backendChangeObject, applyChangeToObject, reverseChangeToObject);

@@ -53,8 +53,9 @@ angular.module('oppia').factory('CollectionEditorStateService', [
         _collectionIsInitialized = true;
       }
     };
-    var _updateCollection = function(newCollectionObject) {
-      _setCollection(newCollectionObject);
+    var _updateCollection = function(newBackendCollectionObject) {
+      _setCollection(CollectionObjectFactory.create(
+        newBackendCollectionObject));
     };
     var _setCollectionRights = function(collectionRights) {
       _collectionRights.copyFromCollectionRights(collectionRights);
@@ -70,8 +71,8 @@ angular.module('oppia').factory('CollectionEditorStateService', [
         _collectionIsLoading = true;
         EditableCollectionBackendApiService.fetchCollection(
           collectionId).then(
-          function(newCollectionObject) {
-            _updateCollection(newCollectionObject);
+          function(newBackendCollectionObject) {
+            _updateCollection(newBackendCollectionObject);
             // TODO(#8521): Remove the use of $rootScope.$applyAsync()
             // once the controller is migrated to angular.
             $rootScope.$applyAsync();
@@ -181,8 +182,8 @@ angular.module('oppia').factory('CollectionEditorStateService', [
         EditableCollectionBackendApiService.updateCollection(
           _collection.getId(), _collection.getVersion(),
           commitMessage, UndoRedoService.getCommittableChangeList()).then(
-          function(collectionObject) {
-            _updateCollection(collectionObject);
+          function(collectionBackendObject) {
+            _updateCollection(collectionBackendObject);
             UndoRedoService.clearChanges();
             _collectionIsBeingSaved = false;
             if (successCallback) {

@@ -18,7 +18,7 @@
 
 require(
   'components/common-layout-directives/common-elements/' +
-  'attribution-guide.component.ts');
+  'attribution-guide.directive.ts');
 require(
   'pages/exploration-editor-page/translation-tab/state-translation/' +
   'state-translation.directive.ts');
@@ -27,7 +27,7 @@ require(
   'welcome-translation-modal.controller.ts');
 require(
   'pages/exploration-editor-page/translation-tab/' +
-  'state-translation-status-graph/state-translation-status-graph.component.ts');
+  'state-translation-status-graph/state-translation-status-graph.directive.ts');
 require(
   'pages/exploration-editor-page/translation-tab/translator-overview/' +
   'translator-overview.directive.ts');

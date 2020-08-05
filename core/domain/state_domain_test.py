@@ -236,10 +236,8 @@ class StateDomainUnitTests(test_utils.GenericTestBase):
                 '<p>HasElementXAtPositionY rule_spec html</p>',
                 '<p>y input for HasElementXAtPositionY rule_spec </p>',
                 '<p>x input for HasElementXAtPositionY rule_spec </p>',
-                (
-                    '<p>IsEqualToOrderingWithOneItemAtIncorrectPosition rule_s'
-                    'pec htmls</p>'),
-                '',
+                ('<p>IsEqualToOrderingWithOneItemAtIncorrectPosition rule_s'
+                 'pec htmls</p>'), '',
                 '<p>Hello, this is html1 for hint 1</p>',
                 '<p>This is solution for state1</p>',
                 '<p>state customization arg html 1</p>',
@@ -1166,9 +1164,7 @@ class StateDomainUnitTests(test_utils.GenericTestBase):
 
         # The exploration should NOT be terminable even though it has a state
         # called 'END' and everything else is connected to it.
-        with self.assertRaisesRegexp(
-            Exception,
-            'This state does not have any interaction specified.'):
+        with self.assertRaises(Exception):
             exploration.validate(strict=True)
 
         # Renaming the node to something other than 'END' and giving it an
@@ -2647,8 +2643,7 @@ class StateDomainUnitTests(test_utils.GenericTestBase):
         }
 
         # Object type of answer must match that of correct_answer.
-        with self.assertRaisesRegexp(
-            AssertionError, r'Expected unicode string, received \[0, 0\]'):
+        with self.assertRaises(AssertionError):
             init_state.interaction.solution = (
                 state_domain.Solution.from_dict(
                     init_state.interaction.id, solution_dict))
@@ -3264,7 +3259,7 @@ class StateDomainUnitTests(test_utils.GenericTestBase):
         }]
         exploration.init_state.update_interaction_answer_groups(answer_groups)
 
-        with logging_swap, self.assertRaisesRegexp(KeyError, 'u\'x\''):
+        with logging_swap, self.assertRaises(KeyError):
             (
                 exploration.init_state.interaction.answer_groups[0]
                 .rule_specs[0].validate([], {})

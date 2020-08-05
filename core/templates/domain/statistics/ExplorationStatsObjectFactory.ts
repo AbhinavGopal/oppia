@@ -19,17 +19,17 @@
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 
-import { StateStatsBackendDict, StateStats, StateStatsObjectFactory } from
+import { IStateStatsBackendDict, StateStats, StateStatsObjectFactory } from
   'domain/statistics/StateStatsObjectFactory';
 
-export interface ExplorationStatsBackendDict {
+export interface IExplorationStatsBackendDict {
   'exp_id': string;
   'exp_version': number;
   'num_starts': number;
   'num_actual_starts': number;
   'num_completions': number;
   'state_stats_mapping': {
-    [stateName: string]: StateStatsBackendDict;
+    [stateName: string]: IStateStatsBackendDict;
   };
 }
 
@@ -43,9 +43,7 @@ export class ExplorationStats {
       public readonly numStarts: number,
       public readonly numActualStarts: number,
       public readonly numCompletions: number,
-      public readonly stateStatsMapping: ReadonlyMap<string, StateStats>) {
-    this.stateStatsMapping = new Map(stateStatsMapping);
-  }
+      private readonly stateStatsMapping: Map<string, StateStats>) {}
 
   getBounceRate(stateName: string): number {
     if (this.numStarts === 0) {
@@ -69,61 +67,6 @@ export class ExplorationStats {
     }
     return this.stateStatsMapping.get(stateName);
   }
-
-  /**
-   * Constructs a new copy of the exploration stats, but with a zero-stats entry
-   * for the given state name.
-   *
-   * This method allows instances of ExplorationStats to remain immutable, while
-   * providing users with an interface for reflecting changes made to an
-   * exploration.
-   */
-  createNewWithStateAdded(newStateName: string): ExplorationStats {
-    const newStateStatsMapping = new Map(this.stateStatsMapping);
-    newStateStatsMapping.set(newStateName, new StateStats(0, 0, 0, 0, 0, 0));
-    return new ExplorationStats(
-      this.expId, this.expVersion, this.numStarts, this.numActualStarts,
-      this.numCompletions, newStateStatsMapping);
-  }
-
-  /**
-   * Constructs a new copy of the exploration stats, but with the given state
-   * name removed.
-   *
-   * This method allows instances of ExplorationStats to remain immutable, while
-   * providing users with an interface for reflecting changes made to an
-   * exploration.
-   */
-  createNewWithStateDeleted(oldStateName: string): ExplorationStats {
-    const newStateStatsMapping = new Map(this.stateStatsMapping);
-    // ES2016 Map uses delete as a method name despite it being a reserved word.
-    // eslint-disable-next-line dot-notation
-    newStateStatsMapping.delete(oldStateName);
-    return new ExplorationStats(
-      this.expId, this.expVersion, this.numStarts, this.numActualStarts,
-      this.numCompletions, newStateStatsMapping);
-  }
-
-  /**
-   * Constructs a new copy of the exploration stats, but with the given state's
-   * name changed.
-   *
-   * This method allows instances of ExplorationStats to remain immutable, while
-   * providing users with an interface for reflecting changes made to an
-   * exploration.
-   */
-  createNewWithStateRenamed(
-      oldStateName: string, newStateName: string): ExplorationStats {
-    const newStateStatsMapping = new Map(this.stateStatsMapping);
-    newStateStatsMapping.set(
-      newStateName, this.stateStatsMapping.get(oldStateName));
-    // ES2016 Map uses delete as a method name despite it being a reserved word.
-    // eslint-disable-next-line dot-notation
-    newStateStatsMapping.delete(oldStateName);
-    return new ExplorationStats(
-      this.expId, this.expVersion, this.numStarts, this.numActualStarts,
-      this.numCompletions, newStateStatsMapping);
-  }
 }
 
 @Injectable({
@@ -133,14 +76,14 @@ export class ExplorationStatsObjectFactory {
   constructor(private stateStatsObjectFactory: StateStatsObjectFactory) {}
 
   createFromBackendDict(
-      backendDict: ExplorationStatsBackendDict): ExplorationStats {
-    const stateStatsMapping = (
-      new Map(Object.entries(backendDict.state_stats_mapping).map(
+      backendDict: IExplorationStatsBackendDict): ExplorationStats {
+    const stateStatsMapping = new Map(
+      Object.entries(backendDict.state_stats_mapping).map(
         ([stateName, stateStatsBackendDict]) => [
           stateName,
           this.stateStatsObjectFactory.createFromBackendDict(
             stateStatsBackendDict)
-        ])));
+        ]));
     return new ExplorationStats(
       backendDict.exp_id, backendDict.exp_version, backendDict.num_starts,
       backendDict.num_actual_starts, backendDict.num_completions,

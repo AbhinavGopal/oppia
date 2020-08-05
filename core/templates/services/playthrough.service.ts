@@ -23,9 +23,9 @@ import { AppConstants } from 'app.constants';
 import { ExplorationFeaturesService } from
   'services/exploration-features.service';
 import {
-  CyclicStateTransitionsCustomizationArgs,
-  EarlyQuitCustomizationArgs,
-  MultipleIncorrectSubmissionsCustomizationArgs
+  ICyclicStateTransitionsCustomizationArgs,
+  IEarlyQuitCustomizationArgs,
+  IMultipleIncorrectSubmissionsCustomizationArgs
 } from 'domain/statistics/PlaythroughIssueObjectFactory';
 import { LearnerAction, LearnerActionObjectFactory } from
   'domain/statistics/LearnerActionObjectFactory';
@@ -97,7 +97,7 @@ class CyclicStateTransitionsTracker {
     this.pathOfVisitedStates.push(destStateName);
   }
 
-  generateIssueCustomizationArgs(): CyclicStateTransitionsCustomizationArgs {
+  generateIssueCustomizationArgs(): ICyclicStateTransitionsCustomizationArgs {
     return {
       state_names: {value: this.cycleOfVisitedStates}
     };
@@ -129,7 +129,7 @@ class EarlyQuitTracker {
     this.expDurationInSecs = expDurationInSecs;
   }
 
-  generateIssueCustomizationArgs(): EarlyQuitCustomizationArgs {
+  generateIssueCustomizationArgs(): IEarlyQuitCustomizationArgs {
     return {
       state_name: {value: this.stateName},
       time_spent_in_exp_in_msecs: {value: this.expDurationInSecs * 1000},
@@ -160,7 +160,7 @@ class MultipleIncorrectAnswersTracker {
   }
 
   generateIssueCustomizationArgs(
-  ): MultipleIncorrectSubmissionsCustomizationArgs {
+  ): IMultipleIncorrectSubmissionsCustomizationArgs {
     return {
       state_name: {value: this.currStateName},
       num_times_answered_incorrectly: {value: this.numTries},

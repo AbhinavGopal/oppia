@@ -26,18 +26,15 @@ angular.module('oppia', [
   'toastr', 'ui.bootstrap', 'ui.sortable', 'ui.tree', 'ui.validate'
 ]);
 
-import { HttpClientModule } from '@angular/common/http';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgModule, StaticProvider } from '@angular/core';
+import { Component, NgModule, StaticProvider } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { downgradeComponent } from '@angular/upgrade/static';
-
+import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { RequestInterceptor } from 'services/request-interceptor.service';
+import { SharedComponentsModule } from 'components/shared-component.module';
 import { OppiaAngularRootComponent } from
   'components/oppia-angular-root.component';
-import { SharedComponentsModule } from 'components/shared-component.module';
-import { TopicLandingPageComponent } from
-  'pages/landing-pages/topic-landing-page/topic-landing-page.component';
-import { RequestInterceptor } from 'services/request-interceptor.service';
 
 import { AppConstants } from 'app.constants';
 import { InteractionsExtensionsConstants } from
@@ -48,7 +45,6 @@ import { ServicesConstants } from 'services/services.constants';
 import { TopicLandingPageConstants } from
   'pages/landing-pages/topic-landing-page/topic-landing-page.constants';
 
-
 @NgModule({
   imports: [
     BrowserModule,
@@ -56,12 +52,10 @@ import { TopicLandingPageConstants } from
     SharedComponentsModule
   ],
   declarations: [
-    OppiaAngularRootComponent,
-    TopicLandingPageComponent
+    OppiaAngularRootComponent
   ],
   entryComponents: [
-    OppiaAngularRootComponent,
-    TopicLandingPageComponent
+    OppiaAngularRootComponent
   ],
   providers: [
     AppConstants,

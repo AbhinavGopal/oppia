@@ -58,12 +58,9 @@ describe('Story object factory', () => {
       language_code: 'en'
     };
     _sampleStory = storyObjectFactory.createFromBackendDict(
-      // This throws "Argument of type '{ id: string; ... }'
-      // is not assignable to parameter of type 'StoryBackendDict'."
-      // This is because 'sampleStoryBackendDict' should have a property
-      // 'thumbnail' but we didn't add that property in order to test
+      // TS ignore is used because sample story doesn't have thumbail to test
       // validations.
-      // @ts-expect-error
+      // @ts-ignore
       sampleStoryBackendDict);
   });
 

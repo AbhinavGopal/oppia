@@ -21,14 +21,11 @@ import { TestBed, fakeAsync, flushMicrotasks } from '@angular/core/testing';
 
 import { EditableCollectionBackendApiService } from
   'domain/collection/editable-collection-backend-api.service';
-import { Collection, CollectionObjectFactory } from
-  'domain/collection/CollectionObjectFactory';
 
 describe('Editable collection backend API service', () => {
   let editableCollectionBackendApiService:
     EditableCollectionBackendApiService = null;
   let httpTestingController: HttpTestingController;
-  let collectionObjectFactory: CollectionObjectFactory;
   // Sample collection object returnable from the backend.
   let sampleDataResults = {
     collection: {
@@ -36,17 +33,12 @@ describe('Editable collection backend API service', () => {
       title: 'Collection Under Test',
       category: 'Test',
       objective: 'To pass',
-      version: 1,
+      version: '1',
       nodes: [{
         exploration_id: '0'
       }],
-      playthrough_dict: {
-        next_exploration_id: 'expId',
-        completed_exploration_ids: ['expId2']
-      },
-      language_code: null,
-      tags: null,
-      schema_version: null
+      next_exploration_ids: [],
+      completed_exploration_ids: []
     }
   };
 
@@ -57,7 +49,6 @@ describe('Editable collection backend API service', () => {
 
     editableCollectionBackendApiService = TestBed.get(
       EditableCollectionBackendApiService);
-    collectionObjectFactory = TestBed.get(CollectionObjectFactory);
     httpTestingController = TestBed.get(HttpTestingController);
   });
 
@@ -79,10 +70,7 @@ describe('Editable collection backend API service', () => {
 
       flushMicrotasks();
 
-      var collectionObject = collectionObjectFactory.create(
-        sampleDataResults.collection);
-
-      expect(successHandler).toHaveBeenCalledWith(collectionObject);
+      expect(successHandler).toHaveBeenCalledWith(sampleDataResults.collection);
       expect(failHandler).not.toHaveBeenCalled();
     })
   );
@@ -97,9 +85,7 @@ describe('Editable collection backend API service', () => {
       var req = httpTestingController.expectOne(
         '/collection_editor_handler/data/1');
       expect(req.request.method).toEqual('GET');
-      req.flush({
-        error: 'Error loading collection 1'
-      }, {
+      req.flush('Error loading collection 1', {
         status: 500, statusText: 'Invalid Request'
       });
 
@@ -114,8 +100,7 @@ describe('Editable collection backend API service', () => {
     fakeAsync(() => {
       var successHandler = jasmine.createSpy('success');
       var failHandler = jasmine.createSpy('fail');
-      var collection: Collection = null;
-      var collectionDict = sampleDataResults;
+      var collection = null;
       // Loading a collection the first time should fetch it from the backend.
       editableCollectionBackendApiService.fetchCollection('0').then(
         (data) => {
@@ -128,20 +113,20 @@ describe('Editable collection backend API service', () => {
 
       flushMicrotasks();
 
-      collectionDict.collection.title = 'New Title';
-      collectionDict.collection.version = 2;
-      collection = collectionObjectFactory.create(collectionDict.collection);
+      collection.title = 'New Title';
+      collection.version = '2';
+      var collectionWrapper = {
+        collection: collection
+      };
 
       // Send a request to update collection.
       editableCollectionBackendApiService.updateCollection(
-        collectionDict.collection.id,
-        collectionDict.collection.version,
-        collectionDict.collection.title, []
+        collection.id, collection.version, collection.title, []
       ).then(successHandler, failHandler);
       req = httpTestingController.expectOne(
         '/collection_editor_handler/data/0');
       expect(req.request.method).toEqual('PUT');
-      req.flush(collectionDict);
+      req.flush(collectionWrapper);
 
       flushMicrotasks();
 

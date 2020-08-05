@@ -21,7 +21,7 @@ require(
   'confirm-or-cancel-modal.controller.ts');
 require(
   'components/common-layout-directives/common-elements/' +
-  'loading-dots.component.ts');
+  'loading-dots.directive.ts');
 require(
   'components/common-layout-directives/common-elements/' +
   'sharing-links.component.ts');

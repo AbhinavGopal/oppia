@@ -20,7 +20,6 @@ from __future__ import unicode_literals  # pylint: disable=import-only-modules
 from core.controllers import acl_decorators
 from core.controllers import base
 from core.domain import skill_domain
-from core.domain import skill_fetchers
 from core.domain import skill_services
 import feconf
 import utils
@@ -52,7 +51,7 @@ class SkillMasteryDataHandler(base.BaseHandler):
             raise self.InvalidInputException('Invalid skill ID %s' % skill_id)
 
         try:
-            skill_fetchers.get_multi_skills(skill_ids)
+            skill_services.get_multi_skills(skill_ids)
         except Exception as e:
             raise self.PageNotFoundException(e)
 
@@ -118,7 +117,7 @@ class SkillMasteryDataHandler(base.BaseHandler):
                 new_degrees_of_mastery[skill_id] = 1.0
 
         try:
-            skill_fetchers.get_multi_skills(skill_ids)
+            skill_services.get_multi_skills(skill_ids)
         except Exception as e:
             raise self.PageNotFoundException(e)
 

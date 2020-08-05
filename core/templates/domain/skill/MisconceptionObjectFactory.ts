@@ -17,7 +17,7 @@
  * misconceptions.
  */
 
-export interface MisconceptionBackendDict {
+export interface IMisconceptionBackendDict {
   'feedback': string;
   'id': string;
   'must_be_addressed': boolean;
@@ -45,7 +45,7 @@ export class Misconception {
     this._mustBeAddressed = mustBeAddressed;
   }
 
-  toBackendDict(): MisconceptionBackendDict {
+  toBackendDict(): IMisconceptionBackendDict {
     return {
       id: this._id,
       name: this._name,
@@ -97,7 +97,7 @@ export class Misconception {
 })
 export class MisconceptionObjectFactory {
   createFromBackendDict(
-      misconceptionBackendDict: MisconceptionBackendDict)
+      misconceptionBackendDict: IMisconceptionBackendDict)
       : Misconception {
     return new Misconception(
       misconceptionBackendDict.id,

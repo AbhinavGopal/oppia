@@ -39,12 +39,7 @@ describe('Classroom backend API service', function() {
       canonical_story_count: 4,
       subtopic_count: 5,
       total_skill_count: 20,
-      uncategorized_skill_count: 5,
-      language_code: 'en',
-      version: 1,
-      additional_story_count: 0,
-      topic_model_created_on: 231241343,
-      topic_model_last_updated: 3454354354
+      uncategorized_skill_count: 5
     }, {
       id: 'topic2',
       name: 'Topic name 2',
@@ -52,12 +47,7 @@ describe('Classroom backend API service', function() {
       canonical_story_count: 3,
       subtopic_count: 2,
       total_skill_count: 10,
-      uncategorized_skill_count: 3,
-      language_code: 'en',
-      version: 1,
-      additional_story_count: 0,
-      topic_model_created_on: 231241343,
-      topic_model_last_updated: 3454354354
+      uncategorized_skill_count: 3
     }]
   };
 

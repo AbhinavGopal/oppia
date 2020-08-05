@@ -71,8 +71,7 @@ DOWNLOAD_FORMATS_TO_MANIFEST_KEYS = {
     }
 }
 
-_PARSER = argparse.ArgumentParser(
-    description="""
+_PARSER = argparse.ArgumentParser(description="""
 Installation script for Oppia third-party libraries.
 """)
 
@@ -90,8 +89,7 @@ def download_files(source_url_root, target_dir, source_filenames):
             download the file. The downloaded file is then placed in target_dir,
             and retains the same filename.
     """
-    assert isinstance(source_filenames, list), (
-        'Expected list of filenames, got \'%s\'' % source_filenames)
+    assert isinstance(source_filenames, list)
     common.ensure_directory_exists(target_dir)
     for filename in source_filenames:
         if not os.path.exists(os.path.join(target_dir, filename)):
@@ -209,7 +207,7 @@ def return_json(filepath):
     Returns:
         *. A parsed json object. Actual conversion is different based on input
         to json.loads. More details can be found here:
-            https://docs.python.org/3/library/json.html#encoders-and-decoders.
+            https://docs.python.org/3/library/json.html#encoders-and-decoders
     """
     response = get_file_contents(filepath)
     return json.loads(response)

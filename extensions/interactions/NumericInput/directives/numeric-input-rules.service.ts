@@ -19,11 +19,11 @@
 import { Injectable } from '@angular/core';
 import { downgradeInjectable } from '@angular/upgrade/static';
 
-import { NumericInputAnswer } from 'interactions/answer-defs';
+import { INumericInputAnswer } from 'interactions/answer-defs';
 import {
-  NumericInputEqualRuleInputs,
-  NumericInputIsInclusivelyBetweenRuleInputs,
-  NumericInputIsWithinToleranceRuleInputs
+  INumericInputEqualRuleInputs,
+  INumericInputIsInclusivelyBetweenRuleInputs,
+  INumericInputIsWithinToleranceRuleInputs
 } from 'interactions/rule-input-defs';
 
 @Injectable({
@@ -31,40 +31,40 @@ import {
 })
 export class NumericInputRulesService {
   Equals(
-      answer: NumericInputAnswer,
-      inputs: NumericInputEqualRuleInputs): boolean {
+      answer: INumericInputAnswer,
+      inputs: INumericInputEqualRuleInputs): boolean {
     return answer === inputs.x;
   }
   IsLessThan(
-      answer: NumericInputAnswer,
-      inputs: NumericInputEqualRuleInputs): boolean {
+      answer: INumericInputAnswer,
+      inputs: INumericInputEqualRuleInputs): boolean {
     return answer < inputs.x;
   }
   IsGreaterThan(
-      answer: NumericInputAnswer,
-      inputs: NumericInputEqualRuleInputs): boolean {
+      answer: INumericInputAnswer,
+      inputs: INumericInputEqualRuleInputs): boolean {
     return answer > inputs.x;
   }
   IsLessThanOrEqualTo(
-      answer: NumericInputAnswer,
-      inputs: NumericInputEqualRuleInputs): boolean {
+      answer: INumericInputAnswer,
+      inputs: INumericInputEqualRuleInputs): boolean {
     return answer <= inputs.x;
   }
   IsGreaterThanOrEqualTo(
-      answer: NumericInputAnswer,
-      inputs: NumericInputEqualRuleInputs): boolean {
+      answer: INumericInputAnswer,
+      inputs: INumericInputEqualRuleInputs): boolean {
     return answer >= inputs.x;
   }
   IsInclusivelyBetween(
-      answer: NumericInputAnswer,
-      inputs: NumericInputIsInclusivelyBetweenRuleInputs): boolean {
+      answer: INumericInputAnswer,
+      inputs: INumericInputIsInclusivelyBetweenRuleInputs): boolean {
     // TODO(wxy): Have frontend validation at creation time to check that
     // inputs.a <= inputs.b.
     return answer >= inputs.a && answer <= inputs.b;
   }
   IsWithinTolerance(
-      answer: NumericInputAnswer,
-      inputs: NumericInputIsWithinToleranceRuleInputs): boolean {
+      answer: INumericInputAnswer,
+      inputs: INumericInputIsWithinToleranceRuleInputs): boolean {
     return answer >= inputs.x - inputs.tol &&
       answer <= inputs.x + inputs.tol;
   }

@@ -57,7 +57,7 @@ class BaseObject(python_utils.OBJECT):
             this class.
 
         Raises:
-            TypeError. The Python object cannot be normalized.
+            TypeError: The Python object cannot be normalized.
         """
         return schema_utils.normalize_against_schema(raw, cls.SCHEMA)
 
@@ -372,9 +372,8 @@ class SkillSelector(BaseObject):
 class MusicPhrase(BaseObject):
     """List of Objects that represent a musical phrase."""
 
-    description = (
-        'A musical phrase that contains zero or more notes, rests, '
-        'and time signature.')
+    description = ('A musical phrase that contains zero or more notes, rests, '
+                   'and time signature.')
     default_value = []
 
     # The maximum number of notes allowed in a music phrase.
@@ -506,7 +505,7 @@ class CheckedProof(BaseObject):
                     error has occurred.
 
         Raises:
-            TypeError. Cannot convert to the CheckedProof schema.
+            TypeError: Cannot convert to the CheckedProof schema.
         """
         try:
             assert isinstance(raw, dict)
@@ -564,7 +563,7 @@ class LogicQuestion(BaseObject):
                 default_proof_string: str. The default proof string.
 
         Raises:
-            TypeError. Cannot convert to LogicQuestion schema.
+            TypeError: Cannot convert to LogicQuestion schema.
         """
 
         def _validate_expression(expression):
@@ -575,7 +574,7 @@ class LogicQuestion(BaseObject):
                     dict format.
 
             Raises:
-                AssertionError. The specified expression is not in the correct
+                AssertionError: The specified expression is not in the correct
                     format.
             """
             assert isinstance(expression, dict)
@@ -593,7 +592,7 @@ class LogicQuestion(BaseObject):
                 array: list(dict(str, *)). The expression array to be verified.
 
             Raises:
-                AssertionError. The specified expression array is not in the
+                AssertionError: The specified expression array is not in the
                     list format.
             """
             assert isinstance(array, list)
@@ -794,7 +793,7 @@ class NormalizedRectangle2D(BaseObject):
             float values as coordinates of the rectangle.
 
         Raises:
-            TypeError. Cannot convert to the NormalizedRectangle2D schema.
+            TypeError: Cannot convert to the NormalizedRectangle2D schema.
         """
         def clamp(value):
             """Clamps a number to range [0, 1].
@@ -1075,12 +1074,13 @@ class AlgebraicExpression(BaseObject):
     """
 
     description = 'A unicode string for an algebraic expression.'
-    default_value = ''
+    default_value = 'x'
 
     SCHEMA = {
         'type': 'unicode',
         'validators': [{
-            'id': 'is_valid_algebraic_expression'
+            'id': 'is_valid_math_expression',
+            'algebraic': True
         }]
     }
 
@@ -1106,29 +1106,12 @@ class MathEquation(BaseObject):
     """
 
     description = 'A unicode string for a math equation.'
-    default_value = ''
+    default_value = 'x=y'
 
     SCHEMA = {
         'type': 'unicode',
         'validators': [{
             'id': 'is_valid_math_equation'
-        }]
-    }
-
-
-class NumericExpression(BaseObject):
-    """Class for numeric expressions. Stores a unicode string representing a
-    valid numeric expression.
-    """
-
-    description = 'A unicode string for an numeric expression.'
-    default_value = ''
-
-    SCHEMA = {
-        'type': 'unicode',
-        'validators': [{
-            'id': 'is_valid_math_expression',
-            'algebraic': False
         }]
     }
 

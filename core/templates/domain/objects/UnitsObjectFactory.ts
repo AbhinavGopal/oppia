@@ -22,11 +22,11 @@ import { Injectable } from '@angular/core';
 import { createUnit, unit } from 'mathjs';
 import { ObjectsDomainConstants } from
   'domain/objects/objects-domain.constants';
-import { Unit } from
+import { IUnit } from
   'interactions/answer-defs';
 
-interface UnitsBackendDict {
-  units: Unit[];
+interface IUnitsBackendDict {
+  units: IUnit[];
 }
 
 interface UnitsDict {
@@ -34,12 +34,12 @@ interface UnitsDict {
 }
 
 export class Units {
-  units: Unit[];
-  constructor(unitsList: Unit[]) {
+  units: IUnit[];
+  constructor(unitsList: IUnit[]) {
     this.units = unitsList;
   }
 
-  toDict(): UnitsBackendDict {
+  toDict(): IUnitsBackendDict {
     return {
       units: this.units
     };
@@ -127,15 +127,15 @@ export class UnitsObjectFactory {
     return unitsWithMultiplier;
   }
 
-  convertUnitDictToList(unitDict: UnitsDict): Unit[] {
-    var unitList: Unit[] = [];
+  convertUnitDictToList(unitDict: UnitsDict): IUnit[] {
+    var unitList: IUnit[] = [];
     for (var key in unitDict) {
       unitList.push({unit: key, exponent: unitDict[key]});
     }
     return unitList;
   }
 
-  unitToList(unitsWithMultiplier: Array<[string, number]>): Unit[] {
+  unitToList(unitsWithMultiplier: Array<[string, number]>): IUnit[] {
     var unitDict = {};
     for (var i = 0; i < unitsWithMultiplier.length; i++) {
       var unit = unitsWithMultiplier[i][0];
@@ -158,11 +158,11 @@ export class UnitsObjectFactory {
     return this.convertUnitDictToList(unitDict);
   }
 
-  fromList(unitsList: Unit[]): Units {
+  fromList(unitsList: IUnit[]): Units {
     return new Units(unitsList);
   }
 
-  fromStringToList(unitsString: string): Unit[] {
+  fromStringToList(unitsString: string): IUnit[] {
     return this.unitToList(
       this.unitWithMultiplier(this.stringToLexical(unitsString)));
   }

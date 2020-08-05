@@ -11,19 +11,13 @@
     <div class="story-thumbnail"
          ng-style="{background: $ctrl.getStorySummary().getThumbnailBgColor()}">
       <img ng-src="<[$ctrl.thumbnailUrl]>"
-           alt=""
            class="img-thumbnail"
            ng-style="{background: $ctrl.getStorySummary().getThumbnailBgColor()}">
     </div>
     <div class="chapter-details">
-      <div ng-class="{'border-bottom': $index < $ctrl.chaptersDisplayed, 'unavailable-chapter': !$ctrl.isPreviousChapterCompleted($index)}" class="chapter-title" ng-repeat="title in $ctrl.getStorySummary().getNodeTitles()">
+      <div ng-class="{'border-bottom': $index < $ctrl.chaptersDisplayed}" class="chapter-title" ng-repeat="title in $ctrl.getStorySummary().getNodeTitles()">
         <span ng-if="$index < $ctrl.chaptersDisplayed">
-          <span ng-if="$ctrl.getStorySummary().isNodeCompleted(title)" class="material-icons completed-icon">
-            done
-          </span>
-          <span ng-class="{'incomplete-chapter': !$ctrl.isChapterCompleted(title)}"
-                translate="I18N_TOPIC_VIEWER_CHAPTER">
-          </span> <[$index + 1]>: <[title]>
+          <span translate="I18N_TOPIC_VIEWER_CHAPTER"></span> <[$index + 1]>: <[title]>
         </span>
       </div>
       <div ng-click="$ctrl.showAllChapters()"
@@ -47,18 +41,6 @@
     display: block;
     font-size: 1.4em;
     padding-bottom: 20px;
-  }
-
-  story-summary-tile .completed-icon {
-    color: #00645C;
-  }
-
-  story-summary-tile .incomplete-chapter {
-    margin-left: 28px;
-  }
-
-  story-summary-tile .unavailable-chapter {
-    color: rgb(0, 0, 0, 0.5);
   }
 
   story-summary-tile .view-button {
@@ -116,7 +98,7 @@
     height: 150px;
     text-align: center;
     vertical-align: middle;
-    width: 225px;
+    width: 205px;
   }
 
   story-summary-tile a {
@@ -133,7 +115,7 @@
       border-radius: 0.4em;
       box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
       display: inherit;
-      width: 225px;
+      width: 205px;
     }
 
     story-summary-tile .story-thumbnail {
@@ -145,7 +127,7 @@
       border: none;
       margin-left: 0;
       padding: 2vh 3vw 2vh 4vw;
-      width: 225px;
+      width: 205px;
     }
   }
 
@@ -154,12 +136,12 @@
       border-radius: 0.4em;
       box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
       display: inherit;
-      width: 225px;
+      width: 205px;
     }
 
     story-summary-tile .story-thumbnail {
       height: 150px;
-      width: 225px;
+      width: 205px;
     }
   }
 </style>

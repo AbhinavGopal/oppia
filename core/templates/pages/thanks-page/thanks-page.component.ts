@@ -16,23 +16,21 @@
  * @fileoverview Component for the 'thanks' page.
  */
 
-import { Component } from '@angular/core';
-import { downgradeComponent } from '@angular/upgrade/static';
+require(
+  'components/common-layout-directives/common-elements/' +
+  'background-banner.component.ts');
 
-import { UrlInterpolationService } from
-  'domain/utilities/url-interpolation.service.ts';
+require('domain/utilities/url-interpolation.service.ts');
 
-@Component({
-  selector: 'thanks-page',
-  templateUrl: './thanks-page.component.html',
-  styleUrls: []
-})
-export class ThanksPageComponent {
-  constructor(private urlInterpolationService: UrlInterpolationService) {}
-
-  getStaticImageUrl(imagePath: string): string {
-    return this.urlInterpolationService.getStaticImageUrl(imagePath);
-  }
-}
-angular.module('oppia').directive(
-  'thanksPage', downgradeComponent({component: ThanksPageComponent}));
+angular.module('oppia').component('thanksPage', {
+  template: require('./thanks-page.component.html'),
+  controller: ['UrlInterpolationService', function(
+      UrlInterpolationService) {
+    var ctrl = this;
+    ctrl.$onInit = function() {
+      ctrl.getStaticImageUrl = function(imagePath) {
+        return UrlInterpolationService.getStaticImageUrl(imagePath);
+      };
+    };
+  }]
+});

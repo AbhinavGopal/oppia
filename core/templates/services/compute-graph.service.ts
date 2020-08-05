@@ -22,27 +22,27 @@ import { Injectable } from '@angular/core';
 
 import { States } from 'domain/exploration/StatesObjectFactory';
 
-export interface GraphLink {
+export interface IGraphLink {
   source: string;
   target: string;
 }
 
-export interface GraphNodes {
+export interface IGraphNodes {
   [stateName: string]: string;
 }
 
-interface GraphData {
+interface IGraphData {
   finalStateIds: string[];
   initStateId: string;
-  links: GraphLink[];
-  nodes: GraphNodes;
+  links: IGraphLink[];
+  nodes: IGraphNodes;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ComputeGraphService {
-  _computeGraphData(initStateId: string, states: States): GraphData {
+  _computeGraphData(initStateId: string, states: States): IGraphData {
     let nodes = {};
     let links = [];
     let finalStateIds = states.getFinalStateNames();
@@ -99,7 +99,7 @@ export class ComputeGraphService {
     return stateNamesInBfsOrder;
   }
 
-  compute(initStateId: string, states: States): GraphData {
+  compute(initStateId: string, states: States): IGraphData {
     return this._computeGraphData(initStateId, states);
   }
 

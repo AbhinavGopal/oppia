@@ -21,9 +21,9 @@ import { downgradeInjectable } from '@angular/upgrade/static';
 
 import { AnswerGroup } from
   'domain/exploration/AnswerGroupObjectFactory';
-import { Warning, baseInteractionValidationService } from
+import { IWarning, baseInteractionValidationService } from
   'interactions/base-interaction-validation.service';
-import { MathEquationInputCustomizationArgs } from
+import { IMathEquationInputCustomizationArgs } from
   'extensions/interactions/customization-args-defs';
 import { MathEquationInputRulesService } from
   './math-equation-input-rules.service';
@@ -41,8 +41,8 @@ export class MathEquationInputValidationService {
 
   getAllWarnings(
       stateName: string,
-      customizationArgs: MathEquationInputCustomizationArgs,
-      answerGroups: AnswerGroup[], defaultOutcome: Outcome): Warning[] {
+      customizationArgs: IMathEquationInputCustomizationArgs,
+      answerGroups: AnswerGroup[], defaultOutcome: Outcome): IWarning[] {
     let warningsList = [];
     let meirs = new MathEquationInputRulesService();
 

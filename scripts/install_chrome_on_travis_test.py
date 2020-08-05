@@ -46,9 +46,11 @@ class InstallChromeOnTravisTests(test_utils.GenericTestBase):
         def mock_chdir(unused_path):
             return
 
-        def mock_url_retrieve(unused_url, filename):  # pylint: disable=unused-argument
+        # pylint: disable=unused-argument
+        def mock_url_retrieve(unused_url, filename):
             return
 
+        # pylint: enable=unused-argument
         def mock_check_call(unused_commands):
             return
 

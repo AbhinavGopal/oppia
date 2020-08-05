@@ -28,8 +28,8 @@ import { Injectable, Pipe, PipeTransform } from '@angular/core';
 @Pipe({name: 'normalizeWhitespacePunctuationAndCase'})
 export class NormalizeWhitespacePunctuationAndCasePipe
 implements PipeTransform {
-  transform(input: string): string {
-    if (typeof input === 'string') {
+  transform(input: any): any {
+    if (typeof input === 'string' || input instanceof String) {
       let isAlphanumeric = function(character) {
         return 'qwertyuiopasdfghjklzxcvbnm0123456789'.indexOf(
           character.toLowerCase()) !== -1;

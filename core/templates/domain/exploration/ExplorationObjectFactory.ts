@@ -24,24 +24,24 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { AppConstants } from 'app.constants';
 import { LoggerService } from 'services/contextual/logger.service';
-import { ParamChangeBackendDict, ParamChange } from
+import { IParamChangeBackendDict, ParamChange } from
   'domain/exploration/ParamChangeObjectFactory';
 import { ParamChangesObjectFactory } from
   'domain/exploration/ParamChangesObjectFactory';
-import { ParamSpecsBackendDict, ParamSpecs, ParamSpecsObjectFactory } from
+import { IParamSpecsBackendDict, ParamSpecs, ParamSpecsObjectFactory } from
   'domain/exploration/ParamSpecsObjectFactory';
-import { EndExplorationCustomizationArgs, InteractionCustomizationArgs } from
+import { IEndExplorationCustomizationArgs, IInteractionCustomizationArgs } from
   'interactions/customization-args-defs';
 import { Interaction } from
   'domain/exploration/InteractionObjectFactory';
-import { BindableVoiceovers } from
+import { IBindableVoiceovers } from
   'domain/exploration/RecordedVoiceoversObjectFactory';
 import { State } from 'domain/state/StateObjectFactory';
 import {
-  StateObjectsBackendDict,
+  IStateObjectsBackendDict,
+  IVoiceoverObjectsDict,
   States,
-  StatesObjectFactory,
-  VoiceoverObjectsDict
+  StatesObjectFactory
 } from 'domain/exploration/StatesObjectFactory';
 import { UrlInterpolationService } from
   'domain/utilities/url-interpolation.service';
@@ -49,11 +49,11 @@ import { Voiceover } from 'domain/exploration/VoiceoverObjectFactory';
 
 const INTERACTION_SPECS = require('interactions/interaction_specs.json');
 
-interface ExplorationBackendDict {
+interface IExplorationBackendDict {
   'init_state_name': string;
-  'param_changes': ParamChangeBackendDict[];
-  'param_specs': ParamSpecsBackendDict;
-  'states': StateObjectsBackendDict;
+  'param_changes': IParamChangeBackendDict[];
+  'param_specs': IParamSpecsBackendDict;
+  'states': IStateObjectsBackendDict;
   'title': string;
   'language_code': string;
 }
@@ -98,7 +98,7 @@ export class Exploration {
     }
 
     const customizationArgs = (
-      <EndExplorationCustomizationArgs> this.getInteractionCustomizationArgs(
+      <IEndExplorationCustomizationArgs> this.getInteractionCustomizationArgs(
         stateName));
     return customizationArgs && customizationArgs.recommendedExplorationIds ?
       customizationArgs.recommendedExplorationIds.value : null;
@@ -122,7 +122,7 @@ export class Exploration {
   }
 
   getInteractionCustomizationArgs(
-      stateName: string): InteractionCustomizationArgs {
+      stateName: string): IInteractionCustomizationArgs {
     let interaction = this.getInteraction(stateName);
     if (interaction === null) {
       return null;
@@ -183,7 +183,7 @@ export class Exploration {
     return this.getState(stateName).content.getHtml();
   }
 
-  getVoiceovers(stateName: string): BindableVoiceovers {
+  getVoiceovers(stateName: string): IBindableVoiceovers {
     let state = this.getState(stateName);
     if (!state) {
       this.logger.error('Invalid state name: ' + stateName);
@@ -208,7 +208,7 @@ export class Exploration {
     return voiceovers || null;
   }
 
-  getAllVoiceovers(languageCode: string): VoiceoverObjectsDict {
+  getAllVoiceovers(languageCode: string): IVoiceoverObjectsDict {
     return this.states.getAllVoiceovers(languageCode);
   }
 
@@ -232,7 +232,7 @@ export class ExplorationObjectFactory {
               private urlInterpolationService: UrlInterpolationService) {}
 
   createFromBackendDict(
-      explorationBackendDict: ExplorationBackendDict): Exploration {
+      explorationBackendDict: IExplorationBackendDict): Exploration {
     return new Exploration(
       explorationBackendDict.init_state_name,
       this.paramChangesObjectFactory.createFromBackendList(

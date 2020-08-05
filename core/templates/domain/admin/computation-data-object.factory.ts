@@ -19,7 +19,7 @@
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 
-export interface ComputationDataBackendDict {
+export interface IComputationDataBackendDict {
   'last_stopped_msec': number;
   'is_startable': boolean;
   'status_code': string;
@@ -60,7 +60,7 @@ export class ComputationData {
 })
 export class ComputationDataObjectFactory {
   createFromBackendDict(
-      backendDict: ComputationDataBackendDict): ComputationData {
+      backendDict: IComputationDataBackendDict): ComputationData {
     return new ComputationData(
       backendDict.last_stopped_msec, backendDict.is_startable,
       backendDict.status_code, backendDict.last_started_msec,

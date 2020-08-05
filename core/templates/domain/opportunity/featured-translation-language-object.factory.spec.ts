@@ -21,7 +21,7 @@ import { TestBed } from '@angular/core/testing';
 import {
   FeaturedTranslationLanguageObjectFactory,
   FeaturedTranslationLanguage,
-  FeaturedTranslationLanguageBackendDict
+  IFeaturedTranslationLanguageBackendDict
 } from
   'domain/opportunity/FeaturedTranslationLanguageObjectFactory';
 
@@ -34,7 +34,7 @@ describe('Featured Translation Language object factory', () => {
     featuredTranslationLanguageObjectFactory = TestBed.get(
       FeaturedTranslationLanguageObjectFactory);
 
-    let sampleFTLDict: FeaturedTranslationLanguageBackendDict = {
+    let sampleFTLDict: IFeaturedTranslationLanguageBackendDict = {
       language_code: 'en',
       explanation: 'English'
     };

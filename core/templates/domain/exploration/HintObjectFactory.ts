@@ -21,13 +21,13 @@ import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 
 import {
+  ISubtitledHtmlBackendDict,
   SubtitledHtml,
-  SubtitledHtmlBackendDict,
   SubtitledHtmlObjectFactory
 } from 'domain/exploration/SubtitledHtmlObjectFactory';
 
-export interface HintBackendDict {
-  'hint_content': SubtitledHtmlBackendDict;
+export interface IHintBackendDict {
+  'hint_content': ISubtitledHtmlBackendDict;
 }
 
 export class Hint {
@@ -36,7 +36,7 @@ export class Hint {
     this.hintContent = hintContent;
   }
 
-  toBackendDict(): HintBackendDict {
+  toBackendDict(): IHintBackendDict {
     return {
       hint_content: this.hintContent.toBackendDict()
     };
@@ -49,7 +49,7 @@ export class Hint {
 export class HintObjectFactory {
   constructor(private subtitledHtmlObjectFactory: SubtitledHtmlObjectFactory) {}
 
-  createFromBackendDict(hintBackendDict: HintBackendDict): Hint {
+  createFromBackendDict(hintBackendDict: IHintBackendDict): Hint {
     return new Hint(
       this.subtitledHtmlObjectFactory.createFromBackendDict(
         hintBackendDict.hint_content));

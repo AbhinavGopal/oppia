@@ -280,7 +280,7 @@ class ClassifierTrainingJob(python_utils.OBJECT):
         """Constructs a dict representation of training job domain object.
 
         Returns:
-            dict. A dict representation of training job domain object.
+            A dict representation of training job domain object.
         """
 
         return {
@@ -302,7 +302,7 @@ class ClassifierTrainingJob(python_utils.OBJECT):
         algorithm_id, classifier_data and data_schema_version.
 
         Returns:
-            dict. A dict containing training job domain object's algorithm_id,
+            A dict containing training job domain object's algorithm_id,
             classifier_data and data_schema_version.
         """
 
@@ -476,7 +476,7 @@ class TrainingJobExplorationMapping(python_utils.OBJECT):
         domain object.
 
         Returns:
-            dict. A dict representation of TrainingJobExplorationMapping domain
+            A dict representation of TrainingJobExplorationMapping domain
             object.
         """
 

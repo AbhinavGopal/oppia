@@ -20,14 +20,15 @@
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 
-import { TaskEntryBackendDict, TaskEntry } from
+import { ITaskEntryBackendDict, TaskEntry } from
   'domain/improvements/TaskEntryObjectFactory';
 import { ImprovementsConstants } from
   'domain/improvements/improvements.constants';
 
-export class IneffectiveFeedbackLoopTask extends TaskEntry<
-    'ineffective_feedback_loop'> {
-  constructor(backendDict: TaskEntryBackendDict<'ineffective_feedback_loop'>) {
+export class IneffectiveFeedbackLoopTask extends TaskEntry {
+  public readonly taskType: 'ineffective_feedback_loop';
+
+  constructor(backendDict: ITaskEntryBackendDict) {
     if (backendDict.entity_type !==
             ImprovementsConstants.TASK_ENTITY_TYPE_EXPLORATION) {
       throw new Error(
@@ -100,8 +101,7 @@ export class IneffectiveFeedbackLoopTaskObjectFactory {
   }
 
   createFromBackendDict(
-      backendDict: TaskEntryBackendDict<'ineffective_feedback_loop'>
-  ): IneffectiveFeedbackLoopTask {
+      backendDict: ITaskEntryBackendDict): IneffectiveFeedbackLoopTask {
     return new IneffectiveFeedbackLoopTask(backendDict);
   }
 }

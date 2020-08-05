@@ -21,9 +21,9 @@ import { Injectable } from '@angular/core';
 
 import { AnswerGroup } from
   'domain/exploration/AnswerGroupObjectFactory';
-import { Warning, baseInteractionValidationService } from
+import { IWarning, baseInteractionValidationService } from
   'interactions/base-interaction-validation.service';
-import { SetInputCustomizationArgs } from
+import { ISetInputCustomizationArgs } from
   'interactions/customization-args-defs';
 import { Outcome } from
   'domain/exploration/OutcomeObjectFactory';
@@ -31,7 +31,7 @@ import { Rule } from
   'domain/exploration/RuleObjectFactory';
 import { AppConstants } from 'app.constants';
 
-interface PreviousRule {
+interface IPreviousRule {
   answerGroupIndex: number;
   ruleIndex: number;
   rule: Rule;
@@ -86,7 +86,7 @@ export class SetInputValidationService {
   }
 
   getCustomizationArgsWarnings(
-      customizationArgs: SetInputCustomizationArgs): Warning[] {
+      customizationArgs: ISetInputCustomizationArgs): IWarning[] {
     let warningsList = [];
 
     let buttonText = customizationArgs.buttonText &&
@@ -111,12 +111,12 @@ export class SetInputValidationService {
    * A rule is considered redundant if it will never be matched.
    *
    * @param {AnswerGroup[]} answerGroups answer groups created from user input.
-   * @return {Warning[]} Array of warnings.
+   * @return {IWarning[]} Array of warnings.
    */
-  getRedundantRuleWarnings(answerGroups: AnswerGroup[]): Warning[] {
-    let warningsList: Warning[] = [];
+  getRedundantRuleWarnings(answerGroups: AnswerGroup[]): IWarning[] {
+    let warningsList: IWarning[] = [];
 
-    let previousRules: PreviousRule[] = [];
+    let previousRules: IPreviousRule[] = [];
 
     for (let [answerGroupIndex, answerGroup] of answerGroups.entries()) {
       for (let [ruleIndex, rule] of answerGroup.rules.entries()) {
@@ -188,8 +188,8 @@ export class SetInputValidationService {
   }
 
   getAllWarnings(
-      stateName: string, customizationArgs: SetInputCustomizationArgs,
-      answerGroups: AnswerGroup[], defaultOutcome: Outcome): Warning[] {
+      stateName: string, customizationArgs: ISetInputCustomizationArgs,
+      answerGroups: AnswerGroup[], defaultOutcome: Outcome): IWarning[] {
     return [
       ...this.getCustomizationArgsWarnings(customizationArgs),
       ...this.getRedundantRuleWarnings(answerGroups),

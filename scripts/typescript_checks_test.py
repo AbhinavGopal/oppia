@@ -35,8 +35,10 @@ class TypescriptChecksTests(test_utils.GenericTestBase):
     def setUp(self):
         super(TypescriptChecksTests, self).setUp()
         process = subprocess.Popen(['test'], stdout=subprocess.PIPE)
-        def mock_popen(unused_cmd, stdout):  # pylint: disable=unused-argument
+        # pylint: disable=unused-argument
+        def mock_popen(unused_cmd, stdout):
             return process
+        # pylint: enable=unused-argument
 
         self.popen_swap = self.swap(subprocess, 'Popen', mock_popen)
 
@@ -85,9 +87,11 @@ class TypescriptChecksTests(test_utils.GenericTestBase):
         def mock_validate_compiled_js_dir():
             pass
         process = subprocess.Popen(['test'], stdout=subprocess.PIPE)
-        def mock_popen_for_deletion(unused_cmd, stdout):  # pylint: disable=unused-argument
+        # pylint: disable=unused-argument
+        def mock_popen_for_deletion(unused_cmd, stdout):
             os.mkdir(os.path.dirname(MOCK_COMPILED_JS_DIR))
             return process
+        # pylint: enable=unused-argument
 
         compiled_js_dir_swap = self.swap(
             typescript_checks, 'COMPILED_JS_DIR', MOCK_COMPILED_JS_DIR)
@@ -111,9 +115,12 @@ class TypescriptChecksTests(test_utils.GenericTestBase):
     def test_error_is_produced_for_invalid_compilation(self):
         """Test that error is produced if stdout is not empty."""
         process = subprocess.Popen(['echo', 'test'], stdout=subprocess.PIPE)
-        def mock_popen_for_errors(unused_cmd, stdout):  # pylint: disable=unused-argument
+        # pylint: disable=unused-argument
+        def mock_popen_for_errors(unused_cmd, stdout):
             return process
+        # pylint: enable=unused-argument
 
-        with self.swap(subprocess, 'Popen', mock_popen_for_errors):
-            with self.assertRaisesRegexp(SystemExit, '1'):
-                typescript_checks.compile_and_check_typescript()
+        with self.swap(
+            subprocess, 'Popen', mock_popen_for_errors), self.assertRaises(
+                SystemExit):
+            typescript_checks.compile_and_check_typescript()

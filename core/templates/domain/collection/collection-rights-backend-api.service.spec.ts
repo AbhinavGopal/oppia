@@ -25,14 +25,14 @@ import { CollectionRightsBackendApiService } from
 import { CsrfTokenService } from 'services/csrf-token.service';
 import { CollectionRightsObjectFactory } from
   'domain/collection/CollectionRightsObjectFactory';
-import { CollectionRightsBackendDict } from
+import { ICollectionRightsBackendDict } from
   'domain/collection/CollectionRightsObjectFactory';
 
 describe('Collection rights backend API service', function() {
   let collectionRightsBackendApiService: CollectionRightsBackendApiService;
   let collectionRightsObjectFactory: CollectionRightsObjectFactory;
   let httpTestingController: HttpTestingController;
-  let sampleDataResults: CollectionRightsBackendDict;
+  let sampleDataResults: ICollectionRightsBackendDict;
   let csrfService: CsrfTokenService = null;
 
   beforeEach(() => {
@@ -102,9 +102,7 @@ describe('Collection rights backend API service', function() {
           .expectOne('/collection_editor_handler/rights/1');
 
         expect(req.request.method).toEqual('GET');
-        req.flush({
-          error: 'Error fetching collection rights.'
-        }, {
+        req.flush('Error fetching collection rights.', {
           status: 404,
           statusText: 'Error fetching collection rights.'
         });
@@ -152,9 +150,7 @@ describe('Collection rights backend API service', function() {
           .expectOne('/collection_editor_handler/publish/0');
 
         expect(req.request.method).toEqual('PUT');
-        req.flush({
-          error: 'Error loading collection 0.'
-        }, {
+        req.flush('Error loading collection 0.', {
           status: 500,
           statusText: 'Error loading collection 0.'
         });
@@ -162,7 +158,7 @@ describe('Collection rights backend API service', function() {
         flushMicrotasks();
 
         expect(successHandler).not.toHaveBeenCalled();
-        expect(failHandler).toHaveBeenCalledWith('Error loading collection 0.');
+        expect(failHandler).toHaveBeenCalled();
       }));
   });
 
@@ -201,9 +197,7 @@ describe('Collection rights backend API service', function() {
           .expectOne('/collection_editor_handler/unpublish/0');
 
         expect(req.request.method).toEqual('PUT');
-        req.flush({
-          error: 'Error loading collection 0.'
-        }, {
+        req.flush('Error loading collection 0.', {
           status: 500,
           statusText: 'Error loading collection 0.'
         });
@@ -211,7 +205,7 @@ describe('Collection rights backend API service', function() {
         flushMicrotasks();
 
         expect(successHandler).not.toHaveBeenCalled();
-        expect(failHandler).toHaveBeenCalledWith('Error loading collection 0.');
+        expect(failHandler).toHaveBeenCalled();
       }));
   });
 

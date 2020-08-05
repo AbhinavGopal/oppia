@@ -21,9 +21,9 @@ import { Injectable } from '@angular/core';
 
 import { AnswerGroup } from
   'domain/exploration/AnswerGroupObjectFactory';
-import { Warning, baseInteractionValidationService } from
+import { IWarning, baseInteractionValidationService } from
   'interactions/base-interaction-validation.service';
-import { ImageClickInputCustomizationArgs } from
+import { IImageClickInputCustomizationArgs } from
   'interactions/customization-args-defs';
 import { Outcome } from
   'domain/exploration/OutcomeObjectFactory';
@@ -39,7 +39,7 @@ export class ImageClickInputValidationService {
       baseInteractionValidationService) {}
 
   getCustomizationArgsWarnings(
-      customizationArgs: ImageClickInputCustomizationArgs): Warning[] {
+      customizationArgs: IImageClickInputCustomizationArgs): IWarning[] {
     this.baseInteractionValidationServiceInstance.requireCustomizationArguments(
       customizationArgs, ['imageAndRegions']);
 
@@ -106,8 +106,8 @@ export class ImageClickInputValidationService {
   }
 
   getAllWarnings(
-      stateName: string, customizationArgs: ImageClickInputCustomizationArgs,
-      answerGroups: AnswerGroup[], defaultOutcome: Outcome): Warning[] {
+      stateName: string, customizationArgs: IImageClickInputCustomizationArgs,
+      answerGroups: AnswerGroup[], defaultOutcome: Outcome): IWarning[] {
     var warningsList = [];
 
     warningsList = warningsList.concat(

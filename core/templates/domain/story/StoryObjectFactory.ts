@@ -21,17 +21,17 @@ import { downgradeInjectable } from '@angular/upgrade/static';
 import { Injectable } from '@angular/core';
 
 import {
-  StoryContentsBackendDict,
+  IStoryContentsBackendDict,
   StoryContents,
   StoryContentsObjectFactory
 } from 'domain/story/StoryContentsObjectFactory';
 
-interface StoryBackendDict {
+interface IStoryBackendDict {
   'id': string;
   'title': string;
   'description': string;
   'notes': string;
-  'story_contents': StoryContentsBackendDict;
+  'story_contents': IStoryContentsBackendDict;
   'language_code': string;
   'version': number;
   'corresponding_topic_id': string;
@@ -170,7 +170,7 @@ export class Story {
 })
 export class StoryObjectFactory {
   constructor(private storyContentsObjectFactory: StoryContentsObjectFactory) {}
-  createFromBackendDict(storyBackendDict: StoryBackendDict): Story {
+  createFromBackendDict(storyBackendDict: IStoryBackendDict): Story {
     return new Story(
       storyBackendDict.id, storyBackendDict.title,
       storyBackendDict.description, storyBackendDict.notes,

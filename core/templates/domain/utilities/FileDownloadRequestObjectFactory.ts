@@ -21,9 +21,12 @@ import { downgradeInjectable } from '@angular/upgrade/static';
 
 export class FileDownloadRequest {
   filename: string;
-  canceler: Q.Deferred<Object>;
+  // TODO(YashJipkate): Replace 'any' with the exact type. This has kept as
+  // 'any' since canceler is a 'Deferred' type object which is native to
+  // AngularJS and does not have a type in native typescript.
+  canceler: any;
 
-  constructor(filename: string, canceler: Q.Deferred<Object>) {
+  constructor(filename: string, canceler: any) {
     this.filename = filename;
     this.canceler = canceler;
   }
@@ -33,12 +36,13 @@ export class FileDownloadRequest {
   providedIn: 'root'
 })
 export class FileDownloadRequestObjectFactory {
-  createNew(
-      filename: string, canceler: Q.Deferred<Object>): FileDownloadRequest {
+  // TODO(YashJipkate): Replace 'any' with the exact type. This has kept as
+  // 'any' since canceler is a 'Deferred' type object which is native to
+  // AngularJS and does not have a type in native typescript.
+  createNew(filename: string, canceler: any): FileDownloadRequest {
     return new FileDownloadRequest(filename, canceler);
   }
 }
-
 angular.module('oppia').factory(
   'FileDownloadRequestObjectFactory',
   downgradeInjectable(FileDownloadRequestObjectFactory));

@@ -18,6 +18,8 @@
 
 import { Component, OnInit } from '@angular/core';
 
+import { downgradeComponent } from '@angular/upgrade/static';
+
 import { UrlInterpolationService } from
   'domain/utilities/url-interpolation.service';
 import { I18nLanguageCodeService } from 'services/i18n-language-code.service';

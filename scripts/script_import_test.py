@@ -53,11 +53,13 @@ class InstallThirdPartyLibsImportTests(test_utils.GenericTestBase):
     def setUp(self):
         super(InstallThirdPartyLibsImportTests, self).setUp()
         self.commands = []
-        def mock_popen_error_call(unused_cmd_tokens, *args, **kwargs): # pylint: disable=unused-argument
+        # pylint: disable=unused-argument
+        # pylint: disable=super-init-not-called
+        def mock_popen_error_call(unused_cmd_tokens, *args, **kwargs):
             class Ret(test_utils.GenericTestBase):
                 """Return object that gives user-prefix error."""
 
-                def __init__(self):  # pylint: disable=super-init-not-called
+                def __init__(self):
                     self.returncode = 1
                 def communicate(self):
                     """Return user-prefix error as stderr."""
@@ -69,6 +71,8 @@ class InstallThirdPartyLibsImportTests(test_utils.GenericTestBase):
             subprocess, 'Popen', mock_popen_error_call)
         self.check_call_swap = self.swap(
             subprocess, 'check_call', mock_check_call)
+        # pylint: enable=unused-argument
+        # pylint: enable=super-init-not-called
 
     def test_import_with_missing_packages(self):
         def mock_exists(unused_path):

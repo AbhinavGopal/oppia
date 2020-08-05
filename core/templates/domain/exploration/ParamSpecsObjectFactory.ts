@@ -21,19 +21,19 @@
 import { Injectable } from '@angular/core';
 import { downgradeInjectable } from '@angular/upgrade/static';
 
-import { ParamSpecBackendDict, ParamSpec, ParamSpecObjectFactory } from
+import { IParamSpecBackendDict, ParamSpec, ParamSpecObjectFactory } from
   'domain/exploration/ParamSpecObjectFactory';
 
-export interface ParamSpecsBackendDict {
-  [paramName: string]: ParamSpecBackendDict;
+export interface IParamSpecsBackendDict {
+  [paramName: string]: IParamSpecBackendDict;
 }
 
-interface ParamDict {
+interface IParamDict {
   [paramName: string]: ParamSpec;
 }
 
 export class ParamSpecs {
-  _paramDict: ParamDict;
+  _paramDict: IParamDict;
   _paramSpecObjectFactory: ParamSpecObjectFactory;
 
   /**
@@ -42,7 +42,7 @@ export class ParamSpecs {
    *    for this object will hold.
    */
   constructor(
-      paramDict: ParamDict, paramSpecObjectFactory: ParamSpecObjectFactory) {
+      paramDict: IParamDict, paramSpecObjectFactory: ParamSpecObjectFactory) {
     /** @member {Object.<String, ParamSpec>} */
     this._paramDict = paramDict;
     this._paramSpecObjectFactory = paramSpecObjectFactory;
@@ -59,7 +59,7 @@ export class ParamSpecs {
   /**
    * @returns {Object.<String, ParamSpec>} - the map of params to their specs.
    */
-  getParamDict(): ParamDict {
+  getParamDict(): IParamDict {
     return this._paramDict;
   }
 
@@ -100,7 +100,7 @@ export class ParamSpecs {
    * @returns {Object.<String, {obj_type: String}>} - Basic dict for backend
    *    consumption.
    */
-  toBackendDict(): ParamSpecsBackendDict {
+  toBackendDict(): IParamSpecsBackendDict {
     var paramSpecsBackendDict = {};
     this.forEach((paramName, paramSpec) => {
       paramSpecsBackendDict[paramName] = paramSpec.toBackendDict();
@@ -122,7 +122,7 @@ export class ParamSpecsObjectFactory {
    *    dict.
    */
   createFromBackendDict(
-      paramSpecsBackendDict: ParamSpecsBackendDict): ParamSpecs {
+      paramSpecsBackendDict: IParamSpecsBackendDict): ParamSpecs {
     var paramDict = {};
     Object.keys(paramSpecsBackendDict).forEach((paramName) => {
       paramDict[paramName] = this.paramSpecObjectFactory.createFromBackendDict(

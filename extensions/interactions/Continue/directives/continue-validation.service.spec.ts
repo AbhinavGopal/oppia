@@ -27,7 +27,7 @@ import { Outcome, OutcomeObjectFactory } from
 
 import { AppConstants } from 'app.constants';
 import { WARNING_TYPES_CONSTANT } from 'app-type.constants';
-import { ContinueCustomizationArgs } from
+import { IContinueCustomizationArgs } from
   'interactions/customization-args-defs';
 
 describe('ContinueValidationService', () => {
@@ -36,7 +36,7 @@ describe('ContinueValidationService', () => {
 
   let currentState: string;
   let goodAnswerGroups: AnswerGroup[], goodDefaultOutcome: Outcome;
-  let customizationArguments: ContinueCustomizationArgs;
+  let customizationArguments: IContinueCustomizationArgs;
   let oof: OutcomeObjectFactory, agof: AnswerGroupObjectFactory;
 
   beforeEach(() => {
